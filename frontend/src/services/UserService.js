@@ -1,35 +1,20 @@
 import ApiService, { TOKEN_STORAGE_LOCATION } from "./ApiService";
 
-const USER_STORAGE_LOCATION = 'USER';
+export const USER_STORAGE_LOCATION = 'USER';
 
 export default class UserService {
     static login(username, password) {
-        return ApiService
-            .post(
-                'auth/login',
-                {
-                    username: username,
-                    password: password
-                }
-            )
-            .then(
-                response => {
-                    const data = response.data;
-
-                    this.#setToken(data.token);
-                    this.#setUser(data.user);
-                },
-                error => Promise.resolve({
-                    succes: false,
-                    message: error.message
-                })
-            );
+        return this.#requestToken("auth/login", username, password)
     }
 
     static register(username, password) {
+        return this.#requestToken("auth/register", username, password);
+    }
+
+    static #requestToken(url, username, password){
         return ApiService
             .post(
-                'auth/register',
+                url,
                 {
                     username: username,
                     password: password
@@ -37,18 +22,21 @@ export default class UserService {
             )
             .then(
                 response => {
+                    console.log("Response", response);
+
                     const data = response.data;
 
                     this.#setToken(data.token);
                     this.#setUser(data.user);
-                },
-                error => {
-                    return Promise.resolve({
-                        succes: false,
-                        message: error.message
-                    })
+
+                    Promise.resolve({
+                        succes: true,
+                        data: data
+                    });
                 }
-            );
+            ).catch(error => {
+                throw error.response.data.detail;
+            });
     }
 
     static #setToken(token){

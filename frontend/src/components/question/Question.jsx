@@ -9,7 +9,7 @@ function Question() {
     const { id } = useParams();
 
     useEffect(() => {
-        ApiService.get("vragen/1").then((response) =>
+        ApiService.get("vragen/" + id).then((response) =>
             setQuestion(response.data)
         );
     }, []);

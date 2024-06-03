@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8080/';
 
-export const TOKEN_LOCATION = 'JWT';
+export const TOKEN_STORAGE_LOCATION = 'JWT';
 
 
 class ApiService {
@@ -35,7 +35,7 @@ class ApiService {
     }
 
     static #getHeaders() {
-        let token = sessionStorage.getItem(TOKEN_LOCATION)
+        let token = sessionStorage.getItem(TOKEN_STORAGE_LOCATION)
         
         if (token == null) return {};
         return {Authorization: "Bearer " + token};
