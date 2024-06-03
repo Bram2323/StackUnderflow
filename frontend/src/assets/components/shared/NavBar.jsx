@@ -1,3 +1,5 @@
 export default function NavBar() {
-    return <div>Yes hello navbar is working!</div>
+    return <nav className=" fixed w-screen bg-red-600 ">
+        testing navbar
+    </nav>
 }
