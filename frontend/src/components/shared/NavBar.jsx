@@ -1,6 +1,7 @@
 import "./NavBar.css"
 import logo from "../../assets/images/stack_underflow_logo.png"
 import { useNavigate } from "react-router-dom"
+import UserService from "../../services/UserService";
 
 export default function NavBar() {
 
@@ -13,8 +14,20 @@ export default function NavBar() {
             <li className="nav-button" onClick={() => navigate("/leaderbord")}>Leaderbord</li>
         </ul>
         <ul className="float-right">
-            <li className="register-button" onClick={() => navigate("/registreren")}>Registreren</li>
-            <li className="login-button" onClick={() => navigate("/inloggen")}>Inloggen</li>
+            {
+                UserService.isLoggedIn() ?
+                <>
+                    <li className="login-button" onClick={() => { 
+                        UserService.logout();
+                        navigate("/");
+                    }}>Uitloggen</li>
+                </>
+                :
+                <>
+                    <li className="register-button" onClick={() => navigate("/registreren")}>Registreren</li>
+                    <li className="login-button" onClick={() => navigate("/inloggen")}>Inloggen</li>
+                </>
+            }
         </ul>
     </div >
 }

@@ -28,7 +28,7 @@ public class UserController {
         if (password == null) throw new BadRequestException("Password is required!");
 
         Optional<User> possibleUser = userRepository.findByUsername(username);
-        if (possibleUser.isEmpty()) throw new BadRequestException("User doesn't exists!");
+        if (possibleUser.isEmpty()) throw new BadRequestException("User doesn't exist!");
         User user = possibleUser.get();
 
         if (!userService.isCorrectPassword(user, password)) throw new BadRequestException("Password is incorrect!");

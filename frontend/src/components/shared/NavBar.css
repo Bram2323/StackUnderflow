@@ -37,7 +37,7 @@
     cursor: pointer;
     margin-top: 5px;
     height: 45px;
-    transition: 0.2s
+    transition: 0.2s;
 }
 
 .login-button:hover {
