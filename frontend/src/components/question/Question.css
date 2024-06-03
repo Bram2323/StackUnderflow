@@ -1,0 +1,15 @@
+.question {
+    display: flex;
+    justify-content: center;
+}
+
+.question-container {
+    width: 50%;
+    background-color: rgb(212, 212, 212);
+    padding: 20px;
+    margin-top: 50px;  
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+}
+
