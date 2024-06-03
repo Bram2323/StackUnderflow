@@ -1,5 +1,5 @@
 package com.itvitae.stackunderflow.security;
 
-import java.util.UUID;
+import com.itvitae.stackunderflow.user.UserDTO;
 
-public record TokenDTO(String token, UUID userId) {}
+public record TokenDTO(String token, UserDTO user) {}

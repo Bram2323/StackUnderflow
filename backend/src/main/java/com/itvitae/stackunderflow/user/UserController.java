@@ -33,7 +33,7 @@ public class UserController {
 
         if (!userService.isCorrectPassword(user, password)) throw new BadRequestException("Password is incorrect!");
 
-        return ResponseEntity.ok(new TokenDTO(jwtService.generateTokenForUser(user), user.getId()));
+        return ResponseEntity.ok(new TokenDTO(jwtService.generateTokenForUser(user), UserDTO.from(user)));
     }
 
     @PostMapping("register")
@@ -49,6 +49,7 @@ public class UserController {
         if (userRepository.findByUsername(username).isPresent()) throw new BadRequestException("User already exists!");
 
         User user = userService.register(username, password);
-        return ResponseEntity.ok(new TokenDTO(jwtService.generateTokenForUser(user), user.getId()));
+
+        return ResponseEntity.ok(new TokenDTO(jwtService.generateTokenForUser(user), UserDTO.from(user)));
     }
 }
