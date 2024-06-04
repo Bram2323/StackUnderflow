@@ -14,7 +14,7 @@ export default function NavBar() {
             <button className="nav-button" onClick={() => navigate("/vragen")}>Vragen</button>
             <button className="nav-button" onClick={() => navigate("/leaderbord")}>Leaderbord</button>
         </div>
-        <div className="float-right flex items-center pr-[5px] h-[100%]">
+        <div className="float-right flex items-center pr-1.5 h-full">
             {
                 UserService.isLoggedIn() ?
                 <>
@@ -22,7 +22,7 @@ export default function NavBar() {
                         UserService.logout();
                         navigate("/");
                     }}>Uitloggen</button>
-                    <User username={UserService.getUser().username}/>
+                    <User user={UserService.getUser()}/>
                 </>
                 :
                 <>
