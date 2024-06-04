@@ -10,9 +10,9 @@ function Question() {
     const { id } = useParams();
 
     useEffect(() => {
-        ApiService.get("vragen/" + id).then((response) => {
-            setQuestion(response.data);
-    });
+        ApiService.get("questions/" + id).then((response) =>
+            setQuestion(response.data)
+        );
     }, []);
 
     if (question === undefined) {
