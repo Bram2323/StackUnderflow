@@ -4,6 +4,7 @@ import "./App.css";
 import NavBar from "./components/shared/NavBar";
 import Question from "./components/question/Question";
 import Login from "./components/login/Login";
+import QuestionOverview from "./components/question-overview/QuestionOverview"
 
 export default function App() {
     const [count, setCount] = useState(0);
@@ -14,7 +15,7 @@ export default function App() {
 
             <Routes>
                 <Route path="" element={<p>Home</p>} />
-                <Route path="/vragen" element={<p>Vragen</p>} />
+                <Route path="/vragen" element={<QuestionOverview />} />
                 <Route path="/vragen/:id" element={<Question />} />
                 <Route path="/leaderbord" element={<p>Leaderbord</p>} />
                 <Route path="/inloggen" element={<Login />} />
