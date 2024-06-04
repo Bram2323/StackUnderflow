@@ -1,0 +1,9 @@
+.question-title {
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+}
+
+.question-title:hover {
+    text-decoration: underline;
+}

@@ -13,12 +13,19 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import java.util.List;
+
 @CrossOrigin(origins = "${stackunderflow.cors}")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("questions")
 public class QuestionController {
     private final QuestionRepository questionRepository;
+
+    @GetMapping()
+    public List<MinimalQuestionDTO> getAllQuestions(){
+        return questionRepository.findAll().stream().map(MinimalQuestionDTO::from).toList();
+    }
 
     @GetMapping("{id}")
     public QuestionDTO getQuestionById(@PathVariable long id) {
