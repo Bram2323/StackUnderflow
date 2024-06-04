@@ -23,8 +23,8 @@ public class QuestionController {
     private final QuestionRepository questionRepository;
 
     @GetMapping()
-    public List<QuestionDTO> getAllQuestions(){
-        return questionRepository.findAll().stream().map(QuestionDTO::from).toList();
+    public List<MinimalQuestionDTO> getAllQuestions(){
+        return questionRepository.findAll().stream().map(MinimalQuestionDTO::from).toList();
     }
 
     @GetMapping("{id}")
