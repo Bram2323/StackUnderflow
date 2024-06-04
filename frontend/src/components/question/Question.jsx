@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import ApiService from "../../services/ApiService";
 import "./Question.css";
@@ -9,7 +8,7 @@ function Question() {
     const { id } = useParams();
 
     useEffect(() => {
-        ApiService.get("vragen/" + id).then((response) =>
+        ApiService.get("questions/" + id).then((response) =>
             setQuestion(response.data)
         );
     }, []);

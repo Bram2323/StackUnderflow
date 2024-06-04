@@ -4,6 +4,7 @@ import "./App.css";
 import NavBar from "./components/shared/NavBar";
 import Question from "./components/question/Question";
 import Login from "./components/login/Login";
+import QuestionForm from "./components/question-form/QuestionForm";
 
 export default function App() {
     const [count, setCount] = useState(0);
@@ -19,6 +20,7 @@ export default function App() {
                 <Route path="/leaderbord" element={<p>Leaderbord</p>} />
                 <Route path="/inloggen" element={<Login />} />
                 <Route path="/registreren" element={<p>Registreren</p>} />
+                <Route path="/vraag-aanmaken" element={<QuestionForm />} />
 
                 <Route path="*" element={<p>404 not found</p>} />
             </Routes>
