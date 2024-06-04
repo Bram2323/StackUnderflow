@@ -22,7 +22,6 @@ function QuestionOverview() {
     useEffect(() => {
         ApiService.get("questions").then((response) =>
             setQuestions(response.data)
-            //console.log(response.data[0].title)
         );
     }, []);
 
