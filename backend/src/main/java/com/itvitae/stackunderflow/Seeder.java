@@ -1,5 +1,7 @@
 package com.itvitae.stackunderflow;
 
+import com.itvitae.stackunderflow.answer.Answer;
+import com.itvitae.stackunderflow.answer.AnswerRepository;
 import com.itvitae.stackunderflow.question.Question;
 import com.itvitae.stackunderflow.question.QuestionRepository;
 import com.itvitae.stackunderflow.user.User;
@@ -18,6 +20,7 @@ public class Seeder implements CommandLineRunner {
     private final UserService userService;
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
 
     @Override
@@ -33,6 +36,14 @@ public class Seeder implements CommandLineRunner {
                     "magna non ipsum ultrices lacinia id at mi. Donec tempor euismod magna, sed maximus quam eleifend in. " +
                     "Vivamus fermentum pharetra urna, sed iaculis turpis sagittis non.", LocalDateTime.now(), user);
             questionRepository.save(q1);
+        }
+        if (answerRepository.count() == 0){
+            User user = userRepository.findByUsername("test").get();
+            Question question = questionRepository.findAll().getFirst();
+            Answer a1 = new Answer("I have no idea how to fix that...", LocalDateTime.of(2023, 5, 12, 23, 24), question, user);
+            Answer a2 = new Answer("Dublicate of #12524", LocalDateTime.now(), question, user);
+            answerRepository.save(a1);
+            answerRepository.save(a2);
         }
     }
 }

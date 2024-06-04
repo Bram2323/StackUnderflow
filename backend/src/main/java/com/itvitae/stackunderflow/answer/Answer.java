@@ -1,6 +1,6 @@
-package com.itvitae.stackunderflow.question;
+package com.itvitae.stackunderflow.answer;
 
-import com.itvitae.stackunderflow.answer.Answer;
+import com.itvitae.stackunderflow.question.Question;
 import com.itvitae.stackunderflow.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,29 +8,34 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
+@Entity(name = "Answers")
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-public class Question {
+public class Answer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
-    private String title;
+
     @Column(columnDefinition = "Text")
     private String text;
+
     private LocalDateTime date;
+
+    private Boolean isSolution;
+
+    @ManyToOne
+    private Question question;
     @ManyToOne
     private User user;
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers = List.of();
 
-    public Question(String title, String text, LocalDateTime date, User user) {
-        this.title = title;
+
+    public Answer(String text, LocalDateTime date, Question question, User user) {
         this.text = text;
         this.date = date;
+        this.question = question;
         this.user = user;
+        isSolution = false;
     }
 }
