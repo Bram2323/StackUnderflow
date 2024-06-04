@@ -20,7 +20,7 @@ function QuestionOverview() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        ApiService.get("vragen").then((response) =>
+        ApiService.get("questions").then((response) =>
             setQuestions(response.data)
             //console.log(response.data[0].title)
         );
@@ -30,14 +30,12 @@ function QuestionOverview() {
         return <></>;
     }
 
-    return <div>
+    return <div className=" w-3/4 ">
         {questions.map((question) =>
-            <div className="flex justify-center">
-                <div className=" bg-gray-300 pt-2 pb-2 pl-2 mt-2 ml-2 w-1/2 " key={question.id}>
-                    <div className="question-title" onClick={() => navigate(`/vragen/${question.id}`)}>{question.title}</div>
-                    <div>geplaatst door: {question.user.username}</div>
-                    <div>datum: {formatDate(question.date)}</div>
-                </div>
+            <div className=" bg-gray-300 pt-2 pb-2 pl-2 mt-2" key={question.id}>
+                <div className="question-title" onClick={() => navigate(`/vragen/${question.id}`)}>{question.title}</div>
+                <div>geplaatst door: {question.user.username}</div>
+                <div>datum: {formatDate(question.date)}</div>
             </div>)}
     </div>;
 }
