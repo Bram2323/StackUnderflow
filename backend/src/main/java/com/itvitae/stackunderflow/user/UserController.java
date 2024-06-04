@@ -43,6 +43,8 @@ public class UserController {
         if (username == null) throw new BadRequestException("Username is required!");
         if (password == null) throw new BadRequestException("Password is required!");
 
+        username = username.trim();
+
         if (!userService.isValidUsername(username)) throw new BadRequestException("Username is invalid!");
         if (!userService.isValidPassword(password)) throw new BadRequestException("Password is invalid!");
 

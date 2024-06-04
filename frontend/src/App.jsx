@@ -1,13 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import { useState } from "react";
 import "./App.css";
 import NavBar from "./components/shared/NavBar";
 import Question from "./components/question/Question";
 import Login from "./components/login/Login";
+import Register from "./components/register/Register";
 
 export default function App() {
-    const [count, setCount] = useState(0);
-
     return (
         <>
             <NavBar />
@@ -18,7 +16,7 @@ export default function App() {
                 <Route path="/vragen/:id" element={<Question />} />
                 <Route path="/leaderbord" element={<p>Leaderbord</p>} />
                 <Route path="/inloggen" element={<Login />} />
-                <Route path="/registreren" element={<p>Registreren</p>} />
+                <Route path="/registreren" element={<Register />} />
 
                 <Route path="*" element={<p>404 not found</p>} />
             </Routes>
