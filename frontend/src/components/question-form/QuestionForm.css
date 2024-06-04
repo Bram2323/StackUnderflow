@@ -1,0 +1,39 @@
+.question-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.question-form label {
+    display: block;
+}
+.question-form p, .question-form label {
+    margin-bottom: 5px;
+}
+
+.question-form h1 {
+    font-size: larger;
+    font-weight: bold;
+    margin-bottom: 15px ;
+}
+
+.question-form-container {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+}
+
+.question-form-container .input-field-container {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.question-form-container .input-field {
+    font-size: medium;
+}
+
+.question-form-error {
+    margin-top: 10px;
+    color: red;
+}
