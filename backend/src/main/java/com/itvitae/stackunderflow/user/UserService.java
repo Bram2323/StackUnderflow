@@ -21,11 +21,6 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
-
-    public Optional<User> findById(UUID id){
-        return userRepository.findById(id);
-    }
 
     public User register(String username, String password){
         if (userRepository.findByUsername(username).isPresent()) throw new IllegalArgumentException("Username already exists!");
@@ -46,7 +41,24 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean isValidPassword(String password){
-        return password != null && !password.isEmpty() && !password.isBlank();
+        if (password == null || password.isBlank()) return false;
+        if (password.length() < 8) return false;
+
+        boolean hasUppercaseLetter = false;
+        boolean hasLowercaseLetter = false;
+        boolean hasNumber = false;
+        boolean hasSpecialCharacter = false;
+
+        for (char chr : password.toCharArray()){
+            if (Character.isLetter(chr)){
+                if (Character.toUpperCase(chr) == chr) hasUppercaseLetter = true;
+                if (Character.toLowerCase(chr) == chr) hasLowercaseLetter = true;
+            }
+            else if (Character.isDigit(chr)) hasNumber = true;
+            else hasSpecialCharacter = true;
+        }
+
+        return hasUppercaseLetter && hasLowercaseLetter && hasNumber && hasSpecialCharacter;
     }
 
     @Override

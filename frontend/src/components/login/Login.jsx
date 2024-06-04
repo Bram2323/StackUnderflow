@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "../shared/InputField/InputField";
 import UserService from "../../services/UserService";
@@ -16,10 +16,8 @@ function translateError(error){
         case "Password is incorrect!":
             return "Wachtwoord is verkeerd!"
         default:
-            break;
+            return error;
     }
-
-    return error;
 }
 
 
@@ -31,11 +29,15 @@ function Login() {
     const navigate = useNavigate();
 
     function handleLogin(){
-        UserService.login(username, password).then(() => {
-            navigate("/");
-        }).catch((error) => {
-            setError(translateError(error));
-        });
+        if (username.length == 0) setError("Gebruikersnaam is verplicht!");
+        else if (password.length == 0) setError("Wachtwoord is verplicht!");
+        else {
+            UserService.login(username, password).then(() => {
+                navigate("/");
+            }).catch((error) => {
+                setError(translateError(error));
+            });
+        }
     }
 
     return ( <>

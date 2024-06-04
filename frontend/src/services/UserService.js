@@ -22,16 +22,14 @@ export default class UserService {
             )
             .then(
                 response => {
-                    console.log("Response", response);
-
                     const data = response.data;
 
                     this.#setToken(data.token);
                     this.#setUser(data.user);
 
-                    Promise.resolve({
+                    return Promise.resolve({
                         succes: true,
-                        data: data
+                        user: data.user
                     });
                 }
             ).catch(error => {
@@ -44,7 +42,7 @@ export default class UserService {
     }
 
     static #setUser(user){
-        sessionStorage.setItem(USER_STORAGE_LOCATION, user);
+        sessionStorage.setItem(USER_STORAGE_LOCATION, JSON.stringify(user));
     }
 
     static logout() {
@@ -57,6 +55,6 @@ export default class UserService {
     }
 
     static getUser() {
-        return JSON.parse(sessionStorage.getItem(USER));
+        return JSON.parse(sessionStorage.getItem(USER_STORAGE_LOCATION));
     }
 }
