@@ -2,18 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ApiService from "../../services/ApiService";
 import "./Question.css";
-import Answer from "./Answer/Answer";
+import Answer from "./answer/Answer";
 import User from "../shared/User/User";
 import CodeHighlighter from "../shared/codeblock/CodeHighlighter/CodeHighlighter";
+import AnswerForm from "./answer-form/AnswerForm";
 
 function Question() {
     const [question, setQuestion] = useState();
+    const [answers, setAnswers] = useState([]);
     const { id } = useParams();
 
     useEffect(() => {
-        ApiService.get("questions/" + id).then((response) =>
-            setQuestion(response.data)
-        );
+        ApiService.get("questions/" + id).then((response) => {
+            setQuestion(response.data);
+            setAnswers(response.data.answers);
+        });
     }, []);
 
     if (question === undefined) {
@@ -25,6 +28,13 @@ function Question() {
         timeStyle: "short",
         timeZone: "Europe/Amsterdam",
     }).format(creationDate);
+
+    function setAnswer(newAnswer) {
+        const newAnswers = answers.map((answer) =>
+            answer.id == newAnswer.id ? newAnswer : answer
+        );
+        setAnswers(newAnswers);
+    }
 
     return (
         <div className="question">
@@ -40,8 +50,15 @@ function Question() {
                     <p className="pt-[3px]">{formattedDate}</p>
                 </div>
             </div>
-            <div className="answer-container flex flex-col gap-[10px]">
-                {[...question.answers]
+            <div className="answer-form-container">
+                <AnswerForm
+                    questionId={question.id}
+                    answers={answers}
+                    setAnswers={setAnswers}
+                />
+            </div>
+            <div className="flex flex-col gap-[10px] pb-2">
+                {[...answers]
                     .sort((a, b) => {
                         const aDate = new Date(a.date);
                         const bDate = new Date(b.date);
@@ -50,7 +67,11 @@ function Question() {
                         return 0;
                     })
                     .map((answer, index) => (
-                        <Answer key={index} answer={answer} />
+                        <Answer
+                            key={index}
+                            answer={answer}
+                            setAnswer={setAnswer}
+                        />
                     ))}
             </div>
         </div>

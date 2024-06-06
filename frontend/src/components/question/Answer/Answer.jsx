@@ -1,7 +1,7 @@
 import User from "../../shared/User/User";
+import CodeHighlighter from "../../shared/codeblock/CodeHighlighter/CodeHighlighter";
 
-function Answer({ answer }) {
-
+function Answer({ answer, setAnswer }) {
     const creationDate = new Date(answer.date);
     const formattedDate = new Intl.DateTimeFormat("nl-NL", {
         dateStyle: "short",
@@ -9,16 +9,18 @@ function Answer({ answer }) {
         timeZone: "Europe/Amsterdam",
     }).format(creationDate);
 
-    return ( <>
-        <div className="answer-container w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
-            <p>{answer.text}</p>
-            <hr />
-            <div className="flex gap-[10px] items-center">
-                <User user={answer.user} />
-                <p className="pt-[3px]">{formattedDate}</p>
+    return (
+        <>
+            <div className="w-full flex flex-col gap-[10px] bg-gray-300 p-[15px] rounded-[10px] border border-solid border-gray-400">
+                <CodeHighlighter markdown={answer.text} />
+                <hr />
+                <div className="flex gap-[10px] items-center">
+                    <User user={answer.user} />
+                    <p className="pt-[3px]">{formattedDate}</p>
+                </div>
             </div>
-        </div>
-    </> );
+        </>
+    );
 }
 
 export default Answer;
