@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import hljs from "highlight.js";
 import "highlight.js/styles/stackoverflow-light.css";
-import "./CodeHighlighter.css";
 
 function CodeHighlighter({ markdown }) {
     // Highlight code blocks
@@ -17,13 +16,21 @@ function CodeHighlighter({ markdown }) {
         <div className="w-full">
             {blocks.map((block, index) =>
                 block.startsWith("```") ? (
-                    <pre key={index}>
-                        <code className="hljs block overflow-x-auto whitespace-pre mt-2 rounded-lg max-h-[600px] bg-[#f1f2f3] p-2">
+                    <pre
+                        key={index}
+                        className="my-4 p-2 rounded-lg max-h-[600px] bg-[#f1f2f3] overflow-auto"
+                    >
+                        <code className="hljs bg-[#f1f2f3]">
                             {block.replace(/^```|```$/g, "").trim()}
                         </code>
                     </pre>
                 ) : (
-                    <span key={index}>{block}</span>
+                    <pre
+                        className="overflow-auto whitespace-pre-wrap font-sans"
+                        key={index}
+                    >
+                        {block.trim()}
+                    </pre>
                 )
             )}
         </div>
