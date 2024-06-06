@@ -1,6 +1,7 @@
 import User from "../../shared/User/User";
 import VoteButton from "../../shared/vote-button/VoteButton";
 import ApiService from "../../../services/ApiService";
+import CodeHighlighter from "../../shared/codeblock/CodeHighlighter/CodeHighlighter";
 
 function Answer({ answer, setAnswer }) {
     const creationDate = new Date(answer.date);
@@ -19,8 +20,8 @@ function Answer({ answer, setAnswer }) {
 
     return (
         <>
-            <div className="answer-container w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
-                <p>{answer.text}</p>
+            <div className="w-full flex flex-col gap-[10px] bg-gray-300 p-[15px] rounded-[10px] border border-solid border-gray-400">
+                <CodeHighlighter markdown={answer.text} />
                 <hr />
                 <div className="flex gap-[10px] items-center">
                     <User user={answer.user} />
