@@ -39,11 +39,14 @@ function QuestionOverview() {
     const form = e.target;
     const formData = new FormData(form);
 
-    let filteredData = questions;
-    filteredData = questions.filter((item) =>
-      item.title.toLowerCase().includes(formData.get("search").toLowerCase())
+    if (formData.get("search").length === 0) {
+      setFilteredQuestions([]);
+      return;
+    }
+
+    ApiService.get(`questions/get-by-title/${formData.get("search")}`).then(
+      (response) => setFilteredQuestions(response.data)
     );
-    setFilteredQuestions(filteredData);
   };
 
   if (questions === undefined) {
