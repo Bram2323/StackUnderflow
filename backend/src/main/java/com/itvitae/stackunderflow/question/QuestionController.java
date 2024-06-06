@@ -27,6 +27,17 @@ public class QuestionController {
         return questionRepository.findAll().stream().map(MinimalQuestionDTO::from).toList();
     }
 
+    @GetMapping("get-by-title/{title}")
+    public List<MinimalQuestionDTO> getAllQuestionsByTitle(@PathVariable String title){
+        List<Question> possiblyExistingQuestions = questionRepository.findByTitleContainsIgnoreCase(title);
+        System.out.println("TITLE: " + title);
+        System.out.println("THIS IS FOR DEBUG PURPOSES: " + possiblyExistingQuestions);
+        if(possiblyExistingQuestions.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return possiblyExistingQuestions.stream().map(MinimalQuestionDTO::from).toList();
+    }
+
     @GetMapping("{id}")
     public QuestionDTO getQuestionById(@PathVariable long id) {
         Optional<Question> possiblyExistingQuestion = questionRepository.findById(id);
