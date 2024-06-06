@@ -26,7 +26,7 @@ function CodeHighlighter({ markdown }) {
                     </pre>
                 ) : (
                     <pre
-                        className="overflow-auto whitespace-pre-wrap font-sans"
+                        className="overflow-auto whitespace-pre-wrap font-sans break-words"
                         key={index}
                     >
                         {block.trim()}
