@@ -28,7 +28,7 @@ function AnswerForm({ questionId, answers, setAnswers }) {
         <>
             <div className="w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
                 {!UserService.isLoggedIn() ? (
-                    <p>Log in to answer this question!</p>
+                    <p>Log in om te antwoorden op deze vraag!</p>
                 ) : (
                     <>
                         <div className="flex flex-col">
@@ -53,7 +53,7 @@ function AnswerForm({ questionId, answers, setAnswers }) {
                                 object={answer}
                                 setObject={setAnswer}
                                 selectionRange={selectionRange}
-                                setSelectionRange={selectionRange}
+                                setSelectionRange={setSelectionRange}
                             />
                             <button
                                 className="w-fit bg-blue-500 text-white rounded-full p-3 px-5 transition duration-200 my-2 hover:bg-blue-700"
