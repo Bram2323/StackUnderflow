@@ -3,10 +3,16 @@ import ApiService from "../../services/ApiService";
 import "./QuestionForm.css";
 import InputField from "../shared/InputField/InputField";
 import { useNavigate } from "react-router-dom";
+import CodeMarker from "../shared/codeblock/CodeMarker/CodeMarker";
 
 function QuestionForm() {
     const [newQuestion, setNewQuestion] = useState({ title: "", text: "" });
     const [error, setError] = useState("");
+    const [selectionRange, setSelectionRange] = useState({
+        start: null,
+        end: null,
+    });
+
     const navigate = useNavigate();
 
     function handleSaveQuestion(e) {
@@ -42,8 +48,14 @@ function QuestionForm() {
                     />
                     <label>Beschrijf je probleem</label>
                     <textarea
-                        className="border-2 border-[#5c5c5c] rounded-lg bg-[#f3f3f3] text-base w-full h-52 mb-2 p-2"
+                        className="border-2 border-[#5c5c5c] rounded-lg bg-[#f3f3f3] text-base w-full h-72 mb-2 p-2"
                         value={newQuestion.text}
+                        onSelect={(e) =>
+                            setSelectionRange({
+                                start: e.target.selectionStart,
+                                end: e.target.selectionEnd,
+                            })
+                        }
                         onChange={(e) =>
                             setNewQuestion({
                                 ...newQuestion,
@@ -51,8 +63,14 @@ function QuestionForm() {
                             })
                         }
                     ></textarea>
+                    <CodeMarker
+                        object={newQuestion}
+                        setObject={setNewQuestion}
+                        selectionRange={selectionRange}
+                        setSelectionRange={setSelectionRange}
+                    />
                     <button
-                        className="bg-blue-500 text-white rounded-full w-48 p-3 transition duration-200"
+                        className="bg-blue-500 text-white rounded-full w-48 p-3 transition duration-200 my-2"
                         onClick={handleSaveQuestion}
                     >
                         Plaats je vraag

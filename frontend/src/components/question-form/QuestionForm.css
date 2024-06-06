@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
+    width: 100%;
 }
 
 .question-form label {
@@ -15,13 +16,14 @@
 .question-form h1 {
     font-size: larger;
     font-weight: bold;
-    margin-bottom: 15px ;
+    margin-bottom: 15px;
 }
 
 .question-form-container {
     display: flex;
     flex-direction: column;
-    width: 500px;
+    max-width: 600px;
+    width: 90%;
 }
 
 .question-form-container .input-field-container {
@@ -34,6 +36,7 @@
 }
 
 .question-form-error {
-    margin-top: 10px;
     color: red;
 }
+
+

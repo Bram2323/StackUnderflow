@@ -26,7 +26,7 @@ public class Seeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (userRepository.findByUsername("test").isEmpty()) {
-            userService.register("test", "test");
+            userService.register("test", "Testww123!");
         }
         if (questionRepository.count() == 0) {
             User user = userRepository.findByUsername("test").get();
@@ -37,7 +37,7 @@ public class Seeder implements CommandLineRunner {
                     "Vivamus fermentum pharetra urna, sed iaculis turpis sagittis non.", LocalDateTime.now(), user);
             questionRepository.save(q1);
         }
-        if (answerRepository.count() == 0){
+        if (answerRepository.count() == 0) {
             User user = userRepository.findByUsername("test").get();
             Question question = questionRepository.findAll().getFirst();
             Answer a1 = new Answer("I have no idea how to fix that...", LocalDateTime.of(2023, 5, 12, 23, 24), question, user);
