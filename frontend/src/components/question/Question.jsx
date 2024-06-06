@@ -8,12 +8,14 @@ import CodeHighlighter from "../shared/codeblock/CodeHighlighter/CodeHighlighter
 
 function Question() {
     const [question, setQuestion] = useState();
+    const [answers, setAnswers] = useState([]);
     const { id } = useParams();
 
     useEffect(() => {
-        ApiService.get("questions/" + id).then((response) =>
-            setQuestion(response.data)
-        );
+        ApiService.get("questions/" + id).then((response) => {
+            setQuestion(response.data);
+            setAnswers(response.data.answers);
+        });
     }, []);
 
     if (question === undefined) {
@@ -25,6 +27,13 @@ function Question() {
         timeStyle: "short",
         timeZone: "Europe/Amsterdam",
     }).format(creationDate);
+
+    function setAnswer(newAnswer) {
+        const newAnswers = answers.map((answer) =>
+            answer.id == newAnswer.id ? newAnswer : answer
+        );
+        setAnswers(newAnswers);
+    }
 
     return (
         <div className="question">
@@ -41,7 +50,7 @@ function Question() {
                 </div>
             </div>
             <div className="answer-container flex flex-col gap-[10px]">
-                {[...question.answers]
+                {[...answers]
                     .sort((a, b) => {
                         const aDate = new Date(a.date);
                         const bDate = new Date(b.date);
@@ -50,7 +59,11 @@ function Question() {
                         return 0;
                     })
                     .map((answer, index) => (
-                        <Answer key={index} answer={answer} />
+                        <Answer
+                            key={index}
+                            answer={answer}
+                            setAnswer={setAnswer}
+                        />
                     ))}
             </div>
         </div>
