@@ -30,8 +30,6 @@ public class QuestionController {
     @GetMapping("get-by-title/{title}")
     public List<MinimalQuestionDTO> getAllQuestionsByTitle(@PathVariable String title){
         List<Question> possiblyExistingQuestions = questionRepository.findByTitleContainsIgnoreCase(title);
-        System.out.println("TITLE: " + title);
-        System.out.println("THIS IS FOR DEBUG PURPOSES: " + possiblyExistingQuestions);
         if(possiblyExistingQuestions.isEmpty()) {
             throw new NotFoundException();
         }
