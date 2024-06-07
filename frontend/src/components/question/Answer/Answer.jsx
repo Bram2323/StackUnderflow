@@ -1,6 +1,7 @@
 import User from "../../shared/User/User";
 import VoteButton from "../../shared/vote-button/VoteButton";
 import ApiService from "../../../services/ApiService";
+import UserService from "../../../services/UserService";
 import CodeHighlighter from "../../shared/codeblock/CodeHighlighter/CodeHighlighter";
 
 function Answer({ answer, setAnswer }) {
@@ -12,6 +13,7 @@ function Answer({ answer, setAnswer }) {
     }).format(creationDate);
 
     function vote(vote) {
+        if (!UserService.isLoggedIn()) return;
         ApiService.patch("answers/" + answer.id + "/votes", {
             isUpVote: vote === 1,
             isDownVote: vote === -1,

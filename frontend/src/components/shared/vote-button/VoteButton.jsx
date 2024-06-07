@@ -1,8 +1,6 @@
 import React from "react";
 
 function VoteButton({ onVote, votes, userHasUpVoted, userHasDownVoted }) {
-    console.log(userHasUpVoted, userHasDownVoted);
-
     return (
         <div className="flex flex-col items-center">
             <button
