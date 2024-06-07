@@ -26,11 +26,15 @@ function formatDate(date) {
 function QuestionOverview() {
   const [questions, setQuestions] = useState();
   const [filteredQuestions, setFilteredQuestions] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    ApiService.get("questions").then((response) => setQuestions(response.data));
+    ApiService.get("questions").then((response) => {
+      setQuestions(response.data);
+      setFilteredQuestions(response.data);
+    });
   }, []);
 
   const handleSearch = (e) => {
@@ -40,7 +44,7 @@ function QuestionOverview() {
     const formData = new FormData(form);
 
     if (formData.get("search").length === 0) {
-      setFilteredQuestions([]);
+      setFilteredQuestions(questions);
       return;
     }
 
@@ -53,19 +57,24 @@ function QuestionOverview() {
     return <></>;
   }
 
-  const dataToDisplay =
-    filteredQuestions.length > 0 ? filteredQuestions : questions;
+  const dataToDisplay = searchQuery.length > 0 ? filteredQuestions : questions;
 
   return (
     <div className=" w-3/4 ">
       <div>
         <form method="post" onSubmit={handleSearch}>
-          <input type="text" placeholder="Search..." name="search" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search..."
+            name="search"
+          />
           <button type="submit">Submit</button>
         </form>
       </div>
       <div>
-        {dataToDisplay.map((question) => (
+        {filteredQuestions.map((question) => (
           <div
             className=" cursor-pointer bg-gray-300 pt-2 pb-2 pl-2 mt-2"
             onClick={() => navigate(`/vragen/${question.id}`)}

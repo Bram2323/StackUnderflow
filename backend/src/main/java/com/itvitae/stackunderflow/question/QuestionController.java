@@ -11,9 +11,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.Optional;
-
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "${stackunderflow.cors}")
 @RestController
@@ -23,16 +22,13 @@ public class QuestionController {
     private final QuestionRepository questionRepository;
 
     @GetMapping()
-    public List<MinimalQuestionDTO> getAllQuestions(){
+    public List<MinimalQuestionDTO> getAllQuestions() {
         return questionRepository.findAll().stream().map(MinimalQuestionDTO::from).toList();
     }
 
     @GetMapping("get-by-title/{title}")
-    public List<MinimalQuestionDTO> getAllQuestionsByTitle(@PathVariable String title){
+    public List<MinimalQuestionDTO> getAllQuestionsByTitle(@PathVariable String title) {
         List<Question> possiblyExistingQuestions = questionRepository.findByTitleContainsIgnoreCase(title);
-        if(possiblyExistingQuestions.isEmpty()) {
-            throw new NotFoundException();
-        }
         return possiblyExistingQuestions.stream().map(MinimalQuestionDTO::from).toList();
     }
 
