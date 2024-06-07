@@ -6,10 +6,10 @@ import "./QuestionOverview.css";
 
 /*
     ways to filter:
-    - search query
+    - [DONE] search query
     - creationdate (newest/oldest)
-    - id (is default)
-    - title (alphabetically???)
+    - [DEFAULT] id (is default)
+    - title (alphabetically?)
 */
 
 function formatDate(date) {
@@ -56,8 +56,6 @@ function QuestionOverview() {
   if (questions === undefined) {
     return <></>;
   }
-
-  const dataToDisplay = searchQuery.length > 0 ? filteredQuestions : questions;
 
   return (
     <div className=" w-3/4 ">

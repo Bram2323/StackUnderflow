@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,9 +27,24 @@ public class QuestionController {
         return questionRepository.findAll().stream().map(MinimalQuestionDTO::from).toList();
     }
 
-    @GetMapping("get-by-title/{title}")
-    public List<MinimalQuestionDTO> getAllQuestionsByTitle(@PathVariable String title) {
-        List<Question> possiblyExistingQuestions = questionRepository.findByTitleContainsIgnoreCase(title);
+    @GetMapping("get-by-title")
+    public List<MinimalQuestionDTO> getAllQuestionsByTitle(@RequestParam(required = false) String title,
+                                                           @RequestParam(name = "date-desc", required = false) boolean dateDescending,
+                                                           @RequestParam(name = "date-asc", required = false) boolean dateAscending,
+                                                           @RequestParam(name = "most-answers", required = false) boolean mostAnswers) {
+
+        List<Question> possiblyExistingQuestions = new ArrayList<>();
+
+        if (!dateAscending && !dateDescending) {
+            possiblyExistingQuestions = questionRepository.findByTitleContainsIgnoreCase(title);
+        } else if (mostAnswers) {
+            possiblyExistingQuestions = questionRepository.findByTitleContainsIgnoreCaseOrderByAnswerCountDesc(title);
+        } else if (dateAscending) {
+            possiblyExistingQuestions = questionRepository.findByTitleContainsIgnoreCaseOrderByDateAsc(title);
+        } else {
+            possiblyExistingQuestions = questionRepository.findByTitleContainsIgnoreCaseOrderByDateDesc(title);
+        }
+
         return possiblyExistingQuestions.stream().map(MinimalQuestionDTO::from).toList();
     }
 
