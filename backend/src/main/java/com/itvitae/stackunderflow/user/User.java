@@ -48,6 +48,12 @@ public class User implements UserDetails {
     }
 
     @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof User otherUser)) return false;
+        return id.equals(otherUser.id);
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
