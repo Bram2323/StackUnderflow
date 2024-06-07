@@ -2,12 +2,12 @@ package com.itvitae.stackunderflow.answer;
 
 import com.itvitae.stackunderflow.exceptions.BadRequestException;
 import com.itvitae.stackunderflow.exceptions.NotFoundException;
-import com.itvitae.stackunderflow.useranswervote.AnswerVoteDTO;
-import com.itvitae.stackunderflow.useranswervote.UserAnswerVote;
-import com.itvitae.stackunderflow.useranswervote.UserAnswerVoteRepository;
 import com.itvitae.stackunderflow.question.Question;
 import com.itvitae.stackunderflow.question.QuestionRepository;
 import com.itvitae.stackunderflow.user.User;
+import com.itvitae.stackunderflow.useranswervote.AnswerVoteDTO;
+import com.itvitae.stackunderflow.useranswervote.UserAnswerVote;
+import com.itvitae.stackunderflow.useranswervote.UserAnswerVoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -54,20 +54,20 @@ public class AnswerController {
         userAnswerVote.setIsUpvote(answerVoteDTO.isUpVote());
         userAnswerVoteRepository.save(userAnswerVote);
 
-//        Answer updatedAnswer = answerRepository.findById(id).get();
         return ResponseEntity.ok(AnswerDTO.from(answer, user));
+    }
 
     @GetMapping("{id}")
     private AnswerDTO get(@PathVariable Long id) {
         Optional<Answer> possibleAnswer = answerRepository.findById(id);
         if (possibleAnswer.isEmpty())
             throw new NotFoundException();
-        return AnswerDTO.from(possibleAnswer.get());
+        return AnswerDTO.from(possibleAnswer.get(), null);
     }
 
     @PostMapping
     private ResponseEntity<AnswerDTO> create(@RequestBody PostAnswerDTO answerDTO, UriComponentsBuilder ucb,
-            Authentication authentication) {
+                                             Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Long questionId = answerDTO.question();
         String text = answerDTO.text();
@@ -87,6 +87,6 @@ public class AnswerController {
         Answer savedAnswer = answerRepository.save(answer);
 
         URI path = ucb.path("/answers/{id}").buildAndExpand(savedAnswer.getId()).toUri();
-        return ResponseEntity.created(path).body(AnswerDTO.from(savedAnswer));
+        return ResponseEntity.created(path).body(AnswerDTO.from(savedAnswer, user));
     }
 }
