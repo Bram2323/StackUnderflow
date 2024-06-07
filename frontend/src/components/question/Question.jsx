@@ -57,7 +57,7 @@ function Question() {
                     setAnswers={setAnswers}
                 />
             </div>
-            <div className="flex flex-col gap-[10px] pb-2">
+            <div className="flex flex-col gap-[20px] pb-2">
                 {[...answers]
                     .sort((a, b) => {
                         const aDate = new Date(a.date);
