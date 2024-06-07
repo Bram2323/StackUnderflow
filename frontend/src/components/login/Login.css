@@ -16,10 +16,10 @@
 }
 
 .login-form button {
-    border: 1px solid #2397F4;
+    border: 1px solid #2397f4;
     border-radius: 100px;
     padding: 10px 20px;
-    transition: 0.2s
+    transition: 0.2s;
 }
 
 .login-form button:hover {

@@ -49,13 +49,20 @@ public class QuestionController {
     }
 
     @GetMapping("{id}")
-    public QuestionDTO getQuestionById(@PathVariable long id) {
+    public QuestionDTO getQuestionById(@PathVariable long id, Authentication authentication) {
+        User user;
+        if (authentication == null) {
+            user = null;
+        } else {
+            user = (User) authentication.getPrincipal();
+        }
+
         Optional<Question> possiblyExistingQuestion = questionRepository.findById(id);
         if (possiblyExistingQuestion.isEmpty()) {
             throw new NotFoundException();
         }
         Question question = possiblyExistingQuestion.get();
-        return QuestionDTO.from(question);
+        return QuestionDTO.from(question, user);
     }
 
     @PostMapping
@@ -72,6 +79,6 @@ public class QuestionController {
         questionRepository.save(newQuestion);
 
         URI locationOfNewQuestion = ucb.path("questions/{id}").buildAndExpand(newQuestion.getId()).toUri();
-        return ResponseEntity.created(locationOfNewQuestion).body(QuestionDTO.from(newQuestion));
+        return ResponseEntity.created(locationOfNewQuestion).body(QuestionDTO.from(newQuestion, user));
     }
 }

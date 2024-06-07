@@ -2,17 +2,16 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    width: 60%;
+    width: 55%;
     gap: 20px;
 }
 
 .question-container {
     background-color: rgb(212, 212, 212);
     padding: 20px;
-    margin-top: 50px;  
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px; 
+    gap: 10px;
 }
-

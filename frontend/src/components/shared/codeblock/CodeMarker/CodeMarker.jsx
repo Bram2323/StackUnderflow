@@ -47,7 +47,7 @@ function CodeMarker({ object, setObject, selectionRange, setSelectionRange }) {
                 </p>
                 <button
                     type="button"
-                    className="relative bg-gray-200 text-gray-800 font-bold py-1 px-4 rounded-full"
+                    className="relative bg-gray-200 text-gray-800 font-bold py-1 px-4 transition duration-200 rounded-full hover:bg-gray-300"
                     onClick={handleMarkCodeBlock}
                 >
                     {"{ }"}
