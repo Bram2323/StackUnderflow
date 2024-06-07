@@ -25,7 +25,7 @@ public class Answer {
 
     private LocalDateTime date;
 
-    private Boolean isSolution = false;
+    private Boolean isSolution;
 
     @ManyToOne
     private Question question;

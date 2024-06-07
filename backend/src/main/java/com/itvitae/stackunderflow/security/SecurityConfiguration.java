@@ -27,8 +27,9 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(HttpMethod.POST, "questions/**").authenticated()
-                        .requestMatchers("answers/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "questions").authenticated()
+                        .requestMatchers("answers/{id}/votes").authenticated()
+                        .requestMatchers("answers").authenticated()
                         .anyRequest().permitAll())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(

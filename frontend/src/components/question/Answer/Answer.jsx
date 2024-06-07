@@ -3,10 +3,8 @@ import VoteButton from "../../shared/vote-button/VoteButton";
 import ApiService from "../../../services/ApiService";
 import UserService from "../../../services/UserService";
 import CodeHighlighter from "../../shared/codeblock/CodeHighlighter/CodeHighlighter";
-import CheckMark from "../../../assets/images/checkmark.svg";
-import "./Answer.css";
 
-function Answer({ answer, setAnswer, isQuestionOwner }) {
+function Answer({ answer, setAnswer }) {
     const creationDate = new Date(answer.date);
     const formattedDate = new Intl.DateTimeFormat("nl-NL", {
         dateStyle: "short",
@@ -22,39 +20,14 @@ function Answer({ answer, setAnswer, isQuestionOwner }) {
         }).then((response) => setAnswer(response.data));
     }
 
-    function setSolution(solution) {
-        if (!UserService.isLoggedIn() || !isQuestionOwner) return;
-        ApiService.patch("answers/" + answer.id, { isSolution: solution }).then(
-            (response) => {
-                setAnswer(response.data);
-            }
-        );
-    }
-
     return (
-        <div className={"answer-container flex items-start gap-2"}>
-            <div className="flex flex-col items-center gap-[2px]">
-                <VoteButton
-                    onVote={vote}
-                    votes={answer.votes}
-                    userHasUpVoted={answer.userHasUpVoted}
-                    userHasDownVoted={answer.userHasDownVoted}
-                />
-                <button
-                    onClick={() => setSolution(!answer.isSolution)}
-                    className={`checkmark-button transition-all duration-200 ${
-                        isQuestionOwner
-                            ? answer.isSolution
-                                ? ""
-                                : "opacity-0 selectable"
-                            : answer.isSolution
-                            ? "cursor-default"
-                            : "hidden"
-                    }`}
-                >
-                    <img src={CheckMark} className="w-4 h-4" />
-                </button>
-            </div>
+        <div className="flex items-start gap-3">
+            <VoteButton
+                onVote={vote}
+                votes={answer.votes}
+                userHasUpVoted={answer.userHasUpVoted}
+                userHasDownVoted={answer.userHasDownVoted}
+            />
             <div className="answer-container w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
                 <CodeHighlighter markdown={answer.text} />
                 <hr />
