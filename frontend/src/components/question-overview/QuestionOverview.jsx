@@ -2,14 +2,7 @@ import React, { useEffect, useState } from "react";
 import ApiService from "../../services/ApiService";
 import "./QuestionOverview.css";
 import QuestionItem from "../shared/question-item/QuestionItem.jsx";
-
-/*
-    ways to filter:
-    - [DONE] search query
-    - creationdate (newest/oldest)
-    - [DEFAULT] id (is default)
-    - title (alphabetically?)
-*/
+import QuestionList from "../shared/question-list/QuestionList.jsx";
 
 function QuestionOverview() {
     const [questions, setQuestions] = useState();
@@ -57,11 +50,7 @@ function QuestionOverview() {
                     <button type="submit">Submit</button>
                 </form>
             </div>
-            <div>
-                {filteredQuestions.map((question, index) => (
-                    <QuestionItem question={question} key={index} />
-                ))}
-            </div>
+            <QuestionList questions={filteredQuestions} />
         </div>
     );
 }
