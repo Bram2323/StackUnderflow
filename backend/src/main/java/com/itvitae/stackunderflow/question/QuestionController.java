@@ -11,6 +11,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +25,40 @@ public class QuestionController {
 
     @GetMapping()
     public List<MinimalQuestionDTO> getAllQuestions() {
-        return questionRepository.findAll().stream().map(MinimalQuestionDTO::from).toList();
+        List<Question> allQuestions = questionRepository.findAll();
+        allQuestions.sort(Comparator.comparing(Question::getDate));
+        Collections.reverse(allQuestions);
+        return allQuestions.stream().map(MinimalQuestionDTO::from).toList();
+    }
+
+    @GetMapping("search")
+    public List<MinimalQuestionDTO> getAllQuestionsByTitle(@RequestParam(required = false) String title,
+                                                           @RequestParam(name = "sort-by", required = false) String sortBy) {
+
+        List<Question> questions;
+
+        if (title == null) {
+            questions = questionRepository.findAll();
+        } else {
+            questions = questionRepository.findByTitleContainsIgnoreCase(title);
+        }
+
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "date-asc" -> questions.sort(Comparator.comparing(Question::getDate));
+                case "date-desc" -> {
+                    questions.sort(Comparator.comparing(Question::getDate));
+                    Collections.reverse(questions);
+                }
+                case "least-answers" -> questions.sort(Comparator.comparing(question -> question.getAnswers().size()));
+                case "most-answers" -> {
+                    questions.sort(Comparator.comparing(question -> question.getAnswers().size()));
+                    Collections.reverse(questions);
+                }
+            }
+        }
+
+        return questions.stream().map(MinimalQuestionDTO::from).toList();
     }
 
     @GetMapping("{id}")
