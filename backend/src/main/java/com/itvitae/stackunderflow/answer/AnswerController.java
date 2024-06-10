@@ -1,6 +1,7 @@
 package com.itvitae.stackunderflow.answer;
 
 import com.itvitae.stackunderflow.exceptions.BadRequestException;
+import com.itvitae.stackunderflow.exceptions.ForbiddenException;
 import com.itvitae.stackunderflow.exceptions.NotFoundException;
 import com.itvitae.stackunderflow.question.Question;
 import com.itvitae.stackunderflow.question.QuestionRepository;
@@ -26,6 +27,34 @@ public class AnswerController {
     private final AnswerRepository answerRepository;
     private final UserAnswerVoteRepository userAnswerVoteRepository;
     private final QuestionRepository questionRepository;
+
+    @PatchMapping("{id}")
+    public ResponseEntity<AnswerDTO> patch(@PathVariable Long id, @RequestBody AnswerDTO answerDTO, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        Optional<Answer> possibleAnswer = answerRepository.findById(id);
+        Answer answer = possibleAnswer.orElseThrow(NotFoundException::new);
+
+        Question question = answer.getQuestion();
+        User questionOwner = question.getUser();
+        User answerOwner = answer.getUser();
+
+        if (!user.equals(questionOwner) && !user.equals(answerOwner)) throw new ForbiddenException();
+
+        Boolean isSolution = answerDTO.isSolution();
+        if (isSolution != null) {
+            if (!user.equals(questionOwner)) throw new ForbiddenException();
+            answer.setIsSolution(isSolution);
+        }
+
+        String text = answerDTO.text();
+        if (text != null) {
+            if (!user.equals(answerOwner)) throw new ForbiddenException();
+            answer.setText(text);
+        }
+
+        Answer updatedAnswer = answerRepository.save(answer);
+        return ResponseEntity.ok(AnswerDTO.from(updatedAnswer, user));
+    }
 
     @PatchMapping("{id}/votes")
     public ResponseEntity<AnswerDTO> addVote(@PathVariable Long id, @RequestBody AnswerVoteDTO answerVoteDTO, Authentication authentication) {
@@ -57,17 +86,8 @@ public class AnswerController {
         return ResponseEntity.ok(AnswerDTO.from(answer, user));
     }
 
-    @GetMapping("{id}")
-    private AnswerDTO get(@PathVariable Long id) {
-        Optional<Answer> possibleAnswer = answerRepository.findById(id);
-        if (possibleAnswer.isEmpty())
-            throw new NotFoundException();
-        return AnswerDTO.from(possibleAnswer.get(), null);
-    }
-
     @PostMapping
-    private ResponseEntity<AnswerDTO> create(@RequestBody PostAnswerDTO answerDTO, UriComponentsBuilder ucb,
-                                             Authentication authentication) {
+    private ResponseEntity<AnswerDTO> create(@RequestBody PostAnswerDTO answerDTO, UriComponentsBuilder ucb, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Long questionId = answerDTO.question();
         String text = answerDTO.text();
