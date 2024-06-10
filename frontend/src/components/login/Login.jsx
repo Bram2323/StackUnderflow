@@ -1,25 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import InputField from "../shared/InputField/InputField";
+import InputField from "../shared/input-field/InputField";
 import UserService from "../../services/UserService";
 import "./Login.css";
 
-
-function translateError(error){
+function translateError(error) {
     switch (error) {
         case "Username is required!":
-            return "Gebruikersnaam is verplicht!"
+            return "Gebruikersnaam is verplicht!";
         case "Password is required!":
-            return "Wachtwoord is verplicht!"
+            return "Wachtwoord is verplicht!";
         case "User doesn't exist!":
-            return "Gebruiker bestaat niet!"
+            return "Gebruiker bestaat niet!";
         case "Password is incorrect!":
-            return "Wachtwoord is verkeerd!"
+            return "Wachtwoord is verkeerd!";
         default:
             return error;
     }
 }
-
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -28,30 +26,43 @@ function Login() {
 
     const navigate = useNavigate();
 
-    function handleLogin(){
+    function handleLogin() {
         if (username.length == 0) setError("Gebruikersnaam is verplicht!");
         else if (password.length == 0) setError("Wachtwoord is verplicht!");
         else {
-            UserService.login(username, password).then(() => {
-                navigate("/");
-            }).catch((error) => {
-                setError(translateError(error));
-            });
+            UserService.login(username, password)
+                .then(() => {
+                    navigate("/");
+                })
+                .catch((error) => {
+                    setError(translateError(error));
+                });
         }
     }
 
-    return ( <>
-        <div className="login-form">
-            <div className="login-input">
-                <InputField label="Gebruikersnaam" text={username} onTextChanged={setUsername} onSubmit={handleLogin}/>
-                <InputField label="Wachtwoord" text={password} onTextChanged={setPassword} hidden={true} onSubmit={handleLogin}/>
+    return (
+        <>
+            <div className="login-form">
+                <div className="login-input">
+                    <InputField
+                        label="Gebruikersnaam"
+                        text={username}
+                        onTextChanged={setUsername}
+                        onSubmit={handleLogin}
+                    />
+                    <InputField
+                        label="Wachtwoord"
+                        text={password}
+                        onTextChanged={setPassword}
+                        hidden={true}
+                        onSubmit={handleLogin}
+                    />
+                </div>
+                {error != "" ? <p className="login-error">{error}</p> : null}
+                <button onClick={handleLogin}>Login</button>
             </div>
-            {error != "" ? 
-                <p className="login-error">{error}</p>
-            : null}
-            <button onClick={handleLogin}>Login</button>
-        </div>
-    </> );
+        </>
+    );
 }
 
 export default Login;

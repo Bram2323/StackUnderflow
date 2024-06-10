@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ApiService from "../../services/ApiService";
 import QuestionList from "../shared/question-list/QuestionList.jsx";
+import Pagable from "../shared/pagable/Pagable.jsx";
 
 function formatDate(date) {
     const creationDate = new Date(date);
@@ -59,6 +60,7 @@ function QuestionOverview() {
                     <button type="submit">Submit</button>
                 </form>
             </div>
+            <Pagable totalPages={100} onPageChange={() => {}} />
             <QuestionList questions={filteredQuestions} />
         </div>
     );

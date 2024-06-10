@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ApiService from "../../services/ApiService";
 import "./QuestionForm.css";
-import InputField from "../shared/InputField/InputField";
+import InputField from "../shared/input-field/InputField";
 import { useNavigate } from "react-router-dom";
 import CodeMarker from "../shared/codeblock/CodeMarker/CodeMarker";
 

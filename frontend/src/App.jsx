@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import NavBar from "./components/shared/NavBar";
+import NavBar from "./components/shared/nav-bar/NavBar";
 import Question from "./components/question/Question";
 import Login from "./components/login/Login";
-import QuestionOverview from "./components/question-overview/QuestionOverview"
+import QuestionOverview from "./components/question-overview/QuestionOverview";
 import QuestionForm from "./components/question-form/QuestionForm";
 import Register from "./components/register/Register";
 
