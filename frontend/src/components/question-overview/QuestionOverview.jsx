@@ -6,6 +6,7 @@ function QuestionOverview() {
     const [questions, setQuestions] = useState();
     const [filteredQuestions, setFilteredQuestions] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [filterQuery, setFilterQuery] = useState("");
 
     useEffect(() => {
         ApiService.get("questions").then((response) => {
@@ -20,14 +21,19 @@ function QuestionOverview() {
         const form = e.target;
         const formData = new FormData(form);
 
-        if (formData.get("search").length === 0) {
+        if (
+            formData.get("search").length === 0 &&
+            filteredQuestions === "none"
+        ) {
             setFilteredQuestions(questions);
             return;
         }
 
-        ApiService.get(`questions/search?title=${formData.get("search")}`).then(
-            (response) => setFilteredQuestions(response.data)
-        );
+        ApiService.get(
+            `questions/search?title=${formData.get(
+                "search"
+            )}&sort-by=${filterQuery}`
+        ).then((response) => setFilteredQuestions(response.data));
     };
 
     if (questions === undefined) {
@@ -45,6 +51,19 @@ function QuestionOverview() {
                         placeholder="Search..."
                         name="search"
                     />
+                    <select
+                        onChange={(e) => setFilterQuery(e.target.value)}
+                        name="filters"
+                    >
+                        <option value="date-desc">
+                            Creation date descending
+                        </option>
+                        <option value="date-asc">
+                            Creation date ascending
+                        </option>
+                        <option value="most-answers">Most answers</option>
+                        <option value="least-answers">Least answers</option>
+                    </select>
                     <button type="submit">Submit</button>
                 </form>
             </div>
