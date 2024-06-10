@@ -2,17 +2,6 @@ import React, { useEffect, useState } from "react";
 import ApiService from "../../services/ApiService";
 import QuestionList from "../shared/question-list/QuestionList.jsx";
 
-function formatDate(date) {
-    const creationDate = new Date(date);
-    const formattedDate = new Intl.DateTimeFormat("nl-NL", {
-        dateStyle: "short",
-        timeStyle: "short",
-        timeZone: "Europe/Amsterdam",
-    }).format(creationDate);
-
-    return formattedDate;
-}
-
 function QuestionOverview() {
     const [questions, setQuestions] = useState();
     const [filteredQuestions, setFilteredQuestions] = useState([]);
