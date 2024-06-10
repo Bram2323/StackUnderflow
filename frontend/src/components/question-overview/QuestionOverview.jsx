@@ -21,14 +21,6 @@ function QuestionOverview() {
         const form = e.target;
         const formData = new FormData(form);
 
-        if (
-            formData.get("search").length === 0 &&
-            filteredQuestions === "none"
-        ) {
-            setFilteredQuestions(questions);
-            return;
-        }
-
         ApiService.get(
             `questions/search?title=${formData.get(
                 "search"
