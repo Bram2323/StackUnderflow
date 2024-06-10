@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import ApiService from "../../services/ApiService";
-import "./QuestionOverview.css";
 import QuestionList from "../shared/question-list/QuestionList.jsx";
 
 function formatDate(date) {
