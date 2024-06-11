@@ -1,6 +1,7 @@
 package com.itvitae.stackunderflow.question;
 
 import com.itvitae.stackunderflow.exceptions.BadRequestException;
+import com.itvitae.stackunderflow.exceptions.ForbiddenException;
 import com.itvitae.stackunderflow.exceptions.NotFoundException;
 import com.itvitae.stackunderflow.user.User;
 import lombok.RequiredArgsConstructor;
@@ -95,19 +96,43 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<QuestionDTO> createQuestion(@RequestBody PostQuestionDTO postQuestionDTO, UriComponentsBuilder ucb, Authentication authentication) {
+    public ResponseEntity<QuestionDTO> createQuestion(@RequestBody PostPatchQuestionDTO postPatchQuestionDTO, UriComponentsBuilder ucb, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
-        if (postQuestionDTO.title() == null || postQuestionDTO.title().isBlank()) {
+        if (postPatchQuestionDTO.title() == null || postPatchQuestionDTO.title().isBlank()) {
             throw new BadRequestException("Title can't be null");
         }
-        if (postQuestionDTO.text() == null || postQuestionDTO.text().isBlank()) {
+        if (postPatchQuestionDTO.text() == null || postPatchQuestionDTO.text().isBlank()) {
             throw new BadRequestException("Text can't be null");
         }
-        Question newQuestion = new Question(postQuestionDTO.title(), postQuestionDTO.text(), LocalDateTime.now(), user);
+        Question newQuestion = new Question(postPatchQuestionDTO.title(), postPatchQuestionDTO.text(), LocalDateTime.now(), user);
         questionRepository.save(newQuestion);
 
         URI locationOfNewQuestion = ucb.path("questions/{id}").buildAndExpand(newQuestion.getId()).toUri();
         return ResponseEntity.created(locationOfNewQuestion).body(QuestionDTO.from(newQuestion, user));
+    }
+
+    @PatchMapping("{id}")
+    public QuestionDTO editQuestion(@PathVariable Long id, @RequestBody PostPatchQuestionDTO postPatchQuestionDTO, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        Optional<Question> possibleQuestion = questionRepository.findById(id);
+        Question question = possibleQuestion.orElseThrow(NotFoundException::new);
+
+        User questionOwner = question.getUser();
+        if (!user.equals(questionOwner)) {
+            throw new ForbiddenException();
+        }
+
+        if (postPatchQuestionDTO.title() == null || postPatchQuestionDTO.title().isBlank()) {
+            throw new BadRequestException("Title can't be null");
+        }
+        if (postPatchQuestionDTO.text() == null || postPatchQuestionDTO.text().isBlank()) {
+            throw new BadRequestException("Text can't be null");
+        }
+        question.setTitle(postPatchQuestionDTO.title());
+        question.setText(postPatchQuestionDTO.text());
+        questionRepository.save(question);
+        return QuestionDTO.from(question, user);
     }
 }
