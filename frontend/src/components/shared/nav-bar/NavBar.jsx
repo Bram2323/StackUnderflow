@@ -1,8 +1,8 @@
 import "./NavBar.css";
-import logo from "../../assets/images/stack_underflow_logo.png";
+import logo from "../../../assets/images/stack_underflow_logo.png";
 import { useNavigate } from "react-router-dom";
-import UserService from "../../services/UserService";
-import User from "./User/User";
+import UserService from "../../../services/UserService";
+import User from "../User/User";
 
 export default function NavBar() {
     const navigate = useNavigate();
