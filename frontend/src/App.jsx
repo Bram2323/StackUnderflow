@@ -7,6 +7,7 @@ import QuestionOverview from "./components/question-overview/QuestionOverview";
 import QuestionForm from "./components/question-form/QuestionForm";
 import Register from "./components/register/Register";
 import Home from "./components/home/Home";
+import NotFoundPage from "./components/not-found-page/NotFoundPage";
 
 export default function App() {
     return (
@@ -22,7 +23,7 @@ export default function App() {
                 <Route path="/registreren" element={<Register />} />
                 <Route path="/vragen/aanmaken" element={<QuestionForm />} />
 
-                <Route path="*" element={<p>404 not found</p>} />
+                <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </>
     );
