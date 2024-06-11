@@ -21,7 +21,7 @@ public class UserController {
 
 
     @PostMapping("login")
-    public ResponseEntity<TokenDTO> login(@RequestBody AuthDTO authDTO){
+    public ResponseEntity<TokenDTO> login(@RequestBody AuthDTO authDTO) {
         String username = authDTO.username();
         String password = authDTO.password();
         if (username == null) throw new BadRequestException("Username is required!");
@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<TokenDTO> register(@RequestBody AuthDTO authDTO){
+    public ResponseEntity<TokenDTO> register(@RequestBody AuthDTO authDTO) {
         String username = authDTO.username();
         String password = authDTO.password();
         if (username == null) throw new BadRequestException("Username is required!");

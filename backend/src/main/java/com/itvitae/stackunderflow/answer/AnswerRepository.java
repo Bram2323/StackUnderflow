@@ -1,7 +1,10 @@
 package com.itvitae.stackunderflow.answer;
 
+import com.itvitae.stackunderflow.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AnswerRepository extends JpaRepository<Answer, Long> {
+import java.util.List;
 
+public interface AnswerRepository extends JpaRepository<Answer, Long> {
+    List<Answer> findByUser(User user);
 }
