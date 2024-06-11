@@ -9,9 +9,6 @@ function Home() {
     const [questions, setQuestions] = useState([]);
     const navigate = useNavigate();
 
-    if (!UserService.isLoggedIn()) {
-    }
-
     useEffect(() => {
         ApiService.get("questions/own").then((response) =>
             setQuestions(response.data)
