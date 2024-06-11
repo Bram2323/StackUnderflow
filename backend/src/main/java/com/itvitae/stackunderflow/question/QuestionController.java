@@ -11,10 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin(origins = "${stackunderflow.cors}")
 @RestController
@@ -23,12 +20,31 @@ import java.util.Optional;
 public class QuestionController {
     private final QuestionRepository questionRepository;
 
-    @GetMapping()
+    @GetMapping
     public List<MinimalQuestionDTO> getAllQuestions() {
         List<Question> allQuestions = questionRepository.findAll();
         allQuestions.sort(Comparator.comparing(Question::getDate));
         Collections.reverse(allQuestions);
         return allQuestions.stream().map(MinimalQuestionDTO::from).toList();
+    }
+
+    @GetMapping("/own")
+    public List<MinimalQuestionDTO> getAllQuestionsByUser(Authentication authentication) {
+        User user;
+        if (authentication == null) {
+            user = null;
+        } else {
+            user = (User) authentication.getPrincipal();
+        }
+
+        if (user != null) {
+            List<Question> questions = questionRepository.findByUserId(user.getId());
+            questions.sort(Comparator.comparing(Question::getDate));
+            Collections.reverse(questions);
+            return questions.stream().map(MinimalQuestionDTO::from).toList();
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     @GetMapping("search")
