@@ -92,7 +92,7 @@ function QuestionForm() {
                         setSelectionRange={setSelectionRange}
                     />
                     <button
-                        className="bg-blue-500 text-white rounded-full w-48 p-3 transition duration-200 my-2 hover:bg-blue-700"
+                        className="bg-blue-500 text-white rounded-full px-6 py-3 transition duration-200 my-2 hover:bg-blue-700"
                         onClick={handleSaveQuestion}
                     >
                         {editMode ? "Opslaan" : "Plaats je vraag"}
