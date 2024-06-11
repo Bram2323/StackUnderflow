@@ -22,14 +22,7 @@ export default function App() {
                 <Route path="/registreren" element={<Register />} />
                 <Route path="/vraag-aanmaken" element={<QuestionForm />} />
 
-                <Route
-                    path="*"
-                    element={
-                        <p>
-                            <NotFoundPage />
-                        </p>
-                    }
-                />
+                <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </>
     );
