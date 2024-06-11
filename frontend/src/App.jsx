@@ -3,9 +3,10 @@ import "./App.css";
 import NavBar from "./components/shared/NavBar";
 import Question from "./components/question/Question";
 import Login from "./components/login/Login";
-import QuestionOverview from "./components/question-overview/QuestionOverview"
+import QuestionOverview from "./components/question-overview/QuestionOverview";
 import QuestionForm from "./components/question-form/QuestionForm";
 import Register from "./components/register/Register";
+import NotFoundPage from "./components/not-found-page/NotFoundPage";
 
 export default function App() {
     return (
@@ -21,7 +22,7 @@ export default function App() {
                 <Route path="/registreren" element={<Register />} />
                 <Route path="/vraag-aanmaken" element={<QuestionForm />} />
 
-                <Route path="*" element={<p>404 not found</p>} />
+                <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </>
     );
