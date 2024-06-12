@@ -4,11 +4,13 @@ import com.itvitae.stackunderflow.user.UserDTO;
 
 import java.time.LocalDateTime;
 
-public record MinimalQuestionDTO(Long id, String title, LocalDateTime date, UserDTO user, Integer answerCount) {
-    public static MinimalQuestionDTO from(Question question) {
-        return new MinimalQuestionDTO(
+public record QuestionListItemDTO(Long id, String title, String text, LocalDateTime date, UserDTO user,
+                                  Integer answers) {
+    public static QuestionListItemDTO from(Question question) {
+        return new QuestionListItemDTO(
                 question.getId(),
                 question.getTitle(),
+                question.getText(),
                 question.getDate(),
                 UserDTO.from(question.getUser()),
                 question.getAnswers().size());

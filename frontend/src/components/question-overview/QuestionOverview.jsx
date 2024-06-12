@@ -1,67 +1,75 @@
 import React, { useEffect, useState } from "react";
 import ApiService from "../../services/ApiService";
 import QuestionList from "../shared/question-list/QuestionList.jsx";
-import Pagable from "../shared/pagable/Pagable.jsx";
+import { useSearchParams } from "react-router-dom";
+import InputField from "../shared/input-field/InputField.jsx";
 
 function QuestionOverview() {
-    const [questions, setQuestions] = useState();
-    const [filteredQuestions, setFilteredQuestions] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [filterQuery, setFilterQuery] = useState("");
+    const [queryParams, setQueryParams] = useSearchParams();
+    const [questions, setQuestions] = useState([]);
+    const [titleQuery, setTitleQuery] = useState(
+        queryParams.has("title") ? queryParams.get("title") : ""
+    );
+    const [orderQuery, setOrderQuery] = useState(
+        queryParams.has("order-by") ? queryParams.get("order-by") : ""
+    );
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        ApiService.get("questions").then((response) => {
-            setQuestions(response.data);
-            setFilteredQuestions(response.data);
+        const url =
+            queryParams.has("title") || queryParams.has("order-by")
+                ? "questions/search"
+                : "questions";
+        ApiService.get(url, queryParams).then((response) => {
+            console.log("===========");
+            response.data.content.forEach((item) =>
+                console.log("AMOUNT:", item.answers, "ID:", item.id)
+            );
+            console.log("===========");
+            setQuestions(response.data.content);
+            setTotalPages(response.data.totalPages);
         });
-    }, []);
+    }, [queryParams]);
 
-    const handleSearch = (e) => {
-        e.preventDefault();
+    function handleSearch() {
+        if (queryParams.get("title") === titleQuery) return;
+        queryParams.set("title", titleQuery);
+        queryParams.delete("page");
+        setQueryParams(queryParams);
+    }
 
-        const form = e.target;
-        const formData = new FormData(form);
-
-        ApiService.get(
-            `questions/search?title=${formData.get(
-                "search"
-            )}&sort-by=${filterQuery}`
-        ).then((response) => setFilteredQuestions(response.data));
-    };
-
-    if (questions === undefined) {
-        return <></>;
+    function handleOrderChange(newOrder) {
+        if (newOrder === orderQuery) return;
+        setOrderQuery(newOrder);
+        queryParams.set("order-by", newOrder);
+        queryParams.delete("page");
+        setQueryParams(queryParams);
     }
 
     return (
-        <div className=" w-3/4 ">
-            <div>
-                <form method="post" onSubmit={handleSearch}>
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search..."
-                        name="search"
-                    />
-                    <select
-                        onChange={(e) => setFilterQuery(e.target.value)}
-                        name="filters"
-                    >
-                        <option value="date-desc">
-                            Creation date descending
-                        </option>
-                        <option value="date-asc">
-                            Creation date ascending
-                        </option>
-                        <option value="most-answers">Most answers</option>
-                        <option value="least-answers">Least answers</option>
-                    </select>
-                    <button type="submit">Submit</button>
-                </form>
+        <div className="pt-3 w-3/4 flex flex-col gap-3">
+            <div className="flex gap-2">
+                <InputField
+                    text={titleQuery}
+                    onTextChanged={setTitleQuery}
+                    placeHolder="Search..."
+                    onSubmit={handleSearch}
+                    onBlur={handleSearch}
+                />
+                <select
+                    onChange={(e) => {
+                        handleOrderChange(e.target.value);
+                    }}
+                    name="orders"
+                    value={orderQuery}
+                >
+                    <option value="date-desc">New questions</option>
+                    <option value="date-asc">Old questions</option>
+                    <option value="most-answers">Most answers</option>
+                    <option value="least-answers">Least answers</option>
+                </select>
             </div>
-            <Pagable totalPages={100} onPageChange={() => {}} />
-            <QuestionList questions={filteredQuestions} />
+            <QuestionList questions={questions} totalPages={totalPages} />
         </div>
     );
 }

@@ -14,6 +14,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@SecondaryTable(name = "question_summary_view",
+        pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")}, foreignKey = @jakarta.persistence.ForeignKey(name = "none"))
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +28,9 @@ public class Question {
     private User user;
     @OneToMany(mappedBy = "question")
     private List<Answer> answers = List.of();
+
+    @Column(table = "question_summary_view")
+    private Integer answerCount = 0;
 
     public Question(String title, String text, LocalDateTime date, User user) {
         this.title = title;
