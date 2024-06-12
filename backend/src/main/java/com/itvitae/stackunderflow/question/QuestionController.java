@@ -62,8 +62,8 @@ public class QuestionController {
         Sort sort = switch (orderBy != null ? orderBy : "") {
             default -> Sort.by("date").descending();
             case "date-asc" -> Sort.by("date").ascending();
-            case "most-answers" -> Sort.by("answerCount").ascending();
-            case "least-answers" -> Sort.by("answerCount").descending();
+            case "most-answers" -> Sort.by("answerCount").descending().and(Sort.by("date").descending());
+            case "least-answers" -> Sort.by("answerCount").ascending().and(Sort.by("date").descending());
         };
         Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
 

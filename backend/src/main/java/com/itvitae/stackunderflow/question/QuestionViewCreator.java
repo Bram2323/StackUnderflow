@@ -20,6 +20,12 @@ public class QuestionViewCreator implements CommandLineRunner {
             jdbcTemplate.execute("DROP TABLE IF EXISTS question_summary_view");
         }
 
-        jdbcTemplate.execute("CREATE OR REPLACE VIEW question_summary_view AS SELECT question_id as id, COUNT(*) AS answer_count FROM answers GROUP BY question_id;");
+        jdbcTemplate.execute(
+                "CREATE VIEW question_summary_view AS " +
+                        "SELECT q.id AS id, COUNT(a.id) AS answer_count " +
+                        "FROM questions q " +
+                        "LEFT JOIN answers a " +
+                        "ON a.question_id = q.id GROUP BY q.id;"
+        );
     }
 }

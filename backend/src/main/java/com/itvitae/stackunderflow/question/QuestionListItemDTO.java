@@ -13,6 +13,6 @@ public record QuestionListItemDTO(Long id, String title, String text, LocalDateT
                 question.getText(),
                 question.getDate(),
                 UserDTO.from(question.getUser()),
-                question.getAnswers().size());
+                question.getAnswerCount());
     }
 }

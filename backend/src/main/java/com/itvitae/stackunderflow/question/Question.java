@@ -29,7 +29,7 @@ public class Question {
     @OneToMany(mappedBy = "question")
     private List<Answer> answers = List.of();
 
-    @Column(table = "question_summary_view")
+    @Column(table = "question_summary_view", insertable = false)
     private Integer answerCount = 0;
 
     public Question(String title, String text, LocalDateTime date, User user) {

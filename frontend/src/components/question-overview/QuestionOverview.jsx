@@ -33,7 +33,8 @@ function QuestionOverview() {
 
     function handleSearch() {
         if (queryParams.get("title") === titleQuery) return;
-        queryParams.set("title", titleQuery);
+        if (titleQuery == "") queryParams.delete("title");
+        else queryParams.set("title", titleQuery);
         queryParams.delete("page");
         setQueryParams(queryParams);
     }
