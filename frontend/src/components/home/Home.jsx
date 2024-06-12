@@ -5,6 +5,7 @@ import ApiService from "../../services/ApiService";
 import { useEffect } from "react";
 import UserService from "../../services/UserService";
 import { useSearchParams } from "react-router-dom";
+import QuestionFilter from "../shared/question-filter/QuestionFilter";
 
 function Home() {
     const [questions, setQuestions] = useState([]);
@@ -13,6 +14,8 @@ function Home() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!UserService.isLoggedIn()) return;
+
         ApiService.get("questions/own", queryParams).then((response) => {
             setQuestions(response.data.content);
             setTotalPages(response.data.totalPages);
@@ -22,7 +25,7 @@ function Home() {
     return (
         <>
             {UserService.isLoggedIn() ? (
-                <div className="flex flex-col w-3/5">
+                <div className="flex flex-col w-3/5 gap-3">
                     <div className="flex items-baseline justify-between gap-10 mt-12">
                         <h1 className="font-bold text-center text-2xl">
                             Mijn vragen
@@ -34,6 +37,7 @@ function Home() {
                             Stel Vraag
                         </button>
                     </div>
+                    <QuestionFilter />
                     <QuestionList
                         questions={questions}
                         totalPages={totalPages}

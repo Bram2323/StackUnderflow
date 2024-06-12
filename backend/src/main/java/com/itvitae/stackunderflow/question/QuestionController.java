@@ -15,7 +15,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "${stackunderflow.cors}")
@@ -38,26 +37,10 @@ public class QuestionController {
 
     @GetMapping("/own")
     public Page<QuestionListItemDTO> getAllQuestionsByUser(Authentication authentication,
+                                                           @RequestParam(required = false) String title,
+                                                           @RequestParam(name = "order-by", required = false) String orderBy,
                                                            @RequestParam(required = false, name = "page") Integer pageParam) {
-        User user = authentication == null ? null : (User) authentication.getPrincipal();
-        int page = pageParam == null ? 0 : pageParam - 1;
-        Pageable pageable = PageRequest.of(page, questionsPerPage, Sort.by("date").descending());
-
-        if (user != null) {
-            Page<Question> questions = questionRepository.findByUserId(user.getId(), pageable);
-            return questions.map(QuestionListItemDTO::from);
-        } else {
-            return Page.empty();
-        }
-    }
-
-    @GetMapping("search")
-    public Page<QuestionListItemDTO> search(@RequestParam(required = false) String title,
-                                            @RequestParam(name = "order-by", required = false) String orderBy,
-                                            @RequestParam(required = false, name = "page") Integer pageParam) {
-        List<Question> all = questionRepository.findAll();
-        all.forEach((question) -> System.out.println(question.getAnswerCount()));
-
+        User user = (User) authentication.getPrincipal();
         int page = pageParam == null ? 0 : pageParam - 1;
         Sort sort = switch (orderBy != null ? orderBy : "") {
             default -> Sort.by("date").descending();
@@ -67,7 +50,24 @@ public class QuestionController {
         };
         Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
 
-        Page<Question> questions = questionRepository.findByTitleContainsIgnoreCase(title == null ? "" : title, pageable);
+        Page<Question> questions = questionRepository.findByUserIdAndTitleContainsIgnoreCase(user.getId(), title != null ? title : "", pageable);
+        return questions.map(QuestionListItemDTO::from);
+    }
+
+    @GetMapping("search")
+    public Page<QuestionListItemDTO> search(@RequestParam(required = false) String title,
+                                            @RequestParam(name = "order-by", required = false) String orderBy,
+                                            @RequestParam(required = false, name = "page") Integer pageParam) {
+        int page = pageParam == null ? 0 : pageParam - 1;
+        Sort sort = switch (orderBy != null ? orderBy : "") {
+            default -> Sort.by("date").descending();
+            case "date-asc" -> Sort.by("date").ascending();
+            case "most-answers" -> Sort.by("answerCount").descending().and(Sort.by("date").descending());
+            case "least-answers" -> Sort.by("answerCount").ascending().and(Sort.by("date").descending());
+        };
+        Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
+
+        Page<Question> questions = questionRepository.findByTitleContainsIgnoreCase(title != null ? title : "", pageable);
         return questions.map(QuestionListItemDTO::from);
     }
 

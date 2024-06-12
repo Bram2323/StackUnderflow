@@ -13,7 +13,7 @@ public class QuestionViewCreator implements CommandLineRunner {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         try {
             jdbcTemplate.execute("DROP VIEW IF EXISTS question_summary_view");
         } catch (BadSqlGrammarException e) {
