@@ -16,7 +16,7 @@ export default function QuestionItem({ question }) {
     const navigate = useNavigate();
     return (
         <div
-            className=" cursor-pointer bg-gray-300 pt-2 pb-2 pl-2 mt-2"
+            className=" cursor-pointer bg-gray-300 p-2 my-2"
             onClick={() => navigate(`/vragen/${question.id}`)}
             key={question.id}
         >

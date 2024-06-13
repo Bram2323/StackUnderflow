@@ -5,6 +5,10 @@ import com.itvitae.stackunderflow.exceptions.ForbiddenException;
 import com.itvitae.stackunderflow.exceptions.NotFoundException;
 import com.itvitae.stackunderflow.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -12,70 +16,60 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Optional;
 
 @CrossOrigin(origins = "${stackunderflow.cors}")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("questions")
 public class QuestionController {
+    public static final int questionsPerPage = 15;
+
     private final QuestionRepository questionRepository;
 
     @GetMapping
-    public List<MinimalQuestionDTO> getAllQuestions() {
-        List<Question> allQuestions = questionRepository.findAll();
-        allQuestions.sort(Comparator.comparing(Question::getDate));
-        Collections.reverse(allQuestions);
-        return allQuestions.stream().map(MinimalQuestionDTO::from).toList();
+    public Page<QuestionListItemDTO> getAllQuestions(@RequestParam(required = false, name = "page") Integer pageParam) {
+        int page = pageParam == null ? 0 : pageParam - 1;
+        Pageable pageable = PageRequest.of(page, questionsPerPage, Sort.by("date").descending());
+
+        Page<Question> allQuestions = questionRepository.findAll(pageable);
+        return allQuestions.map(QuestionListItemDTO::from);
     }
 
     @GetMapping("/own")
-    public List<MinimalQuestionDTO> getAllQuestionsByUser(Authentication authentication) {
-        User user;
-        if (authentication == null) {
-            user = null;
-        } else {
-            user = (User) authentication.getPrincipal();
-        }
+    public Page<QuestionListItemDTO> getAllQuestionsByUser(Authentication authentication,
+                                                           @RequestParam(required = false) String title,
+                                                           @RequestParam(name = "order-by", required = false) String orderBy,
+                                                           @RequestParam(required = false, name = "page") Integer pageParam) {
+        User user = (User) authentication.getPrincipal();
+        int page = pageParam == null ? 0 : pageParam - 1;
+        Sort sort = switch (orderBy != null ? orderBy : "") {
+            default -> Sort.by("date").descending();
+            case "date-asc" -> Sort.by("date").ascending();
+            case "most-answers" -> Sort.by("answerCount").descending().and(Sort.by("date").descending());
+            case "least-answers" -> Sort.by("answerCount").ascending().and(Sort.by("date").descending());
+        };
+        Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
 
-        if (user != null) {
-            List<Question> questions = questionRepository.findByUserId(user.getId());
-            questions.sort(Comparator.comparing(Question::getDate));
-            Collections.reverse(questions);
-            return questions.stream().map(MinimalQuestionDTO::from).toList();
-        } else {
-            return new ArrayList<>();
-        }
+        Page<Question> questions = questionRepository.findByUserIdAndTitleContainsIgnoreCase(user.getId(), title != null ? title : "", pageable);
+        return questions.map(QuestionListItemDTO::from);
     }
 
     @GetMapping("search")
-    public List<MinimalQuestionDTO> getAllQuestionsByTitle(@RequestParam(required = false) String title,
-                                                           @RequestParam(name = "sort-by", required = false) String sortBy) {
+    public Page<QuestionListItemDTO> search(@RequestParam(required = false) String title,
+                                            @RequestParam(name = "order-by", required = false) String orderBy,
+                                            @RequestParam(required = false, name = "page") Integer pageParam) {
+        int page = pageParam == null ? 0 : pageParam - 1;
+        Sort sort = switch (orderBy != null ? orderBy : "") {
+            default -> Sort.by("date").descending();
+            case "date-asc" -> Sort.by("date").ascending();
+            case "most-answers" -> Sort.by("answerCount").descending().and(Sort.by("date").descending());
+            case "least-answers" -> Sort.by("answerCount").ascending().and(Sort.by("date").descending());
+        };
+        Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
 
-        List<Question> questions;
-
-        if (title == null) {
-            questions = questionRepository.findAll();
-        } else {
-            questions = questionRepository.findByTitleContainsIgnoreCase(title);
-        }
-
-        if (sortBy != null) {
-            switch (sortBy) {
-                case "date-asc" -> questions.sort(Comparator.comparing(Question::getDate));
-                case "date-desc" -> {
-                    questions.sort(Comparator.comparing(Question::getDate));
-                    Collections.reverse(questions);
-                }
-                case "least-answers" -> questions.sort(Comparator.comparing(question -> question.getAnswers().size()));
-                case "most-answers" -> {
-                    questions.sort(Comparator.comparing(question -> question.getAnswers().size()));
-                    Collections.reverse(questions);
-                }
-            }
-        }
-
-        return questions.stream().map(MinimalQuestionDTO::from).toList();
+        Page<Question> questions = questionRepository.findByTitleContainsIgnoreCase(title != null ? title : "", pageable);
+        return questions.map(QuestionListItemDTO::from);
     }
 
     @GetMapping("{id}")
