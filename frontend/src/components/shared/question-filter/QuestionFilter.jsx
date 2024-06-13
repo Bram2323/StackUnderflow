@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import InputField from "../input-field/InputField";
+import "./QuestionFilter.css";
 
 function QuestionFilter() {
     const [queryParams, setQueryParams] = useSearchParams();
@@ -29,7 +30,7 @@ function QuestionFilter() {
 
     return (
         <>
-            <div className="flex gap-2">
+            <div className="question-filter-container flex gap-2">
                 <InputField
                     text={titleQuery}
                     onTextChanged={setTitleQuery}
