@@ -79,16 +79,16 @@ function Question() {
                 <hr className="w-full border-none h-[2px] bg-[#C0C0C0]" />
 
                 <div className="flex items-center justify-between w-full">
-                    <div className="flex gap-3">
-                        <div className="flex items-center gap-4">
+                    <div className="flex gap-4">
+                        <div className="flex items-center">
                             <User user={question.user} />
                         </div>
-                        <div className="leading-tight">
+                        <div className="leading-tight text-[12px] flex flex-col justify-center">
                             <p>Gevraagd op:</p>
                             <p>{formatDate(question.date)}</p>
                         </div>
                         {question.lastEdited && (
-                            <div className="leading-tight">
+                            <div className="leading-tight text-[12px] flex flex-col justify-center">
                                 <p>Bewerkt op:</p>
                                 <p>{formatDate(question.lastEdited)}</p>
                             </div>

@@ -25,12 +25,12 @@ export default function QuestionItem({ question }) {
                     </p>
                 </div>
                 <div className="flex items-center gap-4">
-                    <div className="leading-tight">
+                    <div className="leading-tight text-[12px] flex flex-col justify-center">
                         <p>Gevraagd op:</p>
                         <p>{formatDate(question.date)}</p>
                     </div>
                     {question.lastEdited && (
-                        <div className="leading-tight">
+                        <div className="leading-tight text-[12px] flex flex-col justify-center">
                             <p>Bewerkt op:</p>
                             <p>{formatDate(question.lastEdited)}</p>
                         </div>
