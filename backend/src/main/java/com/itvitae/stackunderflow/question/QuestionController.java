@@ -124,14 +124,13 @@ public class QuestionController {
             throw new ForbiddenException();
         }
 
-        if (postPatchQuestionDTO.title() == null || postPatchQuestionDTO.title().isBlank()) {
-            throw new BadRequestException("Title can't be null");
+        if (postPatchQuestionDTO.title() != null) {
+            question.setTitle(postPatchQuestionDTO.title());
         }
-        if (postPatchQuestionDTO.text() == null || postPatchQuestionDTO.text().isBlank()) {
-            throw new BadRequestException("Text can't be null");
+        if (postPatchQuestionDTO.text() != null) {
+            question.setText(postPatchQuestionDTO.text());
         }
-        question.setTitle(postPatchQuestionDTO.title());
-        question.setText(postPatchQuestionDTO.text());
+
         questionRepository.save(question);
         return QuestionDTO.from(question, user);
     }
