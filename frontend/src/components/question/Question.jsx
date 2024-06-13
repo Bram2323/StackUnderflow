@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ApiService from "../../services/ApiService";
 import "./Question.css";
 import Answer from "./answer/Answer";
@@ -7,11 +7,14 @@ import User from "../shared/User/User";
 import CodeHighlighter from "../shared/codeblock/CodeHighlighter/CodeHighlighter";
 import AnswerForm from "./answer-form/AnswerForm";
 import UserService from "../../services/UserService";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Question() {
     const [question, setQuestion] = useState();
     const [answers, setAnswers] = useState([]);
     const { id } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         ApiService.get("questions/" + id).then((response) => {
@@ -60,6 +63,16 @@ function Question() {
             return 0;
         });
 
+    function handleEdit() {
+        navigate(`/vragen/${id}/bewerken`, {
+            state: {
+                editMode: true,
+                questionId: id,
+                isQuestionOwner: isQuestionOwner,
+            },
+        });
+    }
+
     return (
         <div className="question">
             <div className="question-container">
@@ -69,9 +82,19 @@ function Question() {
                 <CodeHighlighter markdown={question.text} />
 
                 <hr className="w-full border-none h-[2px] bg-[#C0C0C0]" />
-                <div className="flex gap-[10px] items-center">
-                    <User user={question.user} />
-                    <p className="pt-[3px]">{formattedDate}</p>
+
+                <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-2">
+                        <User user={question.user} />
+                        <p className="pt-[3px]">{formattedDate}</p>
+                    </div>
+                    {isQuestionOwner && (
+                        <FontAwesomeIcon
+                            icon={faPen}
+                            className="cursor-pointer"
+                            onClick={handleEdit}
+                        />
+                    )}
                 </div>
             </div>
             <div className="answer-form-container">

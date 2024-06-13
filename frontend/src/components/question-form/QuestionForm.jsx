@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ApiService from "../../services/ApiService";
+import UserService from "../../services/UserService";
 import "./QuestionForm.css";
 import InputField from "../shared/input-field/InputField";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import CodeMarker from "../shared/codeblock/CodeMarker/CodeMarker";
 
 function QuestionForm() {
@@ -14,6 +15,21 @@ function QuestionForm() {
     });
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const { editMode, questionId, isQuestionOwner } = location.state || {
+        editMode: false,
+        questionId: null,
+        isQuestionOwner: false,
+    };
+
+    if (editMode) {
+        useEffect(() => {
+            ApiService.get("questions/" + questionId).then((response) => {
+                setQuestion(response.data);
+            });
+        }, []);
+    }
 
     function handleSelect(e) {
         e.stopPropagation();
@@ -36,10 +52,16 @@ function QuestionForm() {
             setError("Beschrijving mag niet leeg zijn");
             return;
         }
-
-        ApiService.post("questions", question).then((response) =>
-            navigate("/vragen/" + response.data.id)
-        );
+        if (editMode) {
+            if (!UserService.isLoggedIn() || !isQuestionOwner) return;
+            ApiService.patch("questions/" + questionId, question).then(
+                (response) => navigate("/vragen/" + response.data.id)
+            );
+        } else {
+            ApiService.post("questions", question).then((response) =>
+                navigate("/vragen/" + response.data.id)
+            );
+        }
     }
 
     function handleTabKeyPress(e) {
@@ -67,7 +89,7 @@ function QuestionForm() {
     return (
         <div className="question-form">
             <div className="question-form-container">
-                <h1>Stel een vraag</h1>
+                <h1>{editMode ? "Bewerk je vraag" : "Stel een vraag"}</h1>
                 <form>
                     <InputField
                         label={"Titel"}
@@ -104,10 +126,10 @@ function QuestionForm() {
                         setSelectionRange={setSelectionRange}
                     />
                     <button
-                        className="bg-blue-500 text-white rounded-full w-48 p-3 transition duration-200 my-2 hover:bg-blue-700"
+                        className="bg-blue-500 text-white rounded-full px-6 py-3 transition duration-200 my-2 hover:bg-blue-700"
                         onClick={handleSaveQuestion}
                     >
-                        Plaats je vraag
+                        {editMode ? "Opslaan" : "Plaats je vraag"}
                     </button>
                     {error && <p className="question-form-error">{error}</p>}
                 </form>
