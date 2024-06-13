@@ -33,6 +33,7 @@ public class Answer {
     private User user;
     @OneToMany(mappedBy = "answer")
     private List<UserAnswerVote> userAnswerVotes = List.of();
+    private Boolean enabled = true;
 
 
     public Answer(String text, LocalDateTime date, Question question, User user) {

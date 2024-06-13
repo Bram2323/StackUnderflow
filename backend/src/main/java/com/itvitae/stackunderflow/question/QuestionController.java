@@ -1,5 +1,7 @@
 package com.itvitae.stackunderflow.question;
 
+import com.itvitae.stackunderflow.answer.Answer;
+import com.itvitae.stackunderflow.answer.AnswerRepository;
 import com.itvitae.stackunderflow.exceptions.BadRequestException;
 import com.itvitae.stackunderflow.exceptions.ForbiddenException;
 import com.itvitae.stackunderflow.exceptions.NotFoundException;
@@ -26,13 +28,14 @@ public class QuestionController {
     public static final int questionsPerPage = 15;
 
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
     @GetMapping
     public Page<QuestionListItemDTO> getAllQuestions(@RequestParam(required = false, name = "page") Integer pageParam) {
         int page = pageParam == null ? 0 : pageParam - 1;
         Pageable pageable = PageRequest.of(page, questionsPerPage, Sort.by("date").descending());
 
-        Page<Question> allQuestions = questionRepository.findAll(pageable);
+        Page<Question> allQuestions = questionRepository.findAllByEnabledTrue(pageable);
         return allQuestions.map(QuestionListItemDTO::from);
     }
 
@@ -51,7 +54,7 @@ public class QuestionController {
         };
         Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
 
-        Page<Question> questions = questionRepository.findByUserIdAndTitleContainsIgnoreCase(user.getId(), title != null ? title : "", pageable);
+        Page<Question> questions = questionRepository.findByUserIdAndTitleContainsIgnoreCaseAndEnabledTrue(user.getId(), title != null ? title : "", pageable);
         return questions.map(QuestionListItemDTO::from);
     }
 
@@ -68,7 +71,7 @@ public class QuestionController {
         };
         Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
 
-        Page<Question> questions = questionRepository.findByTitleContainsIgnoreCase(title != null ? title : "", pageable);
+        Page<Question> questions = questionRepository.findByTitleContainsIgnoreCaseAndEnabledTrue(title != null ? title : "", pageable);
         return questions.map(QuestionListItemDTO::from);
     }
 
@@ -81,7 +84,7 @@ public class QuestionController {
             user = (User) authentication.getPrincipal();
         }
 
-        Optional<Question> possiblyExistingQuestion = questionRepository.findById(id);
+        Optional<Question> possiblyExistingQuestion = questionRepository.findByIdAndEnabledTrue(id);
         if (possiblyExistingQuestion.isEmpty()) {
             throw new NotFoundException();
         }
@@ -110,7 +113,7 @@ public class QuestionController {
     public QuestionDTO editQuestion(@PathVariable Long id, @RequestBody PostPatchQuestionDTO postPatchQuestionDTO, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
-        Optional<Question> possibleQuestion = questionRepository.findById(id);
+        Optional<Question> possibleQuestion = questionRepository.findByIdAndEnabledTrue(id);
         Question question = possibleQuestion.orElseThrow(NotFoundException::new);
 
         User questionOwner = question.getUser();
@@ -129,5 +132,25 @@ public class QuestionController {
 
         questionRepository.save(question);
         return QuestionDTO.from(question, user);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        Optional<Question> possibleQuestion = questionRepository.findByIdAndEnabledTrue(id);
+        Question question = possibleQuestion.orElseThrow(NotFoundException::new);
+
+        User questionOwner = question.getUser();
+        if (!user.equals(questionOwner)) {
+            throw new ForbiddenException();
+        }
+
+        question.setEnabled(false);
+        for (Answer answer : question.getAnswers()) {
+            answer.setEnabled(false);
+        }
+
+        questionRepository.save(question);
+        return ResponseEntity.notFound().build();
     }
 }

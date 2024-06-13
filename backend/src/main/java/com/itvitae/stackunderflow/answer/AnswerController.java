@@ -31,7 +31,7 @@ public class AnswerController {
     @PatchMapping("{id}")
     public ResponseEntity<AnswerDTO> patch(@PathVariable Long id, @RequestBody AnswerDTO answerDTO, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        Optional<Answer> possibleAnswer = answerRepository.findById(id);
+        Optional<Answer> possibleAnswer = answerRepository.findByIdAndEnabledTrue(id);
         Answer answer = possibleAnswer.orElseThrow(NotFoundException::new);
 
         Question question = answer.getQuestion();
@@ -62,7 +62,7 @@ public class AnswerController {
             throw new BadRequestException("Upvote and downvote need to be defined");
         }
         User user = (User) authentication.getPrincipal();
-        Optional<Answer> possiblyExistingAnswer = answerRepository.findById(id);
+        Optional<Answer> possiblyExistingAnswer = answerRepository.findByIdAndEnabledTrue(id);
         if (possiblyExistingAnswer.isEmpty()) {
             throw new NotFoundException();
         }
@@ -95,7 +95,7 @@ public class AnswerController {
 
         if (questionId == null)
             throw new BadRequestException("Question needs to be defined!");
-        Optional<Question> possibleQuestion = questionRepository.findById(questionId);
+        Optional<Question> possibleQuestion = questionRepository.findByIdAndEnabledTrue(questionId);
         if (possibleQuestion.isEmpty())
             throw new BadRequestException("Question doesn't exist!");
         Question question = possibleQuestion.get();
