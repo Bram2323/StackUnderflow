@@ -4,7 +4,6 @@ function CodeMarker({ object, setObject, selectionRange, setSelectionRange }) {
     const { text } = object;
 
     function handleMarkCodeBlock() {
-        console.log(selectionRange);
         if (
             selectionRange.start === null ||
             selectionRange.end === null ||
@@ -26,7 +25,10 @@ function CodeMarker({ object, setObject, selectionRange, setSelectionRange }) {
             selectedText.endsWith("\n```")
         ) {
             // remove the backticks when they're already there
-            newText = selectedText.replace(/^```|```$/g, "").trim();
+            newText =
+                beforeSelection +
+                selectedText.replace(/^```|```$/g, "").trim() +
+                afterSelection;
         } else {
             newText =
                 beforeSelection +
