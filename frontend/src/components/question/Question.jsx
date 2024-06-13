@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ApiService from "../../services/ApiService";
 import "./Question.css";
-import Answer from "./answer/Answer";
 import User from "../shared/User/User";
 import CodeHighlighter from "../shared/codeblock/CodeHighlighter/CodeHighlighter";
 import AnswerForm from "./answer-form/AnswerForm";
@@ -10,19 +9,26 @@ import UserService from "../../services/UserService";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatDate } from "../shared/date-formatter/FormatDate";
+import AnswerList from "./answer-list/AnswerList";
+import { useSearchParams } from "react-router-dom";
 
 function Question() {
+    const [queryParams] = useSearchParams();
     const [question, setQuestion] = useState();
     const [answers, setAnswers] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
     const { id } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
         ApiService.get("questions/" + id).then((response) => {
             setQuestion(response.data);
-            setAnswers(response.data.answers);
         });
     }, []);
+
+    useEffect(() => {
+        getAnswers();
+    }, [queryParams]);
 
     if (question === undefined) {
         return <></>;
@@ -32,6 +38,15 @@ function Question() {
         UserService.isLoggedIn() &&
         question.user.id === UserService.getUser().id;
 
+    function getAnswers() {
+        ApiService.get(`questions/${id}/answers`, queryParams).then(
+            (response) => {
+                setAnswers(response.data.content);
+                setTotalPages(response.data.totalPages);
+            }
+        );
+    }
+
     function setAnswer(newAnswer) {
         const newAnswers = answers.map((answer) =>
             answer.id == newAnswer.id ? newAnswer : answer
@@ -39,24 +54,9 @@ function Question() {
         setAnswers(newAnswers);
     }
 
-    const solutions = answers
-        .filter((answer) => answer.isSolution)
-        .sort((a, b) => {
-            const aDate = new Date(a.date);
-            const bDate = new Date(b.date);
-            if (aDate < bDate) return -1;
-            if (aDate > bDate) return 1;
-            return 0;
-        });
-    const nonSolutions = answers
-        .filter((answer) => !answer.isSolution)
-        .sort((a, b) => {
-            const aDate = new Date(a.date);
-            const bDate = new Date(b.date);
-            if (aDate < bDate) return -1;
-            if (aDate > bDate) return 1;
-            return 0;
-        });
+    function handleAddAnswer() {
+        getAnswers();
+    }
 
     function handleEdit() {
         navigate(`/vragen/${id}/bewerken`, {
@@ -107,20 +107,15 @@ function Question() {
             <div className="answer-form-container">
                 <AnswerForm
                     questionId={question.id}
-                    answers={answers}
-                    setAnswers={setAnswers}
+                    addAnswer={handleAddAnswer}
                 />
             </div>
-            <div className="flex flex-col gap-[20px] pb-2">
-                {[...solutions, ...nonSolutions].map((answer, index) => (
-                    <Answer
-                        key={index}
-                        answer={answer}
-                        setAnswer={setAnswer}
-                        isQuestionOwner={isQuestionOwner}
-                    />
-                ))}
-            </div>
+            <AnswerList
+                answers={answers}
+                setAnswer={setAnswer}
+                isQuestionOwner={isQuestionOwner}
+                totalPages={totalPages}
+            />
         </div>
     );
 }
