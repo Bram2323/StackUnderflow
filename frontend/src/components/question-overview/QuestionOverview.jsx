@@ -15,11 +15,6 @@ function QuestionOverview() {
                 ? "questions/search"
                 : "questions";
         ApiService.get(url, queryParams).then((response) => {
-            // console.log("===========");
-            // response.data.content.forEach((item) =>
-            //     console.log("AMOUNT:", item.answers, "ID:", item.id)
-            // );
-            // console.log("===========");
             setQuestions(response.data.content);
             setTotalPages(response.data.totalPages);
         });
