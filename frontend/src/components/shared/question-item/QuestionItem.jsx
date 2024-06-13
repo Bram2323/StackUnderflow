@@ -1,19 +1,11 @@
 import User from "../User/User.jsx";
 import { useNavigate } from "react-router-dom";
-
-function formatDate(date) {
-    const creationDate = new Date(date);
-    const formattedDate = new Intl.DateTimeFormat("nl-NL", {
-        dateStyle: "short",
-        timeStyle: "short",
-        timeZone: "Europe/Amsterdam",
-    }).format(creationDate);
-
-    return formattedDate;
-}
+import { formatDate } from "../date-formatter/FormatDate.js";
 
 export default function QuestionItem({ question }) {
     const navigate = useNavigate();
+    console.log(question);
+
     return (
         <div
             className=" cursor-pointer bg-gray-300 p-2 my-2"
@@ -24,7 +16,12 @@ export default function QuestionItem({ question }) {
             <div className=" flex items-center gap-1">
                 <p>geplaatst door:</p> <User user={question.user} />
             </div>
-            <div>datum: {formatDate(question.date)}</div>
+            <div className="flex gap-10">
+                <p>datum: {formatDate(question.date)}</p>
+                {question.lastEdited && (
+                    <p>bewerkt: {formatDate(question.lastEdited)}</p>
+                )}
+            </div>
         </div>
     );
 }

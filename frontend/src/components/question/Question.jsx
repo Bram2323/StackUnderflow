@@ -9,6 +9,7 @@ import AnswerForm from "./answer-form/AnswerForm";
 import UserService from "../../services/UserService";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { formatDate } from "../shared/date-formatter/FormatDate";
 
 function Question() {
     const [question, setQuestion] = useState();
@@ -26,12 +27,6 @@ function Question() {
     if (question === undefined) {
         return <></>;
     }
-    const creationDate = new Date(question.date);
-    const formattedDate = new Intl.DateTimeFormat("nl-NL", {
-        dateStyle: "short",
-        timeStyle: "short",
-        timeZone: "Europe/Amsterdam",
-    }).format(creationDate);
 
     const isQuestionOwner =
         UserService.isLoggedIn() &&
@@ -84,10 +79,22 @@ function Question() {
                 <hr className="w-full border-none h-[2px] bg-[#C0C0C0]" />
 
                 <div className="flex items-center justify-between w-full">
-                    <div className="flex items-center gap-2">
-                        <User user={question.user} />
-                        <p className="pt-[3px]">{formattedDate}</p>
+                    <div className="flex gap-3">
+                        <div className="flex items-center gap-2">
+                            <User user={question.user} />
+                        </div>
+                        <div className="flex items-center gap-6">
+                            <p className="pt-[3px]">{`gevraagd op: ${formatDate(
+                                question.date
+                            )}`}</p>
+                            {question.lastEdited && (
+                                <p>{`bewerkt: ${formatDate(
+                                    question.lastEdited
+                                )}`}</p>
+                            )}
+                        </div>
                     </div>
+
                     {isQuestionOwner && (
                         <FontAwesomeIcon
                             icon={faPen}

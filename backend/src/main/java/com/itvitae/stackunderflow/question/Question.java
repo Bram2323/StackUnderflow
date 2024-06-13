@@ -24,6 +24,7 @@ public class Question {
     @Column(columnDefinition = "Text")
     private String text;
     private LocalDateTime date;
+    private LocalDateTime lastEdited;
     @ManyToOne
     private User user;
     @OneToMany(mappedBy = "question")

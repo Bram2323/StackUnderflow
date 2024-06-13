@@ -61,7 +61,15 @@ function AnswerForm({ questionId, answers, setAnswers }) {
         <>
             <div className="w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
                 {!UserService.isLoggedIn() ? (
-                    <p>Log in om te antwoorden op deze vraag!</p>
+                    <p>
+                        <a
+                            className="font-bold text-[#2397F4]"
+                            href="/inloggen"
+                        >
+                            Log in
+                        </a>{" "}
+                        om te antwoorden op deze vraag!
+                    </p>
                 ) : (
                     <>
                         <div className="flex flex-col">
