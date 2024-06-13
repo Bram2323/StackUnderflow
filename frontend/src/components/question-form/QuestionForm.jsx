@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import CodeMarker from "../shared/codeblock/CodeMarker/CodeMarker";
 
 function QuestionForm() {
-    const [newQuestion, setNewQuestion] = useState({ title: "", text: "" });
+    const [question, setQuestion] = useState({ title: "", text: "" });
     const [error, setError] = useState("");
     const [selectionRange, setSelectionRange] = useState({
         start: null,
@@ -15,20 +15,53 @@ function QuestionForm() {
 
     const navigate = useNavigate();
 
+    function handleSelect(e) {
+        e.stopPropagation();
+        const { selectionStart, selectionEnd } = e.target;
+        if (selectionStart !== null && selectionEnd !== null) {
+            setSelectionRange({
+                start: selectionStart,
+                end: selectionEnd,
+            });
+        }
+    }
+
     function handleSaveQuestion(e) {
         e.preventDefault();
-        if (!newQuestion.title.trim()) {
+        if (!question.title.trim()) {
             setError("Titel mag niet leeg zijn");
             return;
         }
-        if (!newQuestion.text.trim()) {
+        if (!question.text.trim()) {
             setError("Beschrijving mag niet leeg zijn");
             return;
         }
 
-        ApiService.post("questions", newQuestion).then((response) =>
+        ApiService.post("questions", question).then((response) =>
             navigate("/vragen/" + response.data.id)
         );
+    }
+
+    function handleTabKeyPress(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const { selectionStart, value } = e.target;
+
+        const newValue =
+            value.substring(0, selectionStart) +
+            "\t" +
+            value.substring(selectionStart);
+
+        setQuestion({
+            ...question,
+            text: newValue,
+        });
+
+        // Use setTimeout to set the cursor position after the DOM update
+        setTimeout(() => {
+            const newCursorPosition = selectionStart + 1;
+            e.target.setSelectionRange(newCursorPosition, newCursorPosition);
+        }, 0);
     }
 
     return (
@@ -38,10 +71,10 @@ function QuestionForm() {
                 <form>
                     <InputField
                         label={"Titel"}
-                        text={newQuestion.title}
+                        text={question.title}
                         onTextChanged={(text) =>
-                            setNewQuestion({
-                                ...newQuestion,
+                            setQuestion({
+                                ...question,
                                 title: text,
                             })
                         }
@@ -49,23 +82,24 @@ function QuestionForm() {
                     <label>Beschrijf je probleem</label>
                     <textarea
                         className="border-2 border-[#5c5c5c] rounded-lg bg-[#f3f3f3] text-base w-full h-72 mb-2 p-2"
-                        value={newQuestion.text}
-                        onSelect={(e) =>
-                            setSelectionRange({
-                                start: e.target.selectionStart,
-                                end: e.target.selectionEnd,
-                            })
-                        }
-                        onChange={(e) =>
-                            setNewQuestion({
-                                ...newQuestion,
+                        value={question.text}
+                        onMouseUp={handleSelect}
+                        onSelect={handleSelect}
+                        onChange={(e) => {
+                            setQuestion({
+                                ...question,
                                 text: e.target.value,
-                            })
-                        }
+                            });
+                        }}
+                        onKeyDown={(e) => {
+                            if (e.key === "Tab") {
+                                handleTabKeyPress(e);
+                            }
+                        }}
                     ></textarea>
                     <CodeMarker
-                        object={newQuestion}
-                        setObject={setNewQuestion}
+                        object={question}
+                        setObject={setQuestion}
                         selectionRange={selectionRange}
                         setSelectionRange={setSelectionRange}
                     />
