@@ -4,7 +4,7 @@ import "./QuestionList.css";
 
 export default function QuestionList({ questions, totalPages }) {
     return (
-        <div>
+        <div className="flex flex-col gap-2">
             <Pageable totalPages={totalPages} />
             {questions.length == 0 ? (
                 <p>Geen vragen gevonden!</p>
