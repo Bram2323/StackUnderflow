@@ -7,6 +7,7 @@ import QuestionOverview from "./components/question-overview/QuestionOverview";
 import QuestionForm from "./components/question-form/QuestionForm";
 import Register from "./components/register/Register";
 import Home from "./components/home/Home";
+import Leaderboard from "./components/leaderboard/Leaderboard";
 import NotFoundPage from "./components/not-found-page/NotFoundPage";
 
 export default function App() {
@@ -18,7 +19,7 @@ export default function App() {
                 <Route path="" element={<Home />} />
                 <Route path="/vragen" element={<QuestionOverview />} />
                 <Route path="/vragen/:id" element={<Question />} />
-                <Route path="/leaderbord" element={<p>Leaderbord</p>} />
+                <Route path="/leaderbord" element={<Leaderboard />} />
                 <Route path="/inloggen" element={<Login />} />
                 <Route path="/registreren" element={<Register />} />
                 <Route path="/vragen/aanmaken" element={<QuestionForm />} />

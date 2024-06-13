@@ -3,7 +3,6 @@ package com.itvitae.stackunderflow.leaderboard;
 import com.itvitae.stackunderflow.answer.Answer;
 import com.itvitae.stackunderflow.answer.AnswerRepository;
 import com.itvitae.stackunderflow.user.User;
-import com.itvitae.stackunderflow.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,11 +10,9 @@ import java.time.LocalDateTime;
 @Service
 public class LeaderboardRunner {
 
-    private final UserRepository userRepository;
     private final AnswerRepository answerRepository;
 
-    public LeaderboardRunner(UserRepository userRepository, AnswerRepository answerRepository) {
-        this.userRepository = userRepository;
+    public LeaderboardRunner(AnswerRepository answerRepository) {
         this.answerRepository = answerRepository;
     }
 

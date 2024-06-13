@@ -31,6 +31,6 @@ public class LeaderboardController {
             userRepository.save(user);
             rank++;
         }
-        return ResponseEntity.ok("Successfully updated data of all users!");
+        return ResponseEntity.ok("Successfully updated the leaderboard ranking of all users!");
     }
 }
