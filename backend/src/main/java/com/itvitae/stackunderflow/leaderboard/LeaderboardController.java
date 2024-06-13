@@ -24,6 +24,13 @@ public class LeaderboardController {
             user.setTotalPoints(totalPoints);
             userRepository.save(user);
         }
+
+        Integer rank = 1;
+        for (User user : userRepository.findAllByOrderByTotalPointsDesc()) {
+            user.setLeaderboardRanking(rank);
+            userRepository.save(user);
+            rank++;
+        }
         return ResponseEntity.ok("Successfully updated data of all users!");
     }
 }
