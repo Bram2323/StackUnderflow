@@ -31,6 +31,17 @@ function QuestionForm() {
         }, []);
     }
 
+    function handleSelect(e) {
+        e.stopPropagation();
+        const { selectionStart, selectionEnd } = e.target;
+        if (selectionStart !== null && selectionEnd !== null) {
+            setSelectionRange({
+                start: selectionStart,
+                end: selectionEnd,
+            });
+        }
+    }
+
     function handleSaveQuestion(e) {
         e.preventDefault();
         if (!question.title.trim()) {
@@ -53,6 +64,28 @@ function QuestionForm() {
         }
     }
 
+    function handleTabKeyPress(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const { selectionStart, value } = e.target;
+
+        const newValue =
+            value.substring(0, selectionStart) +
+            "\t" +
+            value.substring(selectionStart);
+
+        setQuestion({
+            ...question,
+            text: newValue,
+        });
+
+        // Use setTimeout to set the cursor position after the DOM update
+        setTimeout(() => {
+            const newCursorPosition = selectionStart + 1;
+            e.target.setSelectionRange(newCursorPosition, newCursorPosition);
+        }, 0);
+    }
+
     return (
         <div className="question-form">
             <div className="question-form-container">
@@ -72,18 +105,19 @@ function QuestionForm() {
                     <textarea
                         className="border-2 border-[#5c5c5c] rounded-lg bg-[#f3f3f3] text-base w-full h-72 mb-2 p-2"
                         value={question.text}
-                        onSelect={(e) =>
-                            setSelectionRange({
-                                start: e.target.selectionStart,
-                                end: e.target.selectionEnd,
-                            })
-                        }
-                        onChange={(e) =>
+                        onMouseUp={handleSelect}
+                        onSelect={handleSelect}
+                        onChange={(e) => {
                             setQuestion({
                                 ...question,
                                 text: e.target.value,
-                            })
-                        }
+                            });
+                        }}
+                        onKeyDown={(e) => {
+                            if (e.key === "Tab") {
+                                handleTabKeyPress(e);
+                            }
+                        }}
                     ></textarea>
                     <CodeMarker
                         object={question}
