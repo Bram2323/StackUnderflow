@@ -4,9 +4,11 @@ import com.itvitae.stackunderflow.answer.Answer;
 import com.itvitae.stackunderflow.answer.AnswerRepository;
 import com.itvitae.stackunderflow.user.User;
 import com.itvitae.stackunderflow.user.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Service
 public class LeaderboardRunner {
 
     private final UserRepository userRepository;
