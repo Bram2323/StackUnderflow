@@ -21,7 +21,7 @@ function QuestionOverview() {
     }, [queryParams]);
 
     return (
-        <div className="pt-3 w-3/4 flex flex-col gap-3">
+        <div className="pt-3 w-3/5 flex flex-col gap-3">
             <QuestionFilter />
             <QuestionList questions={questions} totalPages={totalPages} />
         </div>

@@ -7,7 +7,8 @@ import com.itvitae.stackunderflow.user.UserDTO;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record QuestionDTO(Long id, String title, String text, LocalDateTime date, UserDTO user,
+public record QuestionDTO(Long id, String title, String text, LocalDateTime date, LocalDateTime lastEdited,
+                          UserDTO user,
                           List<AnswerDTO> answers) {
 //    public static QuestionDTO from(Question question) {
 //        return from(question, null);
@@ -19,6 +20,7 @@ public record QuestionDTO(Long id, String title, String text, LocalDateTime date
                 question.getTitle(),
                 question.getText(),
                 question.getDate(),
+                question.getLastEdited(),
                 UserDTO.from(question.getUser()),
                 question.getAnswers().stream().map(answer -> AnswerDTO.from(answer, user)).toList());
     }

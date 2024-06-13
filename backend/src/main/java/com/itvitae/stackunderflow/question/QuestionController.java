@@ -125,6 +125,8 @@ public class QuestionController {
             question.setText(postPatchQuestionDTO.text());
         }
 
+        question.setLastEdited(LocalDateTime.now());
+
         questionRepository.save(question);
         return QuestionDTO.from(question, user);
     }
