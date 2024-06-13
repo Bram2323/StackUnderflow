@@ -4,7 +4,6 @@ import { formatDate } from "../date-formatter/FormatDate.js";
 
 export default function QuestionItem({ question }) {
     const navigate = useNavigate();
-    console.log(question);
 
     return (
         <div
