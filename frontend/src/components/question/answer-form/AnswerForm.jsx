@@ -24,6 +24,39 @@ function AnswerForm({ questionId, answers, setAnswers }) {
         });
     }
 
+    function handleSelect(e) {
+        e.stopPropagation();
+        const { selectionStart, selectionEnd } = e.target;
+        if (selectionStart !== null && selectionEnd !== null) {
+            setSelectionRange({
+                start: selectionStart,
+                end: selectionEnd,
+            });
+        }
+    }
+
+    function handleTabKeyPress(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const { selectionStart, value } = e.target;
+
+        const newValue =
+            value.substring(0, selectionStart) +
+            "\t" +
+            value.substring(selectionStart);
+
+        setAnswer({
+            ...answer,
+            text: newValue,
+        });
+
+        // Use setTimeout to set the cursor position after the DOM update
+        setTimeout(() => {
+            const newCursorPosition = selectionStart + 1;
+            e.target.setSelectionRange(newCursorPosition, newCursorPosition);
+        }, 0);
+    }
+
     return (
         <>
             <div className="w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
@@ -36,18 +69,19 @@ function AnswerForm({ questionId, answers, setAnswers }) {
                             <TextareaAutosize
                                 className="border-2 min-h-[4.25rem] max-h-[20rem] border-[#5c5c5c] rounded-lg bg-white text-base w-full mb-2 p-2 resize-none"
                                 value={answer.text}
-                                onSelect={(e) =>
-                                    setSelectionRange({
-                                        start: e.target.selectionStart,
-                                        end: e.target.selectionEnd,
-                                    })
-                                }
+                                onMouseUp={handleSelect}
+                                onSelect={handleSelect}
                                 onChange={(e) =>
                                     setAnswer({
                                         ...answer,
                                         text: e.target.value,
                                     })
                                 }
+                                onKeyDown={(e) => {
+                                    if (e.key === "Tab") {
+                                        handleTabKeyPress(e);
+                                    }
+                                }}
                             />
                             <CodeMarker
                                 object={answer}
