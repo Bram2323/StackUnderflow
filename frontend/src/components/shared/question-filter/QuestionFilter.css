@@ -1,3 +1,4 @@
 .question-filter-container .input-field-container {
-    width: 500px;
+    width: 100%;
+    max-width: 60%;
 }

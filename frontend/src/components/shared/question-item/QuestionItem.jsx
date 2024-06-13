@@ -11,18 +11,20 @@ export default function QuestionItem({ question }) {
             onClick={() => navigate(`/vragen/${question.id}`)}
             key={question.id}
         >
-            <h2 className="w-full font-bold text-wrap">{question.title}</h2>
+            <h2 className="w-full text-[120%] font-bold text-wrap">
+                {question.title}
+            </h2>
             <p className=" w-full h-6 overflow-hidden overflow-ellipsis text-nowrap text-gray-600">
                 {question.text}
             </p>
             <div className="flex h-full w-full items-end justify-between">
-                <div>
+                <div className="font-bold">
                     <p>
-                        {question.answers} Answer
-                        {question.answers != 1 ? "s" : ""}
+                        {question.answers} Antwoord
+                        {question.answers != 1 ? "en" : ""}
                     </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-4">
                     <div className="leading-tight">
                         <p>Gevraagd op:</p>
                         <p>{formatDate(question.date)}</p>

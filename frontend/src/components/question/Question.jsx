@@ -80,19 +80,19 @@ function Question() {
 
                 <div className="flex items-center justify-between w-full">
                     <div className="flex gap-3">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-4">
                             <User user={question.user} />
                         </div>
-                        <div className="flex items-center gap-6">
-                            <p className="pt-[3px]">{`gevraagd op: ${formatDate(
-                                question.date
-                            )}`}</p>
-                            {question.lastEdited && (
-                                <p>{`bewerkt: ${formatDate(
-                                    question.lastEdited
-                                )}`}</p>
-                            )}
+                        <div className="leading-tight">
+                            <p>Gevraagd op:</p>
+                            <p>{formatDate(question.date)}</p>
                         </div>
+                        {question.lastEdited && (
+                            <div className="leading-tight">
+                                <p>Bewerkt op:</p>
+                                <p>{formatDate(question.lastEdited)}</p>
+                            </div>
+                        )}
                     </div>
 
                     {isQuestionOwner && (
