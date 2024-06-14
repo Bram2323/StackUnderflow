@@ -20,6 +20,7 @@ function AnswerForm({ questionId, addAnswer }) {
         ApiService.post("answers", answer).then((response) => {
             const newAnswer = response.data;
             addAnswer(newAnswer);
+            setAnswer({ ...answer, text: "" });
         });
     }
 
