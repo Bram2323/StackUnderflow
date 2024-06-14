@@ -15,6 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@SecondaryTable(name = "answer_summary_view",
+        pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")}, foreignKey = @jakarta.persistence.ForeignKey(name = "none"))
 public class Answer {
     @Id
     @GeneratedValue
@@ -35,6 +37,9 @@ public class Answer {
     private List<UserAnswerVote> userAnswerVotes = List.of();
     private Boolean enabled = true;
 
+    @Column(table = "answer_summary_view", insertable = false)
+    private Long voteCount;
+
 
     public Answer(String text, LocalDateTime date, Question question, User user) {
         this.text = text;
@@ -44,8 +49,8 @@ public class Answer {
         isSolution = false;
     }
 
-    public Integer getVotes() {
-        int count = 0;
+    public long getVotes() {
+        long count = 0;
         for (UserAnswerVote vote : userAnswerVotes) {
             if (vote.getIsUpvote()) count++;
             else count--;

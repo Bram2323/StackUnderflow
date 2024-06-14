@@ -4,6 +4,8 @@ export const queryName = "page";
 const neighbourAmount = 2;
 
 function Pageable({ totalPages }) {
+    if (totalPages <= 1) return <></>;
+
     const [queryParams, setSearchParams] = useSearchParams();
 
     const queryPage = Number(queryParams.get(queryName));

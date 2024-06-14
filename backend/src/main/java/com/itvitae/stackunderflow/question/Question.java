@@ -1,6 +1,5 @@
 package com.itvitae.stackunderflow.question;
 
-import com.itvitae.stackunderflow.answer.Answer;
 import com.itvitae.stackunderflow.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity(name = "Questions")
 @Getter
@@ -27,8 +25,6 @@ public class Question {
     private LocalDateTime lastEdited;
     @ManyToOne
     private User user;
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers = List.of();
 
     @Column(table = "question_summary_view", insertable = false)
     private Integer answerCount;

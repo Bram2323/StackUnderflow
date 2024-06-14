@@ -5,13 +5,15 @@ import com.itvitae.stackunderflow.user.UserDTO;
 
 import java.time.LocalDateTime;
 
-public record QuestionDTO(Long id, String title, String text, LocalDateTime date, LocalDateTime lastEdited,
-                          UserDTO user, Integer answers) {
-    public static QuestionDTO from(Question question, User user) {
-        return new QuestionDTO(
+public record QuestionMinimalDTO(Long id, String title, String text, LocalDateTime date, LocalDateTime lastEdited,
+                                 UserDTO user, Integer answers) {
+    public static QuestionMinimalDTO from(Question question, User user) {
+        String text = question.getText();
+
+        return new QuestionMinimalDTO(
                 question.getId(),
                 question.getTitle(),
-                question.getText(),
+                text.substring(0, Math.min(text.length(), 300)),
                 question.getDate(),
                 question.getLastEdited(),
                 UserDTO.from(question.getUser()),
