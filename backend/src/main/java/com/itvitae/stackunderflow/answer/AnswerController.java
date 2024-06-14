@@ -29,26 +29,30 @@ public class AnswerController {
     private final QuestionRepository questionRepository;
 
     @PatchMapping("{id}")
-    public ResponseEntity<AnswerDTO> patch(@PathVariable Long id, @RequestBody AnswerDTO answerDTO, Authentication authentication) {
+    public ResponseEntity<AnswerDTO> patch(@PathVariable Long id, @RequestBody AnswerDTO answerDTO,
+            Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        Optional<Answer> possibleAnswer = answerRepository.findById(id);
+        Optional<Answer> possibleAnswer = answerRepository.findByIdAndEnabledTrue(id);
         Answer answer = possibleAnswer.orElseThrow(NotFoundException::new);
 
         Question question = answer.getQuestion();
         User questionOwner = question.getUser();
         User answerOwner = answer.getUser();
 
-        if (!user.equals(questionOwner) && !user.equals(answerOwner)) throw new ForbiddenException();
+        if (!user.equals(questionOwner) && !user.equals(answerOwner))
+            throw new ForbiddenException();
 
         Boolean isSolution = answerDTO.isSolution();
         if (isSolution != null) {
-            if (!user.equals(questionOwner)) throw new ForbiddenException();
+            if (!user.equals(questionOwner))
+                throw new ForbiddenException();
             answer.setIsSolution(isSolution);
         }
 
         String text = answerDTO.text();
         if (text != null) {
-            if (!user.equals(answerOwner)) throw new ForbiddenException();
+            if (!user.equals(answerOwner))
+                throw new ForbiddenException();
             answer.setText(text);
         }
 
@@ -57,19 +61,17 @@ public class AnswerController {
     }
 
     @PatchMapping("{id}/votes")
-    public ResponseEntity<AnswerDTO> addVote(@PathVariable Long id, @RequestBody AnswerVoteDTO answerVoteDTO, Authentication authentication) {
+    public ResponseEntity<AnswerDTO> addVote(@PathVariable Long id, @RequestBody AnswerVoteDTO answerVoteDTO,
+            Authentication authentication) {
         if (answerVoteDTO.isUpVote() == null || answerVoteDTO.isDownVote() == null) {
-            throw new BadRequestException("Upvote and downvote need to be defined");
+            throw new BadRequestException("Upvote or down vote needs to be defined");
         }
         User user = (User) authentication.getPrincipal();
         Optional<Answer> possiblyExistingAnswer = answerRepository.findById(id);
-        if (possiblyExistingAnswer.isEmpty()) {
-            throw new NotFoundException();
-        }
-        Answer answer = possiblyExistingAnswer.get();
+        Answer answer = possiblyExistingAnswer.orElseThrow(NotFoundException::new);
 
         if (answerVoteDTO.isUpVote() && answerVoteDTO.isDownVote()) {
-            throw new BadRequestException("Can't upvote and downvote at the same time");
+            throw new BadRequestException("Can't upvote and down vote at the same time");
         }
 
         Optional<UserAnswerVote> possibleUserAnswerVote = userAnswerVoteRepository.findByAnswerAndUser(answer, user);
@@ -87,7 +89,8 @@ public class AnswerController {
     }
 
     @PostMapping
-    private ResponseEntity<AnswerDTO> create(@RequestBody PostAnswerDTO answerDTO, UriComponentsBuilder ucb, Authentication authentication) {
+    private ResponseEntity<AnswerDTO> create(@RequestBody PostAnswerDTO answerDTO, UriComponentsBuilder ucb,
+            Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Long questionId = answerDTO.question();
         String text = answerDTO.text();
@@ -95,7 +98,7 @@ public class AnswerController {
 
         if (questionId == null)
             throw new BadRequestException("Question needs to be defined!");
-        Optional<Question> possibleQuestion = questionRepository.findById(questionId);
+        Optional<Question> possibleQuestion = questionRepository.findByIdAndEnabledTrue(questionId);
         if (possibleQuestion.isEmpty())
             throw new BadRequestException("Question doesn't exist!");
         Question question = possibleQuestion.get();

@@ -1,5 +1,8 @@
 package com.itvitae.stackunderflow.question;
 
+import com.itvitae.stackunderflow.answer.Answer;
+import com.itvitae.stackunderflow.answer.AnswerDTO;
+import com.itvitae.stackunderflow.answer.AnswerRepository;
 import com.itvitae.stackunderflow.exceptions.BadRequestException;
 import com.itvitae.stackunderflow.exceptions.ForbiddenException;
 import com.itvitae.stackunderflow.exceptions.NotFoundException;
@@ -24,23 +27,28 @@ import java.util.Optional;
 @RequestMapping("questions")
 public class QuestionController {
     public static final int questionsPerPage = 15;
+    public static final int answersPerPage = 30;
 
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
     @GetMapping
-    public Page<QuestionListItemDTO> getAllQuestions(@RequestParam(required = false, name = "page") Integer pageParam) {
+    public Page<QuestionMinimalDTO> getAllQuestions(@RequestParam(required = false, name = "page") Integer pageParam,
+                                                    Authentication authentication) {
         int page = pageParam == null ? 0 : pageParam - 1;
         Pageable pageable = PageRequest.of(page, questionsPerPage, Sort.by("date").descending());
 
-        Page<Question> allQuestions = questionRepository.findAll(pageable);
-        return allQuestions.map(QuestionListItemDTO::from);
+        User user = authentication == null ? null : (User) authentication.getPrincipal();
+
+        Page<Question> allQuestions = questionRepository.findAllByEnabledTrue(pageable);
+        return allQuestions.map(question -> QuestionMinimalDTO.from(question, user));
     }
 
     @GetMapping("/own")
-    public Page<QuestionListItemDTO> getAllQuestionsByUser(Authentication authentication,
-                                                           @RequestParam(required = false) String title,
-                                                           @RequestParam(name = "order-by", required = false) String orderBy,
-                                                           @RequestParam(required = false, name = "page") Integer pageParam) {
+    public Page<QuestionMinimalDTO> getAllQuestionsByUser(@RequestParam(required = false) String title,
+                                                          @RequestParam(name = "order-by", required = false) String orderBy,
+                                                          @RequestParam(required = false, name = "page") Integer pageParam,
+                                                          Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         int page = pageParam == null ? 0 : pageParam - 1;
         Sort sort = switch (orderBy != null ? orderBy : "") {
@@ -51,14 +59,16 @@ public class QuestionController {
         };
         Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
 
-        Page<Question> questions = questionRepository.findByUserIdAndTitleContainsIgnoreCase(user.getId(), title != null ? title : "", pageable);
-        return questions.map(QuestionListItemDTO::from);
+        Page<Question> questions = questionRepository.findByUserIdAndTitleContainsIgnoreCaseAndEnabledTrue(user.getId(),
+                title != null ? title : "", pageable);
+        return questions.map(question -> QuestionMinimalDTO.from(question, user));
     }
 
     @GetMapping("search")
-    public Page<QuestionListItemDTO> search(@RequestParam(required = false) String title,
-                                            @RequestParam(name = "order-by", required = false) String orderBy,
-                                            @RequestParam(required = false, name = "page") Integer pageParam) {
+    public Page<QuestionMinimalDTO> search(@RequestParam(required = false) String title,
+                                           @RequestParam(name = "order-by", required = false) String orderBy,
+                                           @RequestParam(required = false, name = "page") Integer pageParam,
+                                           Authentication authentication) {
         int page = pageParam == null ? 0 : pageParam - 1;
         Sort sort = switch (orderBy != null ? orderBy : "") {
             default -> Sort.by("date").descending();
@@ -68,20 +78,18 @@ public class QuestionController {
         };
         Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
 
-        Page<Question> questions = questionRepository.findByTitleContainsIgnoreCase(title != null ? title : "", pageable);
-        return questions.map(QuestionListItemDTO::from);
+        User user = authentication == null ? null : (User) authentication.getPrincipal();
+
+        Page<Question> questions = questionRepository
+                .findByTitleContainsIgnoreCaseAndEnabledTrue(title != null ? title : "", pageable);
+        return questions.map(question -> QuestionMinimalDTO.from(question, user));
     }
 
     @GetMapping("{id}")
     public QuestionDTO getQuestionById(@PathVariable long id, Authentication authentication) {
-        User user;
-        if (authentication == null) {
-            user = null;
-        } else {
-            user = (User) authentication.getPrincipal();
-        }
+        User user = authentication == null ? null : (User) authentication.getPrincipal();
 
-        Optional<Question> possiblyExistingQuestion = questionRepository.findById(id);
+        Optional<Question> possiblyExistingQuestion = questionRepository.findByIdAndEnabledTrue(id);
         if (possiblyExistingQuestion.isEmpty()) {
             throw new NotFoundException();
         }
@@ -89,8 +97,27 @@ public class QuestionController {
         return QuestionDTO.from(question, user);
     }
 
+    @GetMapping("{id}/answers")
+    public Page<AnswerDTO> getAnswersFromQuestion(@PathVariable long id,
+                                                  @RequestParam(required = false, name = "page") Integer pageParam, Authentication authentication) {
+        Optional<Question> possibleQuestion = questionRepository.findById(id);
+        Question question = possibleQuestion.orElseThrow(NotFoundException::new);
+
+        User user = authentication == null ? null : (User) authentication.getPrincipal();
+
+        int page = pageParam == null ? 0 : pageParam - 1;
+        Pageable pageable = PageRequest.of(page, answersPerPage,
+                Sort.by("isSolution").descending().and(
+                        Sort.by("voteCount").descending().and(
+                                Sort.by("date").ascending())));
+
+        Page<Answer> answers = answerRepository.findByQuestionAndEnabledTrue(question, pageable);
+        return answers.map(answer -> AnswerDTO.from(answer, user));
+    }
+
     @PostMapping
-    public ResponseEntity<QuestionDTO> createQuestion(@RequestBody PostPatchQuestionDTO postPatchQuestionDTO, UriComponentsBuilder ucb, Authentication authentication) {
+    public ResponseEntity<QuestionDTO> createQuestion(@RequestBody PostPatchQuestionDTO postPatchQuestionDTO,
+                                                      UriComponentsBuilder ucb, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
         if (postPatchQuestionDTO.title() == null || postPatchQuestionDTO.title().isBlank()) {
@@ -99,7 +126,8 @@ public class QuestionController {
         if (postPatchQuestionDTO.text() == null || postPatchQuestionDTO.text().isBlank()) {
             throw new BadRequestException("Text can't be null");
         }
-        Question newQuestion = new Question(postPatchQuestionDTO.title(), postPatchQuestionDTO.text(), LocalDateTime.now(), user);
+        Question newQuestion = new Question(postPatchQuestionDTO.title(), postPatchQuestionDTO.text(),
+                LocalDateTime.now(), user);
         questionRepository.save(newQuestion);
 
         URI locationOfNewQuestion = ucb.path("questions/{id}").buildAndExpand(newQuestion.getId()).toUri();
@@ -107,10 +135,11 @@ public class QuestionController {
     }
 
     @PatchMapping("{id}")
-    public QuestionDTO editQuestion(@PathVariable Long id, @RequestBody PostPatchQuestionDTO postPatchQuestionDTO, Authentication authentication) {
+    public QuestionDTO editQuestion(@PathVariable Long id, @RequestBody PostPatchQuestionDTO postPatchQuestionDTO,
+                                    Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
-        Optional<Question> possibleQuestion = questionRepository.findById(id);
+        Optional<Question> possibleQuestion = questionRepository.findByIdAndEnabledTrue(id);
         Question question = possibleQuestion.orElseThrow(NotFoundException::new);
 
         User questionOwner = question.getUser();
@@ -129,5 +158,25 @@ public class QuestionController {
 
         questionRepository.save(question);
         return QuestionDTO.from(question, user);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        Optional<Question> possibleQuestion = questionRepository.findByIdAndEnabledTrue(id);
+        Question question = possibleQuestion.orElseThrow(NotFoundException::new);
+
+        User questionOwner = question.getUser();
+        if (!user.equals(questionOwner)) {
+            throw new ForbiddenException();
+        }
+
+        question.setEnabled(false);
+        for (Answer answer : answerRepository.findByQuestion(question)) {
+            answer.setEnabled(false);
+        }
+
+        questionRepository.save(question);
+        return ResponseEntity.noContent().build();
     }
 }
