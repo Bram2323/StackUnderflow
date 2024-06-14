@@ -55,7 +55,7 @@ function QuestionFilter() {
                     </select>
                 </div>
                 <button
-                    className="bg-blue-500 text-white  text-nowrap rounded-full px-5 py-3 transition duration-200 my-2 hover:bg-blue-700"
+                    className="bg-blue-500 text-white text-nowrap rounded-full px-5 py-3 transition duration-200 my-2 hover:bg-blue-700"
                     onClick={() => navigate("/vragen/aanmaken")}
                 >
                     Stel Vraag

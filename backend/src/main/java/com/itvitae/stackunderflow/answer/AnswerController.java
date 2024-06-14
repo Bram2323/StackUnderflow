@@ -59,17 +59,14 @@ public class AnswerController {
     @PatchMapping("{id}/votes")
     public ResponseEntity<AnswerDTO> addVote(@PathVariable Long id, @RequestBody AnswerVoteDTO answerVoteDTO, Authentication authentication) {
         if (answerVoteDTO.isUpVote() == null || answerVoteDTO.isDownVote() == null) {
-            throw new BadRequestException("Upvote and downvote need to be defined");
+            throw new BadRequestException("Upvote or down vote needs to be defined");
         }
         User user = (User) authentication.getPrincipal();
         Optional<Answer> possiblyExistingAnswer = answerRepository.findById(id);
-        if (possiblyExistingAnswer.isEmpty()) {
-            throw new NotFoundException();
-        }
-        Answer answer = possiblyExistingAnswer.get();
+        Answer answer = possiblyExistingAnswer.orElseThrow(NotFoundException::new);
 
         if (answerVoteDTO.isUpVote() && answerVoteDTO.isDownVote()) {
-            throw new BadRequestException("Can't upvote and downvote at the same time");
+            throw new BadRequestException("Can't upvote and down vote at the same time");
         }
 
         Optional<UserAnswerVote> possibleUserAnswerVote = userAnswerVoteRepository.findByAnswerAndUser(answer, user);

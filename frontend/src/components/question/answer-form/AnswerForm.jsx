@@ -4,7 +4,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import CodeMarker from "../../shared/codeblock/CodeMarker/CodeMarker";
 import ApiService from "../../../services/ApiService";
 
-function AnswerForm({ questionId, answers, setAnswers }) {
+function AnswerForm({ questionId, addAnswer }) {
     const [answer, setAnswer] = useState({ question: questionId, text: "" });
     const [error, setError] = useState(null);
     const [selectionRange, setSelectionRange] = useState({
@@ -19,8 +19,8 @@ function AnswerForm({ questionId, answers, setAnswers }) {
         }
         ApiService.post("answers", answer).then((response) => {
             const newAnswer = response.data;
-            setAnswers([...answers, newAnswer]);
-            setAnswer({ question: questionId, text: "" });
+            addAnswer(newAnswer);
+            setAnswer({ ...answer, text: "" });
         });
     }
 
