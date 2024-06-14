@@ -3,6 +3,7 @@ import { useState } from "react";
 import InputField from "../input-field/InputField";
 import { useNavigate } from "react-router-dom";
 import "./QuestionFilter.css";
+import UserService from "../../../services/UserService";
 
 function QuestionFilter() {
     const navigate = useNavigate();
@@ -54,12 +55,14 @@ function QuestionFilter() {
                         <option value="least-answers">Least answers</option>
                     </select>
                 </div>
-                <button
-                    className="bg-blue-500 text-white text-nowrap rounded-full px-5 py-3 transition duration-200 my-2 hover:bg-blue-700"
-                    onClick={() => navigate("/vragen/aanmaken")}
-                >
-                    Stel Vraag
-                </button>
+                {UserService.isLoggedIn() && (
+                    <button
+                        className="bg-blue-500 text-white text-nowrap rounded-full px-5 py-3 transition duration-200 my-2 hover:bg-blue-700"
+                        onClick={() => navigate("/vragen/aanmaken")}
+                    >
+                        Stel Vraag
+                    </button>
+                )}
             </div>
         </>
     );
