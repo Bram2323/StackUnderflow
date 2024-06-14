@@ -7,6 +7,7 @@ import CodeHighlighter from "../shared/codeblock/CodeHighlighter/CodeHighlighter
 import AnswerForm from "./answer-form/AnswerForm";
 import UserService from "../../services/UserService";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatDate } from "../shared/date-formatter/FormatDate";
 import AnswerList from "./answer-list/AnswerList";
@@ -68,8 +69,15 @@ function Question() {
         });
     }
 
+    function handleDelete() {
+        if (!UserService.isLoggedIn || !isQuestionOwner) {
+            return;
+        }
+        ApiService.delete(`questions/${id}`).then(() => navigate("/vragen"));
+    }
+
     return (
-        <div className="question">
+        <div className="question mb-12">
             <div className="question-container">
                 <h2 className="font-bold text-center">{question.title}</h2>
                 <hr className="w-full border-none h-[2px] bg-[#C0C0C0]" />
@@ -94,14 +102,23 @@ function Question() {
                             </div>
                         )}
                     </div>
+                    <div className="flex gap-3">
+                        {isQuestionOwner && (
+                            <FontAwesomeIcon
+                                icon={faPen}
+                                className="cursor-pointer"
+                                onClick={handleEdit}
+                            />
+                        )}
 
-                    {isQuestionOwner && (
-                        <FontAwesomeIcon
-                            icon={faPen}
-                            className="cursor-pointer"
-                            onClick={handleEdit}
-                        />
-                    )}
+                        {isQuestionOwner && (
+                            <FontAwesomeIcon
+                                icon={faTrashCan}
+                                className="cursor-pointer"
+                                onClick={handleDelete}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="answer-form-container">

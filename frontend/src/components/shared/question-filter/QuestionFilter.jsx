@@ -2,7 +2,9 @@ import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import InputField from "../input-field/InputField";
 import { useNavigate } from "react-router-dom";
+import Button from "../button/Button";
 import "./QuestionFilter.css";
+import UserService from "../../../services/UserService";
 
 function QuestionFilter() {
     const navigate = useNavigate();
@@ -37,7 +39,7 @@ function QuestionFilter() {
                     <InputField
                         text={titleQuery}
                         onTextChanged={setTitleQuery}
-                        placeHolder="Search..."
+                        placeHolder="Zoeken..."
                         onSubmit={handleSearch}
                         onBlur={handleSearch}
                     />
@@ -48,18 +50,18 @@ function QuestionFilter() {
                         name="orders"
                         value={orderQuery}
                     >
-                        <option value="date-desc">New questions</option>
-                        <option value="date-asc">Old questions</option>
-                        <option value="most-answers">Most answers</option>
-                        <option value="least-answers">Least answers</option>
+                        <option value="date-desc">Nieuwste vragen</option>
+                        <option value="date-asc">Oudste vragen</option>
+                        <option value="most-answers">Meeste antwoorden</option>
+                        <option value="least-answers">Minste antwoorden</option>
                     </select>
                 </div>
-                <button
-                    className="bg-blue-500 text-white text-nowrap rounded-full px-5 py-3 transition duration-200 my-2 hover:bg-blue-700"
-                    onClick={() => navigate("/vragen/aanmaken")}
-                >
-                    Stel Vraag
-                </button>
+                {UserService.isLoggedIn() && (
+                    <Button
+                        text={"Stel Vraag"}
+                        onClick={() => navigate("/vragen/aanmaken")}
+                    />
+                )}
             </div>
         </>
     );

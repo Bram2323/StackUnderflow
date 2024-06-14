@@ -3,6 +3,7 @@ import UserService from "../../../services/UserService";
 import TextareaAutosize from "react-textarea-autosize";
 import CodeMarker from "../../shared/codeblock/CodeMarker/CodeMarker";
 import ApiService from "../../../services/ApiService";
+import Button from "../../shared/button/Button";
 
 function AnswerForm({ questionId, addAnswer }) {
     const [answer, setAnswer] = useState({ question: questionId, text: "" });
@@ -97,13 +98,12 @@ function AnswerForm({ questionId, addAnswer }) {
                                 selectionRange={selectionRange}
                                 setSelectionRange={setSelectionRange}
                             />
-                            <button
-                                className="w-fit bg-blue-500 text-white rounded-full p-3 px-5 transition duration-200 my-2 hover:bg-blue-700"
-                                onClick={handlePost}
-                            >
-                                Post
-                            </button>
-                            {error && <p className="text-[#FF0000]">{error}</p>}
+                        </div>
+                        <div className="flex gap-3">
+                            <Button text={"Post"} onClick={handlePost} />
+                            {error && (
+                                <p className="text-[#FF0000] mt-2">{error}</p>
+                            )}
                         </div>
                     </>
                 )}

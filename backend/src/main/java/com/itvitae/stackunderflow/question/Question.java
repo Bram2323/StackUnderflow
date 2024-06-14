@@ -28,6 +28,7 @@ public class Question {
 
     @Column(table = "question_summary_view", insertable = false)
     private Integer answerCount;
+    private Boolean enabled = true;
 
     public Question(String title, String text, LocalDateTime date, User user) {
         this.title = title;
