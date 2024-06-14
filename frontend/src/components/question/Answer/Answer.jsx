@@ -5,15 +5,9 @@ import UserService from "../../../services/UserService";
 import CodeHighlighter from "../../shared/codeblock/CodeHighlighter/CodeHighlighter";
 import CheckMark from "../../../assets/images/checkmark.svg";
 import "./Answer.css";
+import { formatDate } from "../../shared/date-formatter/FormatDate";
 
 function Answer({ answer, setAnswer, isQuestionOwner }) {
-    const creationDate = new Date(answer.date);
-    const formattedDate = new Intl.DateTimeFormat("nl-NL", {
-        dateStyle: "short",
-        timeStyle: "short",
-        timeZone: "Europe/Amsterdam",
-    }).format(creationDate);
-
     function vote(vote) {
         if (!UserService.isLoggedIn()) return;
         ApiService.patch("answers/" + answer.id + "/votes", {
@@ -60,7 +54,7 @@ function Answer({ answer, setAnswer, isQuestionOwner }) {
                 <hr />
                 <div className="flex gap-[10px] items-center">
                     <User user={answer.user} />
-                    <p className="pt-[3px]">{formattedDate}</p>
+                    <p className="pt-[3px]">{formatDate(answer.date)}</p>
                 </div>
             </div>
         </div>

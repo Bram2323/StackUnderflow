@@ -30,12 +30,6 @@ function Home() {
                         <h1 className="font-bold text-center text-2xl">
                             Mijn vragen
                         </h1>
-                        <button
-                            className="bg-blue-500 text-white rounded-full px-5 py-3 transition duration-200 my-2 hover:bg-blue-700"
-                            onClick={() => navigate("/vragen/aanmaken")}
-                        >
-                            Stel Vraag
-                        </button>
                     </div>
                     <QuestionFilter />
                     <QuestionList
