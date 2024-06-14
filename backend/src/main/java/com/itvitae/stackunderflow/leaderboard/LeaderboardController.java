@@ -1,12 +1,15 @@
 package com.itvitae.stackunderflow.leaderboard;
 
 import com.itvitae.stackunderflow.user.User;
+import com.itvitae.stackunderflow.user.UserLeaderboardDTO;
 import com.itvitae.stackunderflow.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("leaderboard")
@@ -15,6 +18,7 @@ import java.util.List;
 public class LeaderboardController {
     private final LeaderboardRunner leaderboardRunner;
     private final UserRepository userRepository;
+    public static final int usersPerPage = 15;
 
     @PatchMapping("set-leaderboard-ranking")
     public ResponseEntity<String> setLeaderboardRanking() {
@@ -24,9 +28,6 @@ public class LeaderboardController {
             userRepository.save(user);
         }
 
-        // ISSUE: if the previous users in the leaderboard has the same amount of points they don't share a rank
-        // May have to implement a check to see the points of the previous user on the leaderboard and assign the same
-        // rank if the points are equal.
         Integer rank = 1;
         Integer previousUserPoints = 0;
         for (User user : userRepository.findAllByOrderByTotalPointsDesc()) {
@@ -42,7 +43,11 @@ public class LeaderboardController {
     }
 
     @GetMapping("get-all-users")
-    public List<User> getAllUsers() {
-        return userRepository.findAllByOrderByTotalPointsDesc();
+    public Page<UserLeaderboardDTO> getAllUsers(@RequestParam(required = false, name = "page") Integer pageParam) {
+        int page = pageParam == null ? 0 : pageParam - 1;
+        Pageable pageable = PageRequest.of(page, usersPerPage, Sort.by("totalPoints").descending());
+
+        Page<User> allUsers = userRepository.findAllByTotalPointsNotNull(pageable);
+        return allUsers.map(UserLeaderboardDTO::from);
     }
 }
