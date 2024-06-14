@@ -16,9 +16,11 @@ export default function Leaderboard({ totalPages }) {
     return (
         <>
             <Pageable totalPages={totalPages} />
-            {users.map((users, index) => (
-                <LeaderboardItem user={users} key={index} />
-            ))}
+            {users
+                .filter((user) => user.totalPoints !== null)
+                .map((users, index) => (
+                    <LeaderboardItem user={users} key={index} />
+                ))}
             <Pageable totalPages={totalPages} />
         </>
     );
