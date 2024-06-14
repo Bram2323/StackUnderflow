@@ -1,6 +1,5 @@
 package com.itvitae.stackunderflow.leaderboard;
 
-import com.itvitae.stackunderflow.user.Award;
 import com.itvitae.stackunderflow.user.User;
 import com.itvitae.stackunderflow.user.UserLeaderboardDTO;
 import com.itvitae.stackunderflow.user.UserRepository;
@@ -23,28 +22,7 @@ public class LeaderboardController {
 
     @PatchMapping("set-leaderboard-ranking")
     public ResponseEntity<String> setLeaderboardRanking() {
-        for (User user : userRepository.findAll()) {
-            long totalPoints = leaderboardRunner.getTotalUserVotes(user);
-            user.setTotalPoints(totalPoints);
-            userRepository.save(user);
-        }
-
-        long rank = 1;
-        long previousUserPoints = 0;
-        for (User user : userRepository.findAllByOrderByTotalPointsDesc()) {
-            if (user.getTotalPoints().equals(previousUserPoints)) {
-                rank--;
-            }
-            user.setLeaderboardRanking(rank);
-            Award award = Award.NONE;
-            if (rank == 1) award = Award.FIRST;
-            if (rank == 2) award = Award.SECOND;
-            if (rank == 3) award = Award.THIRD;
-            user.setAward(award);
-            userRepository.save(user);
-            previousUserPoints = user.getTotalPoints();
-            rank++;
-        }
+        leaderboardRunner.updateLeaderboard();
         return ResponseEntity.ok("Successfully updated the leaderboard ranking of all users!");
     }
 
