@@ -73,7 +73,7 @@ function Question() {
         if (!UserService.isLoggedIn || !isQuestionOwner) {
             return;
         }
-        ApiService.delete(`questions/${id}`).then(navigate("/vragen"));
+        ApiService.delete(`questions/${id}`).then(() => navigate("/vragen"));
     }
 
     return (

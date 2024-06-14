@@ -55,11 +55,11 @@ function QuestionForm() {
         if (editMode) {
             if (!UserService.isLoggedIn() || !isQuestionOwner) return;
             ApiService.patch("questions/" + questionId, question).then(
-                (response) => navigate("/vragen/" + response.data.id)
+                (response) => () => navigate("/vragen/" + response.data.id)
             );
         } else {
-            ApiService.post("questions", question).then((response) =>
-                navigate("/vragen/" + response.data.id)
+            ApiService.post("questions", question).then(
+                (response) => () => navigate("/vragen/" + response.data.id)
             );
         }
     }

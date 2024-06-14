@@ -177,6 +177,6 @@ public class QuestionController {
         }
 
         questionRepository.save(question);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 }
