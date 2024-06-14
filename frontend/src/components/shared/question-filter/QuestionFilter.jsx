@@ -4,6 +4,7 @@ import InputField from "../input-field/InputField";
 import { useNavigate } from "react-router-dom";
 import Button from "../button/Button";
 import "./QuestionFilter.css";
+import UserService from "../../../services/UserService";
 
 function QuestionFilter() {
     const navigate = useNavigate();
@@ -55,10 +56,12 @@ function QuestionFilter() {
                         <option value="least-answers">Minste antwoorden</option>
                     </select>
                 </div>
-                <Button
-                    text={"Stel Vraag"}
-                    onClick={() => navigate("/vragen/aanmaken")}
-                />
+                {UserService.isLoggedIn() && (
+                    <Button
+                        text={"Stel Vraag"}
+                        onClick={() => navigate("/vragen/aanmaken")}
+                    />
+                )}
             </div>
         </>
     );

@@ -3,7 +3,7 @@ import ApiService from "../../services/ApiService";
 import UserService from "../../services/UserService";
 import "./QuestionForm.css";
 import InputField from "../shared/input-field/InputField";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import CodeMarker from "../shared/codeblock/CodeMarker/CodeMarker";
 import Button from "../shared/button/Button";
 
@@ -24,13 +24,13 @@ function QuestionForm() {
         isQuestionOwner: false,
     };
 
-    if (editMode) {
-        useEffect(() => {
+    useEffect(() => {
+        if (editMode) {
             ApiService.get("questions/" + questionId).then((response) => {
                 setQuestion(response.data);
             });
-        }, []);
-    }
+        }
+    }, []);
 
     function handleSelect(e) {
         e.stopPropagation();
@@ -86,6 +86,8 @@ function QuestionForm() {
             e.target.setSelectionRange(newCursorPosition, newCursorPosition);
         }, 0);
     }
+
+    if (!UserService.isLoggedIn()) return <Navigate to={"/"} />;
 
     return (
         <div className="question-form">

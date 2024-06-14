@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import InputField from "../shared/input-field/InputField";
 import UserService from "../../services/UserService";
 import Button from "../shared/button/Button";
@@ -26,6 +26,12 @@ function Login() {
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const prevPath =
+        location.state && location.state.prevPath
+            ? location.state.prevPath
+            : "/";
 
     function handleLogin() {
         if (username.length == 0) setError("Gebruikersnaam is verplicht!");
@@ -33,13 +39,15 @@ function Login() {
         else {
             UserService.login(username, password)
                 .then(() => {
-                    navigate("/");
+                    navigate(prevPath);
                 })
                 .catch((error) => {
                     setError(translateError(error));
                 });
         }
     }
+
+    if (UserService.isLoggedIn()) return <Navigate to={prevPath} />;
 
     return (
         <>
