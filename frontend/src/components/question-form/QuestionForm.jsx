@@ -5,6 +5,7 @@ import "./QuestionForm.css";
 import InputField from "../shared/input-field/InputField";
 import { useNavigate, useLocation } from "react-router-dom";
 import CodeMarker from "../shared/codeblock/CodeMarker/CodeMarker";
+import Button from "../shared/button/Button";
 
 function QuestionForm() {
     const [question, setQuestion] = useState({ title: "", text: "" });
@@ -125,12 +126,10 @@ function QuestionForm() {
                         selectionRange={selectionRange}
                         setSelectionRange={setSelectionRange}
                     />
-                    <button
-                        className="bg-blue-500 text-white rounded-full px-6 py-3 transition duration-200 my-2 hover:bg-blue-700"
+                    <Button
+                        text={editMode ? "Opslaan" : "Plaats je vraag"}
                         onClick={handleSaveQuestion}
-                    >
-                        {editMode ? "Opslaan" : "Plaats je vraag"}
-                    </button>
+                    />
                     {error && <p className="question-form-error">{error}</p>}
                 </form>
             </div>

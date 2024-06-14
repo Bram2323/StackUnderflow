@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "../shared/input-field/InputField";
 import UserService from "../../services/UserService";
+import Button from "../shared/button/Button";
 import "./Login.css";
 
 function translateError(error) {
@@ -59,7 +60,11 @@ function Login() {
                     />
                 </div>
                 {error != "" ? <p className="login-error">{error}</p> : null}
-                <button onClick={handleLogin}>Login</button>
+                <Button
+                    text={"Login"}
+                    onClick={handleLogin}
+                    isLoginOrOut={true}
+                />
             </div>
         </>
     );
