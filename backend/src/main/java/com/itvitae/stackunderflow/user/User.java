@@ -31,9 +31,9 @@ public class User implements UserDetails {
 
     private String role;
 
-    private Integer leaderboardRanking;
+    private Long leaderboardRanking;
 
-    private Integer totalPoints;
+    private Long totalPoints;
 
     private Award award;
 

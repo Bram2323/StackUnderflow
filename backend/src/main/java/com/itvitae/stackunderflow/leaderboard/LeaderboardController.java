@@ -23,13 +23,13 @@ public class LeaderboardController {
     @PatchMapping("set-leaderboard-ranking")
     public ResponseEntity<String> setLeaderboardRanking() {
         for (User user : userRepository.findAll()) {
-            int totalPoints = leaderboardRunner.getTotalUserVotes(user);
+            long totalPoints = leaderboardRunner.getTotalUserVotes(user);
             user.setTotalPoints(totalPoints);
             userRepository.save(user);
         }
 
-        Integer rank = 1;
-        Integer previousUserPoints = 0;
+        long rank = 1;
+        long previousUserPoints = 0;
         for (User user : userRepository.findAllByOrderByTotalPointsDesc()) {
             if (user.getTotalPoints().equals(previousUserPoints)) {
                 rank--;
