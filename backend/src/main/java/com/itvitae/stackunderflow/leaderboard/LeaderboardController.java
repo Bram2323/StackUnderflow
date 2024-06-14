@@ -1,5 +1,6 @@
 package com.itvitae.stackunderflow.leaderboard;
 
+import com.itvitae.stackunderflow.user.Award;
 import com.itvitae.stackunderflow.user.User;
 import com.itvitae.stackunderflow.user.UserLeaderboardDTO;
 import com.itvitae.stackunderflow.user.UserRepository;
@@ -35,6 +36,11 @@ public class LeaderboardController {
                 rank--;
             }
             user.setLeaderboardRanking(rank);
+            Award award = Award.NONE;
+            if (rank == 1) award = Award.FIRST;
+            if (rank == 2) award = Award.SECOND;
+            if (rank == 3) award = Award.THIRD;
+            user.setAward(award);
             userRepository.save(user);
             previousUserPoints = user.getTotalPoints();
             rank++;

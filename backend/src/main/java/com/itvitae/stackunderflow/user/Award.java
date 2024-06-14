@@ -1,5 +1,8 @@
 package com.itvitae.stackunderflow.user;
 
 public enum Award {
-    NONE
+    NONE,
+    FIRST,
+    SECOND,
+    THIRD
 }
