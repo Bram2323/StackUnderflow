@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "../shared/input-field/InputField";
 import UserService from "../../services/UserService";
+import Button from "../shared/button/Button";
 import "./Register.css";
 
 function translateError(error) {
@@ -108,7 +109,11 @@ function Register() {
                         ))}
                     </div>
                 ) : null}
-                <button onClick={handleRegister}>Registreer</button>
+                <Button
+                    text={"Registreer"}
+                    onClick={handleRegister}
+                    isLoginOrOut={true}
+                />
             </div>
         </>
     );

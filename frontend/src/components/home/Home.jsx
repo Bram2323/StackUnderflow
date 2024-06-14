@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import UserService from "../../services/UserService";
 import { useSearchParams } from "react-router-dom";
 import QuestionFilter from "../shared/question-filter/QuestionFilter";
+import Button from "../shared/button/Button";
 
 function Home() {
     const [questions, setQuestions] = useState([]);
@@ -25,7 +26,7 @@ function Home() {
     return (
         <>
             {UserService.isLoggedIn() ? (
-                <div className="flex flex-col w-3/5 gap-3">
+                <div className="flex flex-col w-3/5 gap-3 mb-12">
                     <div className="flex items-baseline justify-between gap-10 mt-12">
                         <h1 className="font-bold text-center text-2xl">
                             Mijn vragen
@@ -47,12 +48,10 @@ function Home() {
                         Vind het beste antwoord op jouw technische vraag, help
                         anderen met het beantwoorden van die van hen.
                     </h2>
-                    <button
-                        className="register-button"
+                    <Button
+                        text={"Registreer je nu!"}
                         onClick={() => navigate("/registreren")}
-                    >
-                        Registreer je nu!
-                    </button>
+                    />
                 </div>
             )}
         </>

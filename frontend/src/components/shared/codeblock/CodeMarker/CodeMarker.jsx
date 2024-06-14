@@ -45,7 +45,7 @@ function CodeMarker({ object, setObject, selectionRange, setSelectionRange }) {
         setSelectionRange({ start: null, end: null });
     }
     return (
-        <div className="w-full flex items-baseline justify-between">
+        <div className="w-full flex items-baseline justify-between mb-1">
             <p>
                 Selecteer je code en klik hier om te markeren als een codeblock{" "}
             </p>

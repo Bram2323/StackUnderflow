@@ -25,39 +25,3 @@
     background-color: lightgray;
 }
 
-.login-button {
-    float: right;
-    border-radius: 50px;
-    border: 1px solid #2397F4;
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-left: 5px;
-    margin-right: 5px;
-    line-height: 45px;
-    cursor: pointer;
-    height: 45px;
-    transition: 0.2s;
-}
-
-.login-button:hover {
-    background-color: #c3e4ff;
-}
-
-.register-button {
-    float: right;
-    border-radius: 50px;
-    background-color: #2397F4;
-    color: white;
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-left: 5px;
-    margin-right: 5px;
-    line-height: 45px;
-    cursor: pointer;
-    height: 45px;
-    transition: 0.2s
-}
-
-.register-button:hover {
-    background-color: #1863a1
-}
