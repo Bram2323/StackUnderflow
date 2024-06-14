@@ -1,6 +1,7 @@
 package com.itvitae.stackunderflow.answer;
 
 import com.itvitae.stackunderflow.question.Question;
+import com.itvitae.stackunderflow.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,6 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     List<Answer> findByQuestion(Question question);
 
     Optional<Answer> findByIdAndEnabledTrue(Long id);
+
+    List<Answer> findByUserAndEnabledTrue(User user);
 }
