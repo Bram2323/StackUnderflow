@@ -19,7 +19,7 @@ public class LeaderboardRunner {
     public long getTotalUserVotes(User user) {
         long totalVotes = 0;
         // calculates for this month for testing purposes, it should be last month in the final product
-        for (Answer answer : answerRepository.findByUser(user)) {
+        for (Answer answer : answerRepository.findByUserAndEnabledTrue(user)) {
             if (answer.getDate().getMonth() == LocalDateTime.now().getMonth() &&
                     answer.getDate().getYear() == LocalDateTime.now().getYear()) {
                 totalVotes += answer.getVotes();

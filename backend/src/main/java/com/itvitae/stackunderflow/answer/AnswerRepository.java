@@ -16,5 +16,5 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
     Optional<Answer> findByIdAndEnabledTrue(Long id);
 
-    List<Answer> findByUser(User user);
+    List<Answer> findByUserAndEnabledTrue(User user);
 }
