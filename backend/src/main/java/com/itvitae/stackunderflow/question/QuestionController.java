@@ -33,21 +33,21 @@ public class QuestionController {
     private final AnswerRepository answerRepository;
 
     @GetMapping
-    public Page<QuestionDTO> getAllQuestions(@RequestParam(required = false, name = "page") Integer pageParam, Authentication authentication) {
+    public Page<QuestionMinimalDTO> getAllQuestions(@RequestParam(required = false, name = "page") Integer pageParam, Authentication authentication) {
         int page = pageParam == null ? 0 : pageParam - 1;
         Pageable pageable = PageRequest.of(page, questionsPerPage, Sort.by("date").descending());
 
         User user = authentication == null ? null : (User) authentication.getPrincipal();
 
         Page<Question> allQuestions = questionRepository.findAll(pageable);
-        return allQuestions.map(question -> QuestionDTO.from(question, user));
+        return allQuestions.map(question -> QuestionMinimalDTO.from(question, user));
     }
 
     @GetMapping("/own")
-    public Page<QuestionDTO> getAllQuestionsByUser(@RequestParam(required = false) String title,
-                                                   @RequestParam(name = "order-by", required = false) String orderBy,
-                                                   @RequestParam(required = false, name = "page") Integer pageParam,
-                                                   Authentication authentication) {
+    public Page<QuestionMinimalDTO> getAllQuestionsByUser(@RequestParam(required = false) String title,
+                                                          @RequestParam(name = "order-by", required = false) String orderBy,
+                                                          @RequestParam(required = false, name = "page") Integer pageParam,
+                                                          Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         int page = pageParam == null ? 0 : pageParam - 1;
         Sort sort = switch (orderBy != null ? orderBy : "") {
@@ -59,14 +59,14 @@ public class QuestionController {
         Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
 
         Page<Question> questions = questionRepository.findByUserIdAndTitleContainsIgnoreCase(user.getId(), title != null ? title : "", pageable);
-        return questions.map(question -> QuestionDTO.from(question, user));
+        return questions.map(question -> QuestionMinimalDTO.from(question, user));
     }
 
     @GetMapping("search")
-    public Page<QuestionDTO> search(@RequestParam(required = false) String title,
-                                    @RequestParam(name = "order-by", required = false) String orderBy,
-                                    @RequestParam(required = false, name = "page") Integer pageParam,
-                                    Authentication authentication) {
+    public Page<QuestionMinimalDTO> search(@RequestParam(required = false) String title,
+                                           @RequestParam(name = "order-by", required = false) String orderBy,
+                                           @RequestParam(required = false, name = "page") Integer pageParam,
+                                           Authentication authentication) {
         int page = pageParam == null ? 0 : pageParam - 1;
         Sort sort = switch (orderBy != null ? orderBy : "") {
             default -> Sort.by("date").descending();
@@ -79,7 +79,7 @@ public class QuestionController {
         User user = authentication == null ? null : (User) authentication.getPrincipal();
 
         Page<Question> questions = questionRepository.findByTitleContainsIgnoreCase(title != null ? title : "", pageable);
-        return questions.map(question -> QuestionDTO.from(question, user));
+        return questions.map(question -> QuestionMinimalDTO.from(question, user));
     }
 
     @GetMapping("{id}")
