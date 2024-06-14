@@ -34,7 +34,7 @@ public class QuestionController {
 
     @GetMapping
     public Page<QuestionMinimalDTO> getAllQuestions(@RequestParam(required = false, name = "page") Integer pageParam,
-            Authentication authentication) {
+                                                    Authentication authentication) {
         int page = pageParam == null ? 0 : pageParam - 1;
         Pageable pageable = PageRequest.of(page, questionsPerPage, Sort.by("date").descending());
 
@@ -46,9 +46,9 @@ public class QuestionController {
 
     @GetMapping("/own")
     public Page<QuestionMinimalDTO> getAllQuestionsByUser(@RequestParam(required = false) String title,
-            @RequestParam(name = "order-by", required = false) String orderBy,
-            @RequestParam(required = false, name = "page") Integer pageParam,
-            Authentication authentication) {
+                                                          @RequestParam(name = "order-by", required = false) String orderBy,
+                                                          @RequestParam(required = false, name = "page") Integer pageParam,
+                                                          Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         int page = pageParam == null ? 0 : pageParam - 1;
         Sort sort = switch (orderBy != null ? orderBy : "") {
@@ -66,9 +66,9 @@ public class QuestionController {
 
     @GetMapping("search")
     public Page<QuestionMinimalDTO> search(@RequestParam(required = false) String title,
-            @RequestParam(name = "order-by", required = false) String orderBy,
-            @RequestParam(required = false, name = "page") Integer pageParam,
-            Authentication authentication) {
+                                           @RequestParam(name = "order-by", required = false) String orderBy,
+                                           @RequestParam(required = false, name = "page") Integer pageParam,
+                                           Authentication authentication) {
         int page = pageParam == null ? 0 : pageParam - 1;
         Sort sort = switch (orderBy != null ? orderBy : "") {
             default -> Sort.by("date").descending();
@@ -99,7 +99,7 @@ public class QuestionController {
 
     @GetMapping("{id}/answers")
     public Page<AnswerDTO> getAnswersFromQuestion(@PathVariable long id,
-            @RequestParam(required = false, name = "page") Integer pageParam, Authentication authentication) {
+                                                  @RequestParam(required = false, name = "page") Integer pageParam, Authentication authentication) {
         Optional<Question> possibleQuestion = questionRepository.findById(id);
         Question question = possibleQuestion.orElseThrow(NotFoundException::new);
 
@@ -111,13 +111,13 @@ public class QuestionController {
                         Sort.by("voteCount").descending().and(
                                 Sort.by("date").ascending())));
 
-        Page<Answer> answers = answerRepository.getByQuestion(question, pageable);
+        Page<Answer> answers = answerRepository.findByQuestionAndEnabledTrue(question, pageable);
         return answers.map(answer -> AnswerDTO.from(answer, user));
     }
 
     @PostMapping
     public ResponseEntity<QuestionDTO> createQuestion(@RequestBody PostPatchQuestionDTO postPatchQuestionDTO,
-            UriComponentsBuilder ucb, Authentication authentication) {
+                                                      UriComponentsBuilder ucb, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
         if (postPatchQuestionDTO.title() == null || postPatchQuestionDTO.title().isBlank()) {
@@ -136,7 +136,7 @@ public class QuestionController {
 
     @PatchMapping("{id}")
     public QuestionDTO editQuestion(@PathVariable Long id, @RequestBody PostPatchQuestionDTO postPatchQuestionDTO,
-            Authentication authentication) {
+                                    Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
         Optional<Question> possibleQuestion = questionRepository.findByIdAndEnabledTrue(id);
@@ -172,7 +172,7 @@ public class QuestionController {
         }
 
         question.setEnabled(false);
-        for (Answer answer : question.getAnswers()) {
+        for (Answer answer : answerRepository.findByQuestion(question)) {
             answer.setEnabled(false);
         }
 
