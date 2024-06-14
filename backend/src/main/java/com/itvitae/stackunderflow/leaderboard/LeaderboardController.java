@@ -28,9 +28,14 @@ public class LeaderboardController {
         // May have to implement a check to see the points of the previous user on the leaderboard and assign the same
         // rank if the points are equal.
         Integer rank = 1;
+        Integer previousUserPoints = 0;
         for (User user : userRepository.findAllByOrderByTotalPointsDesc()) {
+            if (user.getTotalPoints().equals(previousUserPoints)) {
+                rank--;
+            }
             user.setLeaderboardRanking(rank);
             userRepository.save(user);
+            previousUserPoints = user.getTotalPoints();
             rank++;
         }
         return ResponseEntity.ok("Successfully updated the leaderboard ranking of all users!");
