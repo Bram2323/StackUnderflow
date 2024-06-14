@@ -27,6 +27,9 @@ public class Seeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (userRepository.findByUsername("test").isEmpty()) {
             userService.register("test", "Testww123!");
+            userService.register("test1", "Testww123!");
+            userService.register("test2", "Testww123!");
+            userService.register("test3", "Testww123!");
         }
         if (questionRepository.count() == 0) {
             User user = userRepository.findByUsername("test").get();

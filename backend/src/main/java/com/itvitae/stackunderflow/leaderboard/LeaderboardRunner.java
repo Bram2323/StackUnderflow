@@ -3,18 +3,16 @@ package com.itvitae.stackunderflow.leaderboard;
 import com.itvitae.stackunderflow.answer.Answer;
 import com.itvitae.stackunderflow.answer.AnswerRepository;
 import com.itvitae.stackunderflow.user.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class LeaderboardRunner {
 
     private final AnswerRepository answerRepository;
-
-    public LeaderboardRunner(AnswerRepository answerRepository) {
-        this.answerRepository = answerRepository;
-    }
 
     public long getTotalUserVotes(User user) {
         long totalVotes = 0;
