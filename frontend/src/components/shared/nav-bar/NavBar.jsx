@@ -1,11 +1,26 @@
 import "./NavBar.css";
 import logo from "../../../assets/images/stack_underflow_logo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import UserService from "../../../services/UserService";
 import User from "../User/User";
 
 export default function NavBar() {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    let prevPath;
+    const currentPath = location.pathname;
+    if (
+        !currentPath.startsWith("/inloggen") &&
+        !currentPath.startsWith("/registreren")
+    ) {
+        prevPath = currentPath;
+    } else {
+        prevPath =
+            location.state && location.state.prevPath
+                ? location.state.prevPath
+                : null;
+    }
 
     return (
         <div className=" sticky top-0 h-14 w-full bg-white text-gray-900 border-gray-500 border-b ">
@@ -36,7 +51,7 @@ export default function NavBar() {
                             className="login-button"
                             onClick={() => {
                                 UserService.logout();
-                                navigate("/");
+                                navigate(currentPath);
                             }}
                         >
                             Uitloggen
@@ -47,13 +62,25 @@ export default function NavBar() {
                     <>
                         <button
                             className="login-button"
-                            onClick={() => navigate("/inloggen")}
+                            onClick={() =>
+                                navigate("/inloggen", {
+                                    state: {
+                                        prevPath: prevPath,
+                                    },
+                                })
+                            }
                         >
                             Inloggen
                         </button>
                         <button
                             className="register-button"
-                            onClick={() => navigate("/registreren")}
+                            onClick={() =>
+                                navigate("/registreren", {
+                                    state: {
+                                        prevPath: prevPath,
+                                    },
+                                })
+                            }
                         >
                             Registreren
                         </button>
