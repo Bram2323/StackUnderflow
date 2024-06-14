@@ -15,17 +15,6 @@
     gap: 5px;
 }
 
-.register-form button {
-    border: 1px solid #2397F4;
-    border-radius: 100px;
-    padding: 10px 20px;
-    transition: 0.2s
-}
-
-.register-form button:hover {
-    background-color: #c3e4ff;
-}
-
 .register-errors {
     text-align: center;
     color: red;
