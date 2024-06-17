@@ -7,11 +7,11 @@ import CodeHighlighter from "../../shared/codeblock/CodeHighlighter/CodeHighligh
 import CheckMark from "../../../assets/images/checkmark.svg";
 import "./Answer.css";
 import { formatDate } from "../../shared/date-formatter/FormatDate";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AnswerForm from "../answer-form/AnswerForm";
 
-function Answer({ answer, setAnswer, isQuestionOwner }) {
+function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
     const [isEditing, setIsEditing] = useState(false);
 
     function vote(vote) {
@@ -29,6 +29,16 @@ function Answer({ answer, setAnswer, isQuestionOwner }) {
                 setAnswer(response.data);
             }
         );
+    }
+
+    function handleDelete() {
+        if (!UserService.isLoggedIn || !isAnswerOwner) {
+            return;
+        }
+        ApiService.delete(`answers/${answer.id}`).then(() => {
+            const updatedAnswers = answers.filter((a) => a.id !== answer.id);
+            setAnswers(updatedAnswers);
+        });
     }
 
     function handleUpdateAnswer(updatedAnswer) {
@@ -76,16 +86,30 @@ function Answer({ answer, setAnswer, isQuestionOwner }) {
                     <CodeHighlighter markdown={answer.text} />
 
                     <hr />
-                    <div className="flex gap-[10px] items-center">
-                        <User user={answer.user} />
-                        <p className="pt-[3px]">{formatDate(answer.date)}</p>
-                        {isAnswerOwner && !isEditing && (
-                            <FontAwesomeIcon
-                                icon={faPen}
-                                className="cursor-pointer"
-                                onClick={() => setIsEditing(true)}
-                            />
-                        )}
+                    <div className="flex items-center justify-between gap-[10px]">
+                        <div className="flex gap-[10px] items-center">
+                            <User user={answer.user} />
+
+                            <p className="pt-[3px]">
+                                {formatDate(answer.date)}
+                            </p>
+                        </div>
+                        <div className="flex gap-3">
+                            {isAnswerOwner && !isEditing && (
+                                <FontAwesomeIcon
+                                    icon={faPen}
+                                    className="cursor-pointer"
+                                    onClick={() => setIsEditing(true)}
+                                />
+                            )}
+                            {isAnswerOwner && (
+                                <FontAwesomeIcon
+                                    icon={faTrashCan}
+                                    className="cursor-pointer"
+                                    onClick={handleDelete}
+                                />
+                            )}
+                        </div>
                     </div>
                 </div>
             )}

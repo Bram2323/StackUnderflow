@@ -128,6 +128,7 @@ function Question() {
             </div>
             <AnswerList
                 answers={answers}
+                setAnswers={setAnswers}
                 setAnswer={setAnswer}
                 isQuestionOwner={isQuestionOwner}
                 totalPages={totalPages}
