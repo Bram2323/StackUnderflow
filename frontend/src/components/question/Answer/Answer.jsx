@@ -6,8 +6,10 @@ import CodeHighlighter from "../../shared/codeblock/CodeHighlighter/CodeHighligh
 import CheckMark from "../../../assets/images/checkmark.svg";
 import "./Answer.css";
 import { formatDate } from "../../shared/date-formatter/FormatDate";
+import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function Answer({ answer, setAnswer, isQuestionOwner }) {
+function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
     function vote(vote) {
         if (!UserService.isLoggedIn()) return;
         ApiService.patch("answers/" + answer.id + "/votes", {
@@ -24,6 +26,19 @@ function Answer({ answer, setAnswer, isQuestionOwner }) {
             }
         );
     }
+
+    function handleDelete() {
+        if (!UserService.isLoggedIn || !isAnswerOwner) {
+            return;
+        }
+        ApiService.delete(`answers/${answer.id}`).then(() => {
+            const updatedAnswers = answers.filter((a) => a.id !== answer.id);
+            setAnswers(updatedAnswers);
+        });
+    }
+
+    const isAnswerOwner =
+        UserService.isLoggedIn() && answer.user.id === UserService.getUser().id;
 
     return (
         <div className={"answer-container flex items-start gap-2"}>
@@ -55,6 +70,13 @@ function Answer({ answer, setAnswer, isQuestionOwner }) {
                 <div className="flex gap-[10px] items-center">
                     <User user={answer.user} />
                     <p className="pt-[3px]">{formatDate(answer.date)}</p>
+                    {isAnswerOwner && (
+                        <FontAwesomeIcon
+                            icon={faTrashCan}
+                            className="cursor-pointer"
+                            onClick={handleDelete}
+                        />
+                    )}
                 </div>
             </div>
         </div>
