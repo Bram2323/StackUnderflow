@@ -12,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class Seeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (userRepository.findByUsername("test").isEmpty()) {
+        if (userRepository.count() == 0) {
             userService.register("test", "Testww123!");
             userService.register("test1", "Testww123!");
             userService.register("test2", "Testww123!");
@@ -33,20 +34,24 @@ public class Seeder implements CommandLineRunner {
         }
         if (questionRepository.count() == 0) {
             User user = userRepository.findByUsername("test").get();
-            Question q1 = new Question("Testvraag", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-                    "Proin dignissim mauris et ornare porttitor. Nunc neque dui, ornare et tincidunt nec, scelerisque in mauris. " +
-                    "Ut ut dictum dui. Sed malesuada ipsum tincidunt consequat lobortis. Sed a consectetur turpis. Etiam tristique " +
-                    "magna non ipsum ultrices lacinia id at mi. Donec tempor euismod magna, sed maximus quam eleifend in. " +
-                    "Vivamus fermentum pharetra urna, sed iaculis turpis sagittis non.", LocalDateTime.now(), user);
+            Question q1 = new Question("Applicatie!", "Mijn applicatie wilt niet opstarten!", LocalDateTime.now().minusMonths(1).minusHours(2), user);
             questionRepository.save(q1);
         }
         if (answerRepository.count() == 0) {
-            User user = userRepository.findByUsername("test").get();
+            List<User> users = userRepository.findAll();
             Question question = questionRepository.findAll().getFirst();
-            Answer a1 = new Answer("I have no idea how to fix that...", LocalDateTime.of(2023, 5, 12, 23, 24), question, user);
-            Answer a2 = new Answer("Dublicate of #12524", LocalDateTime.now(), question, user);
+            Answer a1 = new Answer("I have no idea how to fix that...", LocalDateTime.now(), question, users.get(0));
+            Answer a2 = new Answer("test", LocalDateTime.now(), question, users.get(1));
+            Answer a3 = new Answer("test", LocalDateTime.now().minusMonths(1), question, users.get(2));
+            Answer a4 = new Answer("test", LocalDateTime.now().minusMonths(1), question, users.get(1));
+            Answer a5 = new Answer("test", LocalDateTime.now().minusMonths(1), question, users.get(3));
+            Answer a6 = new Answer("test", LocalDateTime.now().minusMonths(1), question, users.get(0));
             answerRepository.save(a1);
             answerRepository.save(a2);
+            answerRepository.save(a3);
+            answerRepository.save(a4);
+            answerRepository.save(a5);
+            answerRepository.save(a6);
         }
     }
 }

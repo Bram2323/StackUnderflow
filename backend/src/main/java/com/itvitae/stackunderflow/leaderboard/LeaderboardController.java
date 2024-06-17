@@ -29,9 +29,9 @@ public class LeaderboardController {
     @GetMapping("get-all-users")
     public Page<UserLeaderboardDTO> getAllUsers(@RequestParam(required = false, name = "page") Integer pageParam) {
         int page = pageParam == null ? 0 : pageParam - 1;
-        Pageable pageable = PageRequest.of(page, usersPerPage, Sort.by("totalPoints").descending());
+        Pageable pageable = PageRequest.of(page, usersPerPage, Sort.by("lastMonthRank"));
 
-        Page<User> allUsers = userRepository.findAllByTotalPointsNotNull(pageable);
+        Page<User> allUsers = userRepository.findAllByLastMonthRankNotNull(pageable);
         return allUsers.map(UserLeaderboardDTO::from);
     }
 }

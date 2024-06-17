@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
 
-    List<User> findAllByOrderByTotalPointsDesc();
+    List<User> findAllByOrderByLastMonthPointsDesc();
 
-    Page<User> findAllByTotalPointsNotNull(Pageable pageable);
+    Page<User> findAllByLastMonthRankNotNull(Pageable pageable);
 }
