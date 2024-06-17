@@ -9,7 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("leaderboard")
@@ -33,5 +37,21 @@ public class LeaderboardController {
 
         Page<User> allUsers = userRepository.findAllByTotalPointsNotNull(pageable);
         return allUsers.map(UserLeaderboardDTO::from);
+    }
+
+    @GetMapping("get-own-ranking")
+    public UserLeaderboardDTO getOwnRanking(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        if (user != null) {
+            Optional<User> ownUserOpt = userRepository.findByUsername(user.getUsername());
+            if (ownUserOpt.isPresent()) {
+                User ownUser = ownUserOpt.get();
+                return new UserLeaderboardDTO(ownUser.getUsername(), ownUser.getAward(), ownUser.getId(), ownUser.getTotalPoints(), ownUser.getLeaderboardRanking());
+            } else {
+                throw new UsernameNotFoundException("User not found");
+            }
+        }
+        return null;
     }
 }
