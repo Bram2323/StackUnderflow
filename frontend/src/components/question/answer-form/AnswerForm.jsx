@@ -4,6 +4,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import CodeMarker from "../../shared/codeblock/CodeMarker/CodeMarker";
 import ApiService from "../../../services/ApiService";
 import Button from "../../shared/button/Button";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function AnswerForm({
     questionId,
@@ -20,6 +21,8 @@ function AnswerForm({
         start: null,
         end: null,
     });
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         if (isEditing) setAnswer(answerToEdit);
@@ -88,7 +91,15 @@ function AnswerForm({
                     <p>
                         <a
                             className="font-bold text-[#2397F4]"
-                            href="/inloggen"
+                            href="./inloggen"
+                            onClick={() => {
+                                const currentPath = location.pathname;
+                                navigate("/inloggen", {
+                                    state: {
+                                        prevPath: currentPath,
+                                    },
+                                });
+                            }}
                         >
                             Log in
                         </a>{" "}

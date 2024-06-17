@@ -1,5 +1,6 @@
 import axios from "axios";
 import UserService from "./UserService";
+import { history } from "./History";
 
 const API_URL = "http://localhost:8080/";
 
@@ -27,13 +28,20 @@ class ApiService {
     }
 
     static #doRequest(method, url, data, otherConfig) {
-        return axios.request(this.#getConfig(method, url, data, otherConfig)).catch(error => {
-            if (error.response && error.response.status === 401) {
-                UserService.logout();
-                window.location.href = '/inloggen'; 
-            }
-            return Promise.reject(error);
-        });
+        return axios
+            .request(this.#getConfig(method, url, data, otherConfig))
+            .catch((error) => {
+                if (error.response && error.response.status === 401) {
+                    UserService.logout();
+                    const currentPath = history.location.pathname;
+                    history.navigate("/inloggen", {
+                        state: {
+                            prevPath: currentPath,
+                        },
+                    });
+                }
+                return Promise.reject(error);
+            });
     }
 
     static #getConfig(method, url, data, otherConfig) {
