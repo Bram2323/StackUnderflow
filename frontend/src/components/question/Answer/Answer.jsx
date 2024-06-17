@@ -86,23 +86,30 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
                     <CodeHighlighter markdown={answer.text} />
 
                     <hr />
-                    <div className="flex gap-[10px] items-center">
-                        <User user={answer.user} />
-                        <p className="pt-[3px]">{formatDate(answer.date)}</p>
-                        {isAnswerOwner && !isEditing && (
-                            <FontAwesomeIcon
-                                icon={faPen}
-                                className="cursor-pointer"
-                                onClick={() => setIsEditing(true)}
-                            />
-                        )}
-                        {isAnswerOwner && (
-                            <FontAwesomeIcon
-                                icon={faTrashCan}
-                                className="cursor-pointer"
-                                onClick={handleDelete}
-                            />
-                        )}
+                    <div className="flex items-center justify-between gap-[10px]">
+                        <div className="flex gap-[10px] items-center">
+                            <User user={answer.user} />
+
+                            <p className="pt-[3px]">
+                                {formatDate(answer.date)}
+                            </p>
+                        </div>
+                        <div className="flex gap-3">
+                            {isAnswerOwner && !isEditing && (
+                                <FontAwesomeIcon
+                                    icon={faPen}
+                                    className="cursor-pointer"
+                                    onClick={() => setIsEditing(true)}
+                                />
+                            )}
+                            {isAnswerOwner && (
+                                <FontAwesomeIcon
+                                    icon={faTrashCan}
+                                    className="cursor-pointer"
+                                    onClick={handleDelete}
+                                />
+                            )}
+                        </div>
                     </div>
                 </div>
             )}
