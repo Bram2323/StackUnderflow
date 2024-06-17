@@ -19,6 +19,7 @@ function getStyle(scale) {
 }
 
 function getAward(award) {
+    if (award == undefined) return <></>;
     award = award.toLowerCase();
     if (award == "first")
         return <FontAwesomeIcon icon={faAward} className=" text-amber-400" />;

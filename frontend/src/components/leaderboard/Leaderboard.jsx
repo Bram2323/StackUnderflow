@@ -11,6 +11,7 @@ export default function Leaderboard() {
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
+        console.log(UserService.getUser().award);
         const url = "leaderboard/get-all-users";
         ApiService.get(url, queryParams).then((response) => {
             setUsers(response.data.content);
@@ -23,7 +24,7 @@ export default function Leaderboard() {
             {UserService.isLoggedIn() ? (
                 <div className="pt-3 pb-3 w-3/5 flex flex-col gap-3 border-b-2 border-gray-400">
                     <p className=" font-bold text-center">Jouw rank:</p>
-                    <LeaderboardItem user={UserService.getUser} />
+                    <LeaderboardItem user={UserService.getUser()} />
                 </div>
             ) : (
                 ""
