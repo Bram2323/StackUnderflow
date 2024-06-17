@@ -30,7 +30,7 @@ public class AnswerController {
 
     @PatchMapping("{id}")
     public ResponseEntity<AnswerDTO> patch(@PathVariable Long id, @RequestBody AnswerDTO answerDTO,
-            Authentication authentication) {
+                                           Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Optional<Answer> possibleAnswer = answerRepository.findByIdAndEnabledTrue(id);
         Answer answer = possibleAnswer.orElseThrow(NotFoundException::new);
@@ -62,7 +62,7 @@ public class AnswerController {
 
     @PatchMapping("{id}/votes")
     public ResponseEntity<AnswerDTO> addVote(@PathVariable Long id, @RequestBody AnswerVoteDTO answerVoteDTO,
-            Authentication authentication) {
+                                             Authentication authentication) {
         if (answerVoteDTO.isUpVote() == null || answerVoteDTO.isDownVote() == null) {
             throw new BadRequestException("Upvote or down vote needs to be defined");
         }
@@ -90,7 +90,7 @@ public class AnswerController {
 
     @PostMapping
     private ResponseEntity<AnswerDTO> create(@RequestBody PostAnswerDTO answerDTO, UriComponentsBuilder ucb,
-            Authentication authentication) {
+                                             Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Long questionId = answerDTO.question();
         String text = answerDTO.text();
@@ -111,5 +111,20 @@ public class AnswerController {
 
         URI path = ucb.path("/answers/{id}").buildAndExpand(savedAnswer.getId()).toUri();
         return ResponseEntity.created(path).body(AnswerDTO.from(savedAnswer, user));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteAnswer(@PathVariable Long id, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        Optional<Answer> possibleAnswer = answerRepository.findByIdAndEnabledTrue(id);
+        Answer answer = possibleAnswer.orElseThrow(NotFoundException::new);
+
+        User answerOwner = answer.getUser();
+        if (!user.equals(answerOwner)) {
+            throw new ForbiddenException();
+        }
+        answer.setEnabled(false);
+        answerRepository.save(answer);
+        return ResponseEntity.noContent().build();
     }
 }
