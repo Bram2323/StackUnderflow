@@ -8,7 +8,7 @@ import Button from "../../shared/button/Button";
 function AnswerForm({
     questionId,
     addAnswer,
-    isEditing,
+    isEditing = false,
     setIsEditing,
     answerToEdit,
     isAnswerOwner,
@@ -21,10 +21,8 @@ function AnswerForm({
         end: null,
     });
 
-    const editMode = isEditing || false;
-
     useEffect(() => {
-        if (editMode) setAnswer(answerToEdit);
+        if (isEditing) setAnswer(answerToEdit);
     }, []);
 
     function handleSaveAnswer() {
@@ -32,7 +30,7 @@ function AnswerForm({
             setError("Antwoord kan niet leeg zijn!");
             return;
         }
-        if (editMode) {
+        if (isEditing) {
             if (!UserService.isLoggedIn() || !isAnswerOwner) return;
             ApiService.patch("answers/" + answer.id, answer).then(
                 (response) => {
@@ -100,7 +98,7 @@ function AnswerForm({
                     <>
                         <div className="flex flex-col">
                             <h2 className="pb-1">
-                                {editMode
+                                {isEditing
                                     ? "Bewerk je antwoord:"
                                     : "Geef je antwoord:"}
                             </h2>
@@ -131,7 +129,7 @@ function AnswerForm({
                         <div className="flex gap-3">
                             <Button
                                 text={
-                                    editMode ? "Opslaan" : "Plaats je antwoord"
+                                    isEditing ? "Opslaan" : "Plaats je antwoord"
                                 }
                                 onClick={handleSaveAnswer}
                             />
