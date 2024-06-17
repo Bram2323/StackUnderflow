@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserService from "../../../services/UserService";
 import TextareaAutosize from "react-textarea-autosize";
 import CodeMarker from "../../shared/codeblock/CodeMarker/CodeMarker";
 import ApiService from "../../../services/ApiService";
 import Button from "../../shared/button/Button";
 
-function AnswerForm({ questionId, addAnswer }) {
+function AnswerForm({
+    questionId,
+    addAnswer,
+    isEditing,
+    setIsEditing,
+    answerToEdit,
+    isAnswerOwner,
+    updateAnswer,
+}) {
     const [answer, setAnswer] = useState({ question: questionId, text: "" });
     const [error, setError] = useState(null);
     const [selectionRange, setSelectionRange] = useState({
@@ -13,16 +21,33 @@ function AnswerForm({ questionId, addAnswer }) {
         end: null,
     });
 
-    function handlePost() {
+    const editMode = isEditing || false;
+
+    useEffect(() => {
+        if (editMode) setAnswer(answerToEdit);
+    }, []);
+
+    function handleSaveAnswer() {
         if (answer.text.trim().length == 0) {
             setError("Antwoord kan niet leeg zijn!");
             return;
         }
-        ApiService.post("answers", answer).then((response) => {
-            const newAnswer = response.data;
-            addAnswer(newAnswer);
-            setAnswer({ ...answer, text: "" });
-        });
+        if (editMode) {
+            if (!UserService.isLoggedIn() || !isAnswerOwner) return;
+            ApiService.patch("answers/" + answer.id, answer).then(
+                (response) => {
+                    const updatedAnswer = response.data;
+                    updateAnswer(updatedAnswer);
+                    setIsEditing(false);
+                }
+            );
+        } else {
+            ApiService.post("answers", answer).then((response) => {
+                const newAnswer = response.data;
+                addAnswer(newAnswer);
+                setAnswer({ ...answer, text: "" });
+            });
+        }
     }
 
     function handleSelect(e) {
@@ -74,7 +99,11 @@ function AnswerForm({ questionId, addAnswer }) {
                 ) : (
                     <>
                         <div className="flex flex-col">
-                            <h2 className="pb-1">Geef je antwoord:</h2>
+                            <h2 className="pb-1">
+                                {editMode
+                                    ? "Bewerk je antwoord:"
+                                    : "Geef je antwoord:"}
+                            </h2>
                             <TextareaAutosize
                                 className="border-2 min-h-[4.25rem] max-h-[20rem] border-[#5c5c5c] rounded-lg bg-white text-base w-full mb-2 p-2 resize-none"
                                 value={answer.text}
@@ -100,7 +129,12 @@ function AnswerForm({ questionId, addAnswer }) {
                             />
                         </div>
                         <div className="flex gap-3">
-                            <Button text={"Post"} onClick={handlePost} />
+                            <Button
+                                text={
+                                    editMode ? "Opslaan" : "Plaats je antwoord"
+                                }
+                                onClick={handleSaveAnswer}
+                            />
                             {error && (
                                 <p className="text-[#FF0000] mt-2">{error}</p>
                             )}

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import User from "../../shared/User/User";
 import VoteButton from "../../shared/vote-button/VoteButton";
 import ApiService from "../../../services/ApiService";
@@ -6,8 +7,13 @@ import CodeHighlighter from "../../shared/codeblock/CodeHighlighter/CodeHighligh
 import CheckMark from "../../../assets/images/checkmark.svg";
 import "./Answer.css";
 import { formatDate } from "../../shared/date-formatter/FormatDate";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AnswerForm from "../answer-form/AnswerForm";
 
 function Answer({ answer, setAnswer, isQuestionOwner }) {
+    const [isEditing, setIsEditing] = useState(false);
+
     function vote(vote) {
         if (!UserService.isLoggedIn()) return;
         ApiService.patch("answers/" + answer.id + "/votes", {
@@ -24,6 +30,13 @@ function Answer({ answer, setAnswer, isQuestionOwner }) {
             }
         );
     }
+
+    function handleUpdateAnswer(updatedAnswer) {
+        setAnswer(updatedAnswer);
+    }
+
+    const isAnswerOwner =
+        UserService.isLoggedIn() && answer.user.id === UserService.getUser().id;
 
     return (
         <div className={"answer-container flex items-start gap-2"}>
@@ -49,14 +62,33 @@ function Answer({ answer, setAnswer, isQuestionOwner }) {
                     <img src={CheckMark} className="w-4 h-4" />
                 </button>
             </div>
-            <div className="answer-container w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
-                <CodeHighlighter markdown={answer.text} />
-                <hr />
-                <div className="flex gap-[10px] items-center">
-                    <User user={answer.user} />
-                    <p className="pt-[3px]">{formatDate(answer.date)}</p>
+
+            {isEditing ? (
+                <AnswerForm
+                    answerToEdit={answer}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    isAnswerOwner={isAnswerOwner}
+                    updateAnswer={handleUpdateAnswer}
+                />
+            ) : (
+                <div className="answer-container w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
+                    <CodeHighlighter markdown={answer.text} />
+
+                    <hr />
+                    <div className="flex gap-[10px] items-center">
+                        <User user={answer.user} />
+                        <p className="pt-[3px]">{formatDate(answer.date)}</p>
+                        {isAnswerOwner && !isEditing && (
+                            <FontAwesomeIcon
+                                icon={faPen}
+                                className="cursor-pointer"
+                                onClick={() => setIsEditing(true)}
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }
