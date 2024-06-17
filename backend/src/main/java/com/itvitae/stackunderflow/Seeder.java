@@ -7,11 +7,14 @@ import com.itvitae.stackunderflow.question.QuestionRepository;
 import com.itvitae.stackunderflow.user.User;
 import com.itvitae.stackunderflow.user.UserRepository;
 import com.itvitae.stackunderflow.user.UserService;
+import com.itvitae.stackunderflow.useranswervote.UserAnswerVote;
+import com.itvitae.stackunderflow.useranswervote.UserAnswerVoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -21,32 +24,34 @@ public class Seeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final UserAnswerVoteRepository userAnswerVoteRepository;
 
 
     @Override
     public void run(String... args) throws Exception {
-        if (userRepository.findByUsername("test").isEmpty()) {
-            userService.register("test", "Testww123!");
-            userService.register("test1", "Testww123!");
-            userService.register("test2", "Testww123!");
-            userService.register("test3", "Testww123!");
-        }
-        if (questionRepository.count() == 0) {
-            User user = userRepository.findByUsername("test").get();
-            Question q1 = new Question("Testvraag", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-                    "Proin dignissim mauris et ornare porttitor. Nunc neque dui, ornare et tincidunt nec, scelerisque in mauris. " +
-                    "Ut ut dictum dui. Sed malesuada ipsum tincidunt consequat lobortis. Sed a consectetur turpis. Etiam tristique " +
-                    "magna non ipsum ultrices lacinia id at mi. Donec tempor euismod magna, sed maximus quam eleifend in. " +
-                    "Vivamus fermentum pharetra urna, sed iaculis turpis sagittis non.", LocalDateTime.now(), user);
-            questionRepository.save(q1);
-        }
-        if (answerRepository.count() == 0) {
-            User user = userRepository.findByUsername("test").get();
-            Question question = questionRepository.findAll().getFirst();
-            Answer a1 = new Answer("I have no idea how to fix that...", LocalDateTime.of(2023, 5, 12, 23, 24), question, user);
-            Answer a2 = new Answer("Dublicate of #12524", LocalDateTime.now(), question, user);
-            answerRepository.save(a1);
-            answerRepository.save(a2);
+        if (userRepository.count() == 0) {
+            List<User> users = List.of(
+                    userService.register("test", "Testww123!"),
+                    userService.register("test2", "Testww123!"),
+                    userService.register("test3", "Testww123!"),
+                    userService.register("test4", "Testww123!")
+            );
+
+            Question question = new Question("Applicatie!", "Mijn applicatie wilt niet opstarten!", LocalDateTime.now().minusMonths(1).minusHours(2), users.get(0));
+            questionRepository.save(question);
+
+            List<Answer> answers = List.of(
+                    answerRepository.save(new Answer("HELP", LocalDateTime.now(), question, users.get(0))),
+                    answerRepository.save(new Answer("That sucks", LocalDateTime.now(), question, users.get(1))),
+                    answerRepository.save(new Answer("hmmmmmm", LocalDateTime.now().minusMonths(1), question, users.get(2))),
+                    answerRepository.save(new Answer("good luck!", LocalDateTime.now().minusMonths(1), question, users.get(1))),
+                    answerRepository.save(new Answer("I have no idea how to fix that...", LocalDateTime.now().minusMonths(1), question, users.get(3))),
+                    answerRepository.save(new Answer(":/", LocalDateTime.now().minusMonths(1), question, users.get(0)))
+            );
+
+            answers.forEach(answer -> userAnswerVoteRepository.save(new UserAnswerVote(users.getFirst(), answer, true)));
+            userAnswerVoteRepository.save(new UserAnswerVote(users.getLast(), answers.get(0), true));
+            userAnswerVoteRepository.save(new UserAnswerVote(users.getLast(), answers.get(4), true));
         }
     }
 }
