@@ -7,6 +7,8 @@ import com.itvitae.stackunderflow.question.QuestionRepository;
 import com.itvitae.stackunderflow.user.User;
 import com.itvitae.stackunderflow.user.UserRepository;
 import com.itvitae.stackunderflow.user.UserService;
+import com.itvitae.stackunderflow.useranswervote.UserAnswerVote;
+import com.itvitae.stackunderflow.useranswervote.UserAnswerVoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -22,36 +24,34 @@ public class Seeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final UserAnswerVoteRepository userAnswerVoteRepository;
 
 
     @Override
     public void run(String... args) throws Exception {
         if (userRepository.count() == 0) {
-            userService.register("test", "Testww123!");
-            userService.register("test1", "Testww123!");
-            userService.register("test2", "Testww123!");
-            userService.register("test3", "Testww123!");
-        }
-        if (questionRepository.count() == 0) {
-            User user = userRepository.findByUsername("test").get();
-            Question q1 = new Question("Applicatie!", "Mijn applicatie wilt niet opstarten!", LocalDateTime.now().minusMonths(1).minusHours(2), user);
-            questionRepository.save(q1);
-        }
-        if (answerRepository.count() == 0) {
-            List<User> users = userRepository.findAll();
-            Question question = questionRepository.findAll().getFirst();
-            Answer a1 = new Answer("I have no idea how to fix that...", LocalDateTime.now(), question, users.get(0));
-            Answer a2 = new Answer("test", LocalDateTime.now(), question, users.get(1));
-            Answer a3 = new Answer("test", LocalDateTime.now().minusMonths(1), question, users.get(2));
-            Answer a4 = new Answer("test", LocalDateTime.now().minusMonths(1), question, users.get(1));
-            Answer a5 = new Answer("test", LocalDateTime.now().minusMonths(1), question, users.get(3));
-            Answer a6 = new Answer("test", LocalDateTime.now().minusMonths(1), question, users.get(0));
-            answerRepository.save(a1);
-            answerRepository.save(a2);
-            answerRepository.save(a3);
-            answerRepository.save(a4);
-            answerRepository.save(a5);
-            answerRepository.save(a6);
+            List<User> users = List.of(
+                    userService.register("test", "Testww123!"),
+                    userService.register("test2", "Testww123!"),
+                    userService.register("test3", "Testww123!"),
+                    userService.register("test4", "Testww123!")
+            );
+
+            Question question = new Question("Applicatie!", "Mijn applicatie wilt niet opstarten!", LocalDateTime.now().minusMonths(1).minusHours(2), users.get(0));
+            questionRepository.save(question);
+
+            List<Answer> answers = List.of(
+                    answerRepository.save(new Answer("HELP", LocalDateTime.now(), question, users.get(0))),
+                    answerRepository.save(new Answer("That sucks", LocalDateTime.now(), question, users.get(1))),
+                    answerRepository.save(new Answer("hmmmmmm", LocalDateTime.now().minusMonths(1), question, users.get(2))),
+                    answerRepository.save(new Answer("good luck!", LocalDateTime.now().minusMonths(1), question, users.get(1))),
+                    answerRepository.save(new Answer("I have no idea how to fix that...", LocalDateTime.now().minusMonths(1), question, users.get(3))),
+                    answerRepository.save(new Answer(":/", LocalDateTime.now().minusMonths(1), question, users.get(0)))
+            );
+
+            answers.forEach(answer -> userAnswerVoteRepository.save(new UserAnswerVote(users.getFirst(), answer, true)));
+            userAnswerVoteRepository.save(new UserAnswerVote(users.getLast(), answers.get(0), true));
+            userAnswerVoteRepository.save(new UserAnswerVote(users.getLast(), answers.get(4), true));
         }
     }
 }
