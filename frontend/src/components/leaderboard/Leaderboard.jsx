@@ -18,8 +18,16 @@ export default function Leaderboard() {
         });
     }, [queryParams]);
 
+    var date = new Date();
+    date.setDate(1);
+    date.setMonth(date.getMonth() - 1);
+    const month = date.toLocaleString("default", { month: "long" });
+
     return (
         <>
+            <p className=" font-bold text-center pt-5 text-3xl ">
+                Leaderbord van de maand: {month} {date.getFullYear()}
+            </p>
             {UserService.isLoggedIn() && (
                 <div className="pt-3 pb-3 w-3/5 flex flex-col gap-3 border-b-2 border-gray-400">
                     <p className=" font-bold text-center">Jouw rank:</p>
