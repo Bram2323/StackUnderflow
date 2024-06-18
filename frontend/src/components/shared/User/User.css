@@ -15,7 +15,7 @@
     background: rgb(235, 255, 255);
     background: linear-gradient(
         170deg,
-        rgba(235, 255, 255, 1) 40%,
+        rgba(213, 255, 255, 1) 40%,
         rgba(184, 241, 252, 1) 100%
     );
 }
