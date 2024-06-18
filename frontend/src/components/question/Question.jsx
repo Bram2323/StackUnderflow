@@ -78,7 +78,7 @@ function Question() {
     return (
         <div className="question mb-12">
             <div className="question-container">
-                <h2 className="w-full font-bold text-center whitespace-pre-wrap break-words">
+                <h2 className="w-full font-bold whitespace-pre-wrap break-words">
                     {question.title}
                 </h2>
                 <hr className="w-full border-none h-[2px] bg-[#C0C0C0]" />
