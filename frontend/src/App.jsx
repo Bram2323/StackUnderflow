@@ -9,8 +9,13 @@ import Register from "./components/register/Register";
 import Home from "./components/home/Home";
 import Leaderboard from "./components/leaderboard/Leaderboard";
 import NotFoundPage from "./components/not-found-page/NotFoundPage";
+import { history } from "./services/History";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function App() {
+    history.navigate = useNavigate();
+    history.location = useLocation();
+
     return (
         <>
             <NavBar />
