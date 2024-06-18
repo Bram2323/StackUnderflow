@@ -119,4 +119,19 @@ public class AnswerController {
         URI path = ucb.path("/answers/{id}").buildAndExpand(savedAnswer.getId()).toUri();
         return ResponseEntity.created(path).body(AnswerDTO.from(savedAnswer, user));
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteAnswer(@PathVariable Long id, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        Optional<Answer> possibleAnswer = answerRepository.findByIdAndEnabledTrue(id);
+        Answer answer = possibleAnswer.orElseThrow(NotFoundException::new);
+
+        User answerOwner = answer.getUser();
+        if (!user.equals(answerOwner)) {
+            throw new ForbiddenException();
+        }
+        answer.setEnabled(false);
+        answerRepository.save(answer);
+        return ResponseEntity.noContent().build();
+    }
 }
