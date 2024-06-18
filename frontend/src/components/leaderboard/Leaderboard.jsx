@@ -3,7 +3,7 @@ import ApiService from "../../services/ApiService";
 import LeaderboardList from "./LeaderboardList";
 import { useSearchParams } from "react-router-dom";
 import UserService from "../../services/UserService";
-import LeaderboardItem from "./LeaderboardItem";
+import LeaderboardItem from "../shared/leaderboard-item/LeaderboardItem";
 
 export default function Leaderboard() {
     const [queryParams] = useSearchParams();

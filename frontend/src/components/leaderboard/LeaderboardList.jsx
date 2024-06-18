@@ -1,5 +1,5 @@
 import Pageable from "../shared/pageable/Pageable";
-import LeaderboardItem from "./LeaderboardItem";
+import LeaderboardItem from "../shared/leaderboard-item/LeaderboardItem";
 
 export default function LeaderboardList({ users, totalPages }) {
     return (
