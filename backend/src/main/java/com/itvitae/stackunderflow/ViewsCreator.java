@@ -23,7 +23,7 @@ public class ViewsCreator implements CommandLineRunner {
                             SELECT q.id AS id, COUNT(a.id) AS answer_count
                                 FROM questions q
                                 LEFT JOIN answers a
-                                ON a.question_id = q.id
+                                ON a.question_id = q.id AND a.enabled
                                 GROUP BY q.id;
                         """
         );
