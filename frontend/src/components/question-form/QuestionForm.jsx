@@ -15,6 +15,9 @@ function QuestionForm() {
         end: null,
     });
 
+    const MAX_TITLE_CHARACTERS = 150;
+    const MAX_TEXT_CHARACTERS = 30000;
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -53,6 +56,7 @@ function QuestionForm() {
             setError("Beschrijving mag niet leeg zijn");
             return;
         }
+
         if (editMode) {
             if (!UserService.isLoggedIn() || !isQuestionOwner) return;
             ApiService.patch("questions/" + questionId, question).then(
@@ -94,40 +98,65 @@ function QuestionForm() {
             <div className="question-form-container">
                 <h1>{editMode ? "Bewerk je vraag" : "Stel een vraag"}</h1>
                 <form>
-                    <InputField
-                        label={"Titel"}
-                        text={question.title}
-                        onTextChanged={(text) =>
-                            setQuestion({
-                                ...question,
-                                title: text,
-                            })
-                        }
-                    />
-                    <label>Beschrijf je probleem</label>
-                    <textarea
-                        className="border-2 border-[#5c5c5c] rounded-lg bg-[#f3f3f3] text-base w-full h-72 mb-2 p-2"
-                        value={question.text}
-                        onMouseUp={handleSelect}
-                        onSelect={handleSelect}
-                        onChange={(e) => {
-                            setQuestion({
-                                ...question,
-                                text: e.target.value,
-                            });
-                        }}
-                        onKeyDown={(e) => {
-                            if (e.key === "Tab") {
-                                handleTabKeyPress(e);
+                    <div className="flex flex-col items-end">
+                        <InputField
+                            label={"Titel"}
+                            text={question.title}
+                            onTextChanged={(text) =>
+                                setQuestion({
+                                    ...question,
+                                    title: text,
+                                })
                             }
-                        }}
-                    ></textarea>
-                    <CodeMarker
-                        object={question}
-                        setObject={setQuestion}
-                        selectionRange={selectionRange}
-                        setSelectionRange={setSelectionRange}
-                    />
+                            maxLength={MAX_TITLE_CHARACTERS}
+                        />
+
+                        <p
+                            className={`text-xs ${
+                                question.title.length == MAX_TITLE_CHARACTERS
+                                    ? "text-red-500"
+                                    : ""
+                            }`}
+                        >{`${question.title.length} / ${MAX_TITLE_CHARACTERS}`}</p>
+                    </div>
+
+                    <label>Beschrijf je probleem</label>
+                    <div className="flex flex-col items-end">
+                        <textarea
+                            className="border-2 border-[#5c5c5c] rounded-lg bg-[#f3f3f3] text-base w-full h-72 mb-2 p-2"
+                            value={question.text}
+                            onMouseUp={handleSelect}
+                            onSelect={handleSelect}
+                            onChange={(e) => {
+                                setQuestion({
+                                    ...question,
+                                    text: e.target.value,
+                                });
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Tab") {
+                                    handleTabKeyPress(e);
+                                }
+                            }}
+                            maxLength={MAX_TEXT_CHARACTERS}
+                        ></textarea>
+                    </div>
+
+                    <div className="flex justify-between">
+                        <CodeMarker
+                            object={question}
+                            setObject={setQuestion}
+                            selectionRange={selectionRange}
+                            setSelectionRange={setSelectionRange}
+                        />
+                        <p
+                            className={`text-xs text-nowrap ${
+                                question.text.length == MAX_TEXT_CHARACTERS
+                                    ? "text-red-500"
+                                    : ""
+                            }`}
+                        >{`${question.text.length} / ${MAX_TEXT_CHARACTERS}`}</p>
+                    </div>
                     <Button
                         text={editMode ? "Opslaan" : "Plaats je vraag"}
                         onClick={handleSaveQuestion}

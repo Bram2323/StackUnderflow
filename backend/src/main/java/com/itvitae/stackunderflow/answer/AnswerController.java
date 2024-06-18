@@ -28,6 +28,8 @@ public class AnswerController {
     private final UserAnswerVoteRepository userAnswerVoteRepository;
     private final QuestionRepository questionRepository;
 
+    public static final int MAX_TEXT_CHARACTERS = 30000;
+
     @PatchMapping("{id}")
     public ResponseEntity<AnswerDTO> patch(@PathVariable Long id, @RequestBody AnswerDTO answerDTO,
                                            Authentication authentication) {
@@ -53,6 +55,8 @@ public class AnswerController {
         if (text != null) {
             if (!user.equals(answerOwner))
                 throw new ForbiddenException();
+            if (text.length() > MAX_TEXT_CHARACTERS)
+                throw new BadRequestException("Text can't be longer than " + MAX_TEXT_CHARACTERS + "characters");
             answer.setText(text);
         }
 
@@ -104,9 +108,11 @@ public class AnswerController {
         Question question = possibleQuestion.get();
         if (text == null || text.isBlank())
             throw new BadRequestException("Text needs to be defined!");
-        String trimmedText = text.trim();
 
-        Answer answer = new Answer(trimmedText, date, question, user);
+        if (text.length() > MAX_TEXT_CHARACTERS)
+            throw new BadRequestException("Text can't be longer than " + MAX_TEXT_CHARACTERS + "characters");
+
+        Answer answer = new Answer(text, date, question, user);
         Answer savedAnswer = answerRepository.save(answer);
 
         URI path = ucb.path("/answers/{id}").buildAndExpand(savedAnswer.getId()).toUri();

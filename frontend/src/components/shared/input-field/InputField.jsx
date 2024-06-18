@@ -8,6 +8,7 @@ function InputField({
     onBlur,
     onSubmit,
     hidden = false,
+    maxLength,
 }) {
     return (
         <div className="input-field-container">
@@ -24,6 +25,7 @@ function InputField({
                 }}
                 type={hidden ? "password" : "text"}
                 placeholder={placeHolder}
+                maxLength={maxLength}
             />
         </div>
     );
