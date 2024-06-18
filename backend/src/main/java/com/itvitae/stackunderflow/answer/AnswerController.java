@@ -60,8 +60,9 @@ public class AnswerController {
             if (text.length() > MAX_TEXT_CHARACTERS)
                 throw new BadRequestException("Text can't be longer than " + MAX_TEXT_CHARACTERS + "characters");
             answer.setText(text);
+            answer.setLastEdited(LocalDateTime.now());
         }
-
+        
         Answer updatedAnswer = answerRepository.save(answer);
         return ResponseEntity.ok(AnswerDTO.from(updatedAnswer, user));
     }

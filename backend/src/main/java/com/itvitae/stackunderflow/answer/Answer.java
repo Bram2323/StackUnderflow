@@ -26,7 +26,7 @@ public class Answer {
     private String text;
 
     private LocalDateTime date;
-
+    private LocalDateTime lastEdited;
     private Boolean isSolution = false;
 
     @ManyToOne

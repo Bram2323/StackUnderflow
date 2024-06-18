@@ -87,14 +87,23 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
                     <CodeHighlighter markdown={answer.text} />
 
                     <hr />
-                    <div className="flex items-center justify-between gap-[10px]">
-                        <div className="flex gap-[10px] items-center">
-                            <User user={answer.user} />
-
-                            <p className="pt-[3px]">
-                                {formatDate(answer.date)}
-                            </p>
+                    <div className="flex items-center justify-between w-full">
+                        <div className="flex gap-4">
+                            <div className="flex items-center">
+                                <User user={answer.user} />
+                            </div>
+                            <div className="leading-tight text-[12px] flex flex-col justify-center">
+                                <p>Beantwoord op:</p>
+                                <p>{formatDate(answer.date)}</p>
+                            </div>
+                            {answer.lastEdited && (
+                                <div className="leading-tight text-[12px] flex flex-col justify-center">
+                                    <p>Bewerkt op:</p>
+                                    <p>{formatDate(answer.lastEdited)}</p>
+                                </div>
+                            )}
                         </div>
+
                         <div className="flex gap-3">
                             {isAnswerOwner && !isEditing && (
                                 <FontAwesomeIcon
