@@ -82,7 +82,7 @@ function Register() {
             return;
         }
         if (password != repeatPassword) {
-            setErrors(["Wachtwoord komt nier overeen!"]);
+            setErrors(["Wachtwoord komt niet overeen!"]);
             return;
         }
         const errors = validatePassword(password);
