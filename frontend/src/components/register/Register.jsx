@@ -77,10 +77,6 @@ function Register() {
             setErrors(["Wachtwoord is verplicht!"]);
             return;
         }
-        if (repeatPassword.length == 0) {
-            setErrors(["Wachtwoord is verplicht!"]);
-            return;
-        }
         if (password != repeatPassword) {
             setErrors(["Wachtwoord komt niet overeen!"]);
             return;
