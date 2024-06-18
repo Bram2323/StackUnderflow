@@ -16,7 +16,7 @@ function translateError(error) {
         case "Password is invalid!":
             return "Wachtwoord is niet toegestaan!";
         case "User already exists!":
-            return "Gebruikersnaam is in gebruik!";
+            return "Gebruikersnaam is al in gebruik!";
         default:
             return error;
     }
