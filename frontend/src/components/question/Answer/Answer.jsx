@@ -10,9 +10,11 @@ import { formatDate } from "../../shared/date-formatter/FormatDate";
 import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AnswerForm from "../answer-form/AnswerForm";
+import ConfirmDialog from "../../shared/confirm-dialog/ConfirmDialog";
 
 function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
     const [isEditing, setIsEditing] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     function vote(vote) {
         if (!UserService.isLoggedIn()) return;
@@ -35,10 +37,18 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
         if (!UserService.isLoggedIn || !isAnswerOwner) {
             return;
         }
+        setIsDialogOpen(true);
+    }
+
+    function confirmDelete() {
         ApiService.delete(`answers/${answer.id}`).then(() => {
             const updatedAnswers = answers.filter((a) => a.id !== answer.id);
             setAnswers(updatedAnswers);
         });
+    }
+
+    function cancelDelete() {
+        setIsDialogOpen(false);
     }
 
     function handleUpdateAnswer(updatedAnswer) {
@@ -107,6 +117,13 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
                                     icon={faTrashCan}
                                     className="cursor-pointer"
                                     onClick={handleDelete}
+                                />
+                            )}
+                            {isDialogOpen && (
+                                <ConfirmDialog
+                                    message="Weet je zeker dat je dit antwoord wil verwijderen?"
+                                    onConfirm={confirmDelete}
+                                    onCancel={cancelDelete}
                                 />
                             )}
                         </div>
