@@ -20,13 +20,11 @@ export default function Leaderboard() {
 
     return (
         <>
-            {UserService.isLoggedIn() ? (
+            {UserService.isLoggedIn() && (
                 <div className="pt-3 pb-3 w-3/5 flex flex-col gap-3 border-b-2 border-gray-400">
                     <p className=" font-bold text-center">Jouw rank:</p>
                     <LeaderboardItem user={UserService.getUser()} />
                 </div>
-            ) : (
-                ""
             )}
             <div className="pt-3 w-3/5 flex flex-col gap-3">
                 <LeaderboardList users={users} totalPages={totalPages} />
