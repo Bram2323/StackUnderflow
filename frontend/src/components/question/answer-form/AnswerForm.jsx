@@ -12,6 +12,7 @@ function AnswerForm({ questionId, addAnswer }) {
         start: null,
         end: null,
     });
+    const MAX_TEXT_CHARACTERS = 30000;
 
     function handlePost() {
         if (answer.text.trim().length == 0) {
@@ -60,7 +61,7 @@ function AnswerForm({ questionId, addAnswer }) {
 
     return (
         <>
-            <div className="w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
+            <div className="w-full flex flex-col  bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
                 {!UserService.isLoggedIn() ? (
                     <p>
                         <a
@@ -75,6 +76,7 @@ function AnswerForm({ questionId, addAnswer }) {
                     <>
                         <div className="flex flex-col">
                             <h2 className="pb-1">Geef je antwoord:</h2>
+
                             <TextareaAutosize
                                 className="border-2 min-h-[4.25rem] max-h-[20rem] border-[#5c5c5c] rounded-lg bg-white text-base w-full mb-2 p-2 resize-none"
                                 value={answer.text}
@@ -91,13 +93,25 @@ function AnswerForm({ questionId, addAnswer }) {
                                         handleTabKeyPress(e);
                                     }
                                 }}
+                                maxLength={MAX_TEXT_CHARACTERS}
                             />
-                            <CodeMarker
-                                object={answer}
-                                setObject={setAnswer}
-                                selectionRange={selectionRange}
-                                setSelectionRange={setSelectionRange}
-                            />
+
+                            <div className="flex justify-between ">
+                                <CodeMarker
+                                    object={answer}
+                                    setObject={setAnswer}
+                                    selectionRange={selectionRange}
+                                    setSelectionRange={setSelectionRange}
+                                />
+                                <p
+                                    className={`text-xs text-nowrap ${
+                                        answer.text.length ==
+                                        MAX_TEXT_CHARACTERS
+                                            ? "text-red-500"
+                                            : ""
+                                    }`}
+                                >{`${answer.text.length} / ${MAX_TEXT_CHARACTERS}`}</p>
+                            </div>
                         </div>
                         <div className="flex gap-3">
                             <Button text={"Post"} onClick={handlePost} />

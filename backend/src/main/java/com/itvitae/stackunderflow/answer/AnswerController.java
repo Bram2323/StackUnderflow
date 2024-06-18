@@ -28,9 +28,11 @@ public class AnswerController {
     private final UserAnswerVoteRepository userAnswerVoteRepository;
     private final QuestionRepository questionRepository;
 
+    public static final int MAX_TEXT_CHARACTERS = 30000;
+
     @PatchMapping("{id}")
     public ResponseEntity<AnswerDTO> patch(@PathVariable Long id, @RequestBody AnswerDTO answerDTO,
-            Authentication authentication) {
+                                           Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Optional<Answer> possibleAnswer = answerRepository.findByIdAndEnabledTrue(id);
         Answer answer = possibleAnswer.orElseThrow(NotFoundException::new);
@@ -53,6 +55,8 @@ public class AnswerController {
         if (text != null) {
             if (!user.equals(answerOwner))
                 throw new ForbiddenException();
+            if (text.length() > MAX_TEXT_CHARACTERS)
+                throw new BadRequestException("Text can't be longer than " + MAX_TEXT_CHARACTERS + "characters");
             answer.setText(text);
         }
 
@@ -62,7 +66,7 @@ public class AnswerController {
 
     @PatchMapping("{id}/votes")
     public ResponseEntity<AnswerDTO> addVote(@PathVariable Long id, @RequestBody AnswerVoteDTO answerVoteDTO,
-            Authentication authentication) {
+                                             Authentication authentication) {
         if (answerVoteDTO.isUpVote() == null || answerVoteDTO.isDownVote() == null) {
             throw new BadRequestException("Upvote or down vote needs to be defined");
         }
@@ -90,7 +94,7 @@ public class AnswerController {
 
     @PostMapping
     private ResponseEntity<AnswerDTO> create(@RequestBody PostAnswerDTO answerDTO, UriComponentsBuilder ucb,
-            Authentication authentication) {
+                                             Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Long questionId = answerDTO.question();
         String text = answerDTO.text();
@@ -105,6 +109,9 @@ public class AnswerController {
         if (text == null || text.isBlank())
             throw new BadRequestException("Text needs to be defined!");
         String trimmedText = text.trim();
+
+        if (trimmedText.length() > MAX_TEXT_CHARACTERS)
+            throw new BadRequestException("Text can't be longer than " + MAX_TEXT_CHARACTERS + "characters");
 
         Answer answer = new Answer(trimmedText, date, question, user);
         Answer savedAnswer = answerRepository.save(answer);

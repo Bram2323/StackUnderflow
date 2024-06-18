@@ -60,6 +60,7 @@ function Register() {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const MAX_USERNAME_CHARACTERS = 20;
 
     const prevPath =
         location.state && location.state.prevPath
@@ -97,10 +98,11 @@ function Register() {
             <div className="register-form">
                 <div className="register-input">
                     <InputField
-                        label="Gebruikersnaam"
+                        label={`Gebruikersnaam (max. ${MAX_USERNAME_CHARACTERS} tekens)`}
                         text={username}
                         onTextChanged={setUsername}
                         onSubmit={handleRegister}
+                        maxLength={MAX_USERNAME_CHARACTERS}
                     />
                     <InputField
                         label="Wachtwoord"
