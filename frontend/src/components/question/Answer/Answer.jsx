@@ -32,7 +32,7 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
     }
 
     function handleDelete() {
-        if (!UserService.isLoggedIn || !isAnswerOwner) {
+        if (!UserService.isLoggedIn || (!isAnswerOwner && !isAdmin)) {
             return;
         }
         ApiService.delete(`answers/${answer.id}`).then(() => {
@@ -47,6 +47,7 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
 
     const isAnswerOwner =
         UserService.isLoggedIn() && answer.user.id === UserService.getUser().id;
+    const isAdmin = UserService.isLoggedIn() && UserService.getUser().isAdmin;
 
     return (
         <div className={"answer-container flex items-start gap-2"}>
@@ -102,7 +103,7 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
                                     onClick={() => setIsEditing(true)}
                                 />
                             )}
-                            {isAnswerOwner && (
+                            {(isAnswerOwner || isAdmin) && (
                                 <FontAwesomeIcon
                                     icon={faTrashCan}
                                     className="cursor-pointer"
