@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatDate } from "../shared/date-formatter/FormatDate";
 import AnswerList from "./answer-list/AnswerList";
 import { useSearchParams } from "react-router-dom";
+import ConfirmDialog from "../shared/confirm-dialog/ConfirmDialog";
 
 function Question() {
     const [queryParams] = useSearchParams();
@@ -19,6 +20,7 @@ function Question() {
     const [totalPages, setTotalPages] = useState(1);
     const { id } = useParams();
     const navigate = useNavigate();
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     useEffect(() => {
         ApiService.get("questions/" + id).then((response) => {
@@ -73,7 +75,16 @@ function Question() {
         if (!UserService.isLoggedIn || (!isQuestionOwner && !isAdmin)) {
             return;
         }
+        setIsDialogOpen(true);
+    }
+
+    function confirmDelete() {
         ApiService.delete(`questions/${id}`).then(() => navigate("/vragen"));
+        setIsDialogOpen(false);
+    }
+
+    function cancelDelete() {
+        setIsDialogOpen(false);
     }
 
     return (
@@ -136,6 +147,13 @@ function Question() {
                 isQuestionOwner={isQuestionOwner}
                 totalPages={totalPages}
             />
+            {isDialogOpen && (
+                <ConfirmDialog
+                    message="Weet je zeker dat je deze vraag wil verwijderen?"
+                    onConfirm={confirmDelete}
+                    onCancel={cancelDelete}
+                />
+            )}
         </div>
     );
 }
