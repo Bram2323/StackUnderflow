@@ -45,13 +45,11 @@ function CodeMarker({ object, setObject, selectionRange, setSelectionRange }) {
         setSelectionRange({ start: null, end: null });
     }
     return (
-        <div className="w-full flex items-baseline justify-between mb-1">
-            <p>
-                Selecteer je code en klik hier om te markeren als een codeblock{" "}
-            </p>
+        <div className="w-full flex items-baseline mb-4">
+            <p>Markeer als codeblock</p>
             <button
                 type="button"
-                className="bg-gray-200 text-gray-800 font-bold py-1 px-4 transition duration-200 rounded-full hover:bg-gray-300"
+                className="bg-gray-200 text-gray-800 font-bold py-1 px-4 ml-2 transition duration-200 rounded-full hover:bg-gray-300 text-nowrap"
                 onClick={handleMarkCodeBlock}
             >
                 {"{ }"}

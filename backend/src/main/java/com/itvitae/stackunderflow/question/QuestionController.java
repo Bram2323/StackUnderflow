@@ -28,6 +28,8 @@ import java.util.Optional;
 public class QuestionController {
     public static final int questionsPerPage = 15;
     public static final int answersPerPage = 30;
+    public static final int MAX_TITLE_CHARACTERS = 150;
+    public static final int MAX_TEXT_CHARACTERS = 30000;
 
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
@@ -123,9 +125,16 @@ public class QuestionController {
         if (postPatchQuestionDTO.title() == null || postPatchQuestionDTO.title().isBlank()) {
             throw new BadRequestException("Title can't be null");
         }
+        if (postPatchQuestionDTO.title().length() > MAX_TITLE_CHARACTERS) {
+            throw new BadRequestException("Title can't be longer than " + MAX_TITLE_CHARACTERS + " characters");
+        }
         if (postPatchQuestionDTO.text() == null || postPatchQuestionDTO.text().isBlank()) {
             throw new BadRequestException("Text can't be null");
         }
+        if (postPatchQuestionDTO.text().length() > MAX_TEXT_CHARACTERS) {
+            throw new BadRequestException("Text can't be longer than " + MAX_TEXT_CHARACTERS + " characters");
+        }
+
         Question newQuestion = new Question(postPatchQuestionDTO.title(), postPatchQuestionDTO.text(),
                 LocalDateTime.now(), user);
         questionRepository.save(newQuestion);
@@ -148,9 +157,16 @@ public class QuestionController {
         }
 
         if (postPatchQuestionDTO.title() != null) {
+            if (postPatchQuestionDTO.title().length() > MAX_TITLE_CHARACTERS) {
+                throw new BadRequestException("Title can't be longer than " + MAX_TITLE_CHARACTERS + " characters");
+            }
             question.setTitle(postPatchQuestionDTO.title());
         }
+
         if (postPatchQuestionDTO.text() != null) {
+            if (postPatchQuestionDTO.text().length() > MAX_TEXT_CHARACTERS) {
+                throw new BadRequestException("Text can't be longer than " + MAX_TEXT_CHARACTERS + " characters");
+            }
             question.setText(postPatchQuestionDTO.text());
         }
 
