@@ -76,6 +76,23 @@ function Question() {
         ApiService.delete(`questions/${id}`).then(() => navigate("/vragen"));
     }
 
+    function getCategoryName(category) {
+        switch (category) {
+            case "CYBER":
+                return "Cyber Security";
+            case "DATA":
+                return "Data Engineering / Science";
+            case "JAVA":
+                return "Java";
+            case "CLOUD":
+                return "Cloud Engineering";
+            case "GENERAL":
+                return "Algemeen";
+            default:
+                return category;
+        }
+    }
+
     return (
         <div className="question mb-12">
             <div className="question-container">
@@ -88,11 +105,10 @@ function Question() {
 
                 <hr className="w-full border-none h-[2px] bg-[#C0C0C0]" />
 
-                <div className="flex items-center justify-between w-full">
-                    <div className="flex gap-4">
-                        <div className="flex items-center">
-                            <User user={question.user} />
-                        </div>
+                <div className="flex  justify-between w-full">
+                    <div className="flex gap-4 items-center">
+                        <User user={question.user} />
+
                         <div className="leading-tight text-[12px] flex flex-col justify-center">
                             <p>Gevraagd op:</p>
                             <p>{formatDate(question.date)}</p>
@@ -104,7 +120,10 @@ function Question() {
                             </div>
                         )}
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex items-center gap-3">
+                        <p className="text-xs">
+                            {getCategoryName(question.category)}
+                        </p>
                         {isQuestionOwner && (
                             <FontAwesomeIcon
                                 icon={faPen}

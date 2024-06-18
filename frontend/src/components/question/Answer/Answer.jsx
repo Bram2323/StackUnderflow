@@ -89,9 +89,7 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
                     <hr />
                     <div className="flex items-center justify-between w-full">
                         <div className="flex gap-4">
-                            <div className="flex items-center">
-                                <User user={answer.user} />
-                            </div>
+                            <User user={answer.user} />
                             <div className="leading-tight text-[12px] flex flex-col justify-center">
                                 <p>Beantwoord op:</p>
                                 <p>{formatDate(answer.date)}</p>

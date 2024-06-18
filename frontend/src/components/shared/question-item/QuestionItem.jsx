@@ -5,6 +5,23 @@ import { formatDate } from "../date-formatter/FormatDate.js";
 export default function QuestionItem({ question }) {
     const navigate = useNavigate();
 
+    function getCategoryName(category) {
+        switch (category) {
+            case "CYBER":
+                return "Cyber Security";
+            case "DATA":
+                return "Data Engineering / Science";
+            case "JAVA":
+                return "Java";
+            case "CLOUD":
+                return "Cloud Engineering";
+            case "GENERAL":
+                return "Algemeen";
+            default:
+                return category;
+        }
+    }
+
     return (
         <div
             className=" cursor-pointer border-2 border-neutral-400 hover:border-neutral-500 transition-all duration-150 bg-gray-300 p-2 rounded-md flex flex-col gap-1"
@@ -18,10 +35,13 @@ export default function QuestionItem({ question }) {
                 {question.text}
             </p>
             <div className="flex h-full w-full items-end justify-between">
-                <div className="font-bold">
-                    <p>
+                <div className="">
+                    <p className="font-bold">
                         {question.answers} Antwoord
                         {question.answers != 1 ? "en" : ""}
+                    </p>
+                    <p className="text-sm">
+                        {getCategoryName(question.category)}
                     </p>
                 </div>
                 <div className="flex items-center gap-4">

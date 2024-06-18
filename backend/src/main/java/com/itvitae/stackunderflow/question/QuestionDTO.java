@@ -6,7 +6,7 @@ import com.itvitae.stackunderflow.user.UserDTO;
 import java.time.LocalDateTime;
 
 public record QuestionDTO(Long id, String title, String text, LocalDateTime date, LocalDateTime lastEdited,
-                          UserDTO user, Integer answers) {
+                          UserDTO user, Integer answers, Category category) {
     public static QuestionDTO from(Question question, User user) {
         return new QuestionDTO(
                 question.getId(),
@@ -15,6 +15,7 @@ public record QuestionDTO(Long id, String title, String text, LocalDateTime date
                 question.getDate(),
                 question.getLastEdited(),
                 UserDTO.from(question.getUser()),
-                question.getAnswerCount());
+                question.getAnswerCount(),
+                question.getCategory());
     }
 }
