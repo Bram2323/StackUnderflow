@@ -8,7 +8,11 @@ import CodeMarker from "../shared/codeblock/CodeMarker/CodeMarker";
 import Button from "../shared/button/Button";
 
 function QuestionForm() {
-    const [question, setQuestion] = useState({ title: "", text: "" });
+    const [question, setQuestion] = useState({
+        title: "",
+        text: "",
+        category: "",
+    });
     const [error, setError] = useState("");
     const [selectionRange, setSelectionRange] = useState({
         start: null,
@@ -54,6 +58,10 @@ function QuestionForm() {
         }
         if (!question.text.trim()) {
             setError("Beschrijving mag niet leeg zijn");
+            return;
+        }
+        if (!question.category) {
+            setError("Kies een categorie");
             return;
         }
 
@@ -157,10 +165,36 @@ function QuestionForm() {
                             }`}
                         >{`${question.text.length} / ${MAX_TEXT_CHARACTERS}`}</p>
                     </div>
-                    <Button
-                        text={editMode ? "Opslaan" : "Plaats je vraag"}
-                        onClick={handleSaveQuestion}
-                    />
+                    <div className="flex flex-col items-start">
+                        <p>Categorie</p>
+                        <select
+                            className="mb-6"
+                            name="categories"
+                            value={question.category}
+                            onChange={(e) =>
+                                setQuestion({
+                                    ...question,
+                                    category: e.target.value,
+                                })
+                            }
+                        >
+                            <option value="" disabled hidden>
+                                Selecteer een categorie
+                            </option>
+                            <option value="GENERAL">Algemeen</option>
+                            <option value="DATA">
+                                Data Engineering / Science
+                            </option>
+                            <option value="CLOUD">Cloud Engineering</option>
+                            <option value="CYBER">Cyber Security</option>
+                            <option value="JAVA">Java</option>
+                        </select>
+                        <Button
+                            text={editMode ? "Opslaan" : "Plaats je vraag"}
+                            onClick={handleSaveQuestion}
+                        />
+                    </div>
+
                     {error && <p className="question-form-error">{error}</p>}
                 </form>
             </div>

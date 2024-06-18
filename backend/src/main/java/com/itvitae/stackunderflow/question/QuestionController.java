@@ -140,9 +140,12 @@ public class QuestionController {
         if (postPatchQuestionDTO.text().length() > MAX_TEXT_CHARACTERS) {
             throw new BadRequestException("Text can't be longer than " + MAX_TEXT_CHARACTERS + " characters");
         }
+        if (postPatchQuestionDTO.category() == null) {
+            throw new BadRequestException("Category can't be null");
+        }
 
         Question newQuestion = new Question(postPatchQuestionDTO.title(), postPatchQuestionDTO.text(),
-                LocalDateTime.now(), user);
+                LocalDateTime.now(), user, postPatchQuestionDTO.category());
         questionRepository.save(newQuestion);
 
         URI locationOfNewQuestion = ucb.path("questions/{id}").buildAndExpand(newQuestion.getId()).toUri();
@@ -174,6 +177,10 @@ public class QuestionController {
                 throw new BadRequestException("Text can't be longer than " + MAX_TEXT_CHARACTERS + " characters");
             }
             question.setText(postPatchQuestionDTO.text());
+        }
+
+        if (postPatchQuestionDTO.category() != null) {
+            question.setCategory(postPatchQuestionDTO.category());
         }
 
         question.setLastEdited(LocalDateTime.now());

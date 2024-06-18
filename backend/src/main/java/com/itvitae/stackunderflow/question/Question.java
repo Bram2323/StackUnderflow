@@ -29,11 +29,13 @@ public class Question {
     @Column(table = "question_summary_view", insertable = false)
     private Integer answerCount;
     private Boolean enabled = true;
+    private Category category;
 
-    public Question(String title, String text, LocalDateTime date, User user) {
+    public Question(String title, String text, LocalDateTime date, User user, Category category) {
         this.title = title;
         this.text = text;
         this.date = date;
         this.user = user;
+        this.category = category;
     }
 }

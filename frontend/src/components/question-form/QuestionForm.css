@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
+    margin-bottom: 20px;
     width: 100%;
 }
 
@@ -37,6 +38,7 @@
 
 .question-form-error {
     color: red;
+    margin-top: 10px;
 }
 
 

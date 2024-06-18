@@ -2,6 +2,7 @@ package com.itvitae.stackunderflow;
 
 import com.itvitae.stackunderflow.answer.Answer;
 import com.itvitae.stackunderflow.answer.AnswerRepository;
+import com.itvitae.stackunderflow.question.Category;
 import com.itvitae.stackunderflow.question.Question;
 import com.itvitae.stackunderflow.question.QuestionRepository;
 import com.itvitae.stackunderflow.user.User;
@@ -42,7 +43,7 @@ public class Seeder implements CommandLineRunner {
                     userService.register("test4", "Testww123!")
             );
 
-            Question question = new Question("Applicatie!", "Mijn applicatie wilt niet opstarten!", LocalDateTime.now().minusMonths(1).minusHours(2), users.get(0));
+            Question question = new Question("Applicatie!", "Mijn applicatie wilt niet opstarten!", LocalDateTime.now().minusMonths(1).minusHours(2), users.get(0), Category.GENERAL);
             questionRepository.save(question);
 
             List<Answer> answers = List.of(
