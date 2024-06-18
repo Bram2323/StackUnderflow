@@ -36,13 +36,13 @@ function AnswerForm({
         }
         if (isEditing) {
             if (!UserService.isLoggedIn() || !isAnswerOwner) return;
-            ApiService.patch("answers/" + answer.id, answer).then(
-                (response) => {
-                    const updatedAnswer = response.data;
-                    updateAnswer(updatedAnswer);
-                    setIsEditing(false);
-                }
-            );
+            ApiService.patch("answers/" + answer.id, {
+                text: answer.text,
+            }).then((response) => {
+                const updatedAnswer = response.data;
+                updateAnswer(updatedAnswer);
+                setIsEditing(false);
+            });
         } else {
             ApiService.post("answers", answer).then((response) => {
                 const newAnswer = response.data;
