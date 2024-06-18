@@ -3,21 +3,6 @@ import { faAward } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./User.css";
 
-function getStyle(scale) {
-    return {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 5 * scale,
-        fontSize: `${120 * scale}%`,
-        border: "1px solid black",
-        padding: `0px ${5 * scale}px`,
-        height: 40 * scale,
-        borderRadius: 10 * scale,
-        backgroundColor: "white",
-    };
-}
-
 function getAward(award) {
     if (award == undefined) return <></>;
     award = award.toLowerCase();
@@ -31,14 +16,11 @@ function getAward(award) {
     return <></>;
 }
 
-function User({ user, scale = 1 }) {
+function User({ user }) {
     return (
         <>
-            <div style={getStyle(scale)}>
-                <img
-                    style={{ width: 30 * scale, height: 30 * scale }}
-                    src={UserIcon}
-                ></img>
+            <div className={"user-container " + (user.isAdmin && "admin")}>
+                <img className=" w-[30px] h-[30px]" src={UserIcon}></img>
                 <p>{user.username}</p>
                 {getAward(user.award)}
             </div>

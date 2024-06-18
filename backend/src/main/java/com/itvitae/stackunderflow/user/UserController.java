@@ -28,7 +28,7 @@ public class UserController {
         if (username == null) throw new BadRequestException("Username is required!");
         if (password == null) throw new BadRequestException("Password is required!");
 
-        Optional<User> possibleUser = userRepository.findByUsername(username);
+        Optional<User> possibleUser = userRepository.findByUsernameIgnoreCase(username);
         if (possibleUser.isEmpty()) throw new BadRequestException("User doesn't exist!");
         User user = possibleUser.get();
 
@@ -51,7 +51,8 @@ public class UserController {
         if (!userService.isValidUsername(username)) throw new BadRequestException("Username is invalid!");
         if (!userService.isValidPassword(password)) throw new BadRequestException("Password is invalid!");
 
-        if (userRepository.findByUsername(username).isPresent()) throw new BadRequestException("User already exists!");
+        if (userRepository.findByUsernameIgnoreCase(username).isPresent())
+            throw new BadRequestException("User already exists!");
 
         User user = userService.register(username, password);
 

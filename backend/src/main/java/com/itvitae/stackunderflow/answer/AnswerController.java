@@ -6,6 +6,7 @@ import com.itvitae.stackunderflow.exceptions.NotFoundException;
 import com.itvitae.stackunderflow.question.Question;
 import com.itvitae.stackunderflow.question.QuestionRepository;
 import com.itvitae.stackunderflow.user.User;
+import com.itvitae.stackunderflow.user.UserService;
 import com.itvitae.stackunderflow.useranswervote.AnswerVoteDTO;
 import com.itvitae.stackunderflow.useranswervote.UserAnswerVote;
 import com.itvitae.stackunderflow.useranswervote.UserAnswerVoteRepository;
@@ -27,6 +28,7 @@ public class AnswerController {
     private final AnswerRepository answerRepository;
     private final UserAnswerVoteRepository userAnswerVoteRepository;
     private final QuestionRepository questionRepository;
+    private final UserService userService;
 
     public static final int MAX_TEXT_CHARACTERS = 30000;
 
@@ -126,7 +128,7 @@ public class AnswerController {
         Answer answer = possibleAnswer.orElseThrow(NotFoundException::new);
 
         User answerOwner = answer.getUser();
-        if (!user.equals(answerOwner)) {
+        if (!user.equals(answerOwner) && !userService.isAdmin(user)) {
             throw new ForbiddenException();
         }
         answer.setEnabled(false);

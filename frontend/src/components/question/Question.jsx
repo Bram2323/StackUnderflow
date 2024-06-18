@@ -37,6 +37,7 @@ function Question() {
     const isQuestionOwner =
         UserService.isLoggedIn() &&
         question.user.id === UserService.getUser().id;
+    const isAdmin = UserService.isLoggedIn() && UserService.getUser().isAdmin;
 
     function getAnswers() {
         ApiService.get(`questions/${id}/answers`, queryParams).then(
@@ -69,7 +70,7 @@ function Question() {
     }
 
     function handleDelete() {
-        if (!UserService.isLoggedIn || !isQuestionOwner) {
+        if (!UserService.isLoggedIn || (!isQuestionOwner && !isAdmin)) {
             return;
         }
         ApiService.delete(`questions/${id}`).then(() => navigate("/vragen"));
@@ -112,7 +113,7 @@ function Question() {
                             />
                         )}
 
-                        {isQuestionOwner && (
+                        {(isQuestionOwner || isAdmin) && (
                             <FontAwesomeIcon
                                 icon={faTrashCan}
                                 className="cursor-pointer"
