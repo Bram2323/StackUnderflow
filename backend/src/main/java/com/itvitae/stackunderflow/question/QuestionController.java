@@ -7,6 +7,7 @@ import com.itvitae.stackunderflow.exceptions.BadRequestException;
 import com.itvitae.stackunderflow.exceptions.ForbiddenException;
 import com.itvitae.stackunderflow.exceptions.NotFoundException;
 import com.itvitae.stackunderflow.user.User;
+import com.itvitae.stackunderflow.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +34,7 @@ public class QuestionController {
 
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final UserService userService;
 
     @GetMapping
     public Page<QuestionMinimalDTO> getAllQuestions(@RequestParam(required = false, name = "page") Integer pageParam,
@@ -183,7 +185,7 @@ public class QuestionController {
         Question question = possibleQuestion.orElseThrow(NotFoundException::new);
 
         User questionOwner = question.getUser();
-        if (!user.equals(questionOwner)) {
+        if (!user.equals(questionOwner) && !userService.isAdmin(user)) {
             throw new ForbiddenException();
         }
 
