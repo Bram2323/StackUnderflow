@@ -7,6 +7,7 @@ import UserService from "../../services/UserService";
 import { useSearchParams } from "react-router-dom";
 import QuestionFilter from "../shared/question-filter/QuestionFilter";
 import Button from "../shared/button/Button";
+import LeaderboardItem from "../shared/leaderboard-item/LeaderboardItem";
 
 function Home() {
     const [questions, setQuestions] = useState([]);
@@ -23,10 +24,19 @@ function Home() {
         });
     }, [queryParams]);
 
+    var date = new Date();
+    date.setDate(1);
+    date.setMonth(date.getMonth() - 1);
+    const month = date.toLocaleString("nl-NL", { month: "long" });
+
     return (
         <>
             {UserService.isLoggedIn() ? (
                 <div className="flex flex-col w-3/5 gap-3 mb-12">
+                    <p className=" font-bold text-center pt-5 ">
+                        Jouw rank van de maand: {month} {date.getFullYear()}
+                    </p>
+                    <LeaderboardItem user={UserService.getUser()} />
                     <div className="flex items-baseline justify-between gap-10 mt-12">
                         <h1 className="font-bold text-center text-2xl">
                             Mijn vragen
