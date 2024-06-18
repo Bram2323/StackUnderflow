@@ -11,7 +11,7 @@ export default function QuestionItem({ question }) {
             onClick={() => navigate(`/vragen/${question.id}`)}
             key={question.id}
         >
-            <h2 className="w-full text-[120%] font-bold text-wrap">
+            <h2 className="w-full text-[120%] font-bold overflow-hidden overflow-ellipsis text-nowrap">
                 {question.title}
             </h2>
             <p className=" w-full h-6 overflow-hidden overflow-ellipsis text-nowrap text-gray-600">
