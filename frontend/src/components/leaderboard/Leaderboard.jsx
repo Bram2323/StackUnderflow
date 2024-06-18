@@ -11,7 +11,6 @@ export default function Leaderboard() {
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        console.log(UserService.getUser().award);
         const url = "leaderboard/get-all-users";
         ApiService.get(url, queryParams).then((response) => {
             setUsers(response.data.content);
