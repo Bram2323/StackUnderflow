@@ -6,7 +6,7 @@ import Button from "../button/Button";
 import "./QuestionFilter.css";
 import UserService from "../../../services/UserService";
 
-function QuestionFilter() {
+function QuestionFilter({ showAskQuestion = true }) {
     const navigate = useNavigate();
     const [queryParams, setQueryParams] = useSearchParams();
     const [titleQuery, setTitleQuery] = useState(
@@ -56,7 +56,7 @@ function QuestionFilter() {
                         <option value="least-answers">Minste antwoorden</option>
                     </select>
                 </div>
-                {UserService.isLoggedIn() && (
+                {showAskQuestion && UserService.isLoggedIn() && (
                     <Button
                         text={"Stel Vraag"}
                         onClick={() => navigate("/vragen/aanmaken")}
