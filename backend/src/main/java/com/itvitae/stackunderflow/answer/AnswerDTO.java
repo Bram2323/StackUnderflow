@@ -5,7 +5,8 @@ import com.itvitae.stackunderflow.user.UserDTO;
 
 import java.time.LocalDateTime;
 
-public record AnswerDTO(Long id, String text, LocalDateTime date, Boolean isSolution, UserDTO user,
+public record AnswerDTO(Long id, String text, LocalDateTime date, LocalDateTime lastEdited, Boolean isSolution,
+                        UserDTO user,
                         Long votes, Boolean userHasUpVoted, Boolean userHasDownVoted) {
     public static AnswerDTO from(Answer answer, User user) {
 
@@ -13,6 +14,7 @@ public record AnswerDTO(Long id, String text, LocalDateTime date, Boolean isSolu
                 answer.getId(),
                 answer.getText(),
                 answer.getDate(),
+                answer.getLastEdited(),
                 answer.getIsSolution(),
                 UserDTO.from(answer.getUser()),
                 answer.getVotes(),
