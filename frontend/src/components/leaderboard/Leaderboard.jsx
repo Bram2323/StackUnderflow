@@ -21,7 +21,7 @@ export default function Leaderboard() {
     var date = new Date();
     date.setDate(1);
     date.setMonth(date.getMonth() - 1);
-    const month = date.toLocaleString("default", { month: "long" });
+    const month = date.toLocaleString("nl-NL", { month: "long" });
 
     return (
         <>
