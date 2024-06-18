@@ -16,7 +16,7 @@ function translateError(error) {
         case "Password is invalid!":
             return "Wachtwoord is niet toegestaan!";
         case "User already exists!":
-            return "Gebruikersnaam is in gebruik!";
+            return "Gebruikersnaam is al in gebruik!";
         default:
             return error;
     }
@@ -56,6 +56,7 @@ function validatePassword(password) {
 function Register() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [repeatPassword, setRepeatPassword] = useState("");
     const [errors, setErrors] = useState([]);
 
     const navigate = useNavigate();
@@ -74,6 +75,10 @@ function Register() {
         }
         if (password.length == 0) {
             setErrors(["Wachtwoord is verplicht!"]);
+            return;
+        }
+        if (password != repeatPassword) {
+            setErrors(["Wachtwoord komt niet overeen!"]);
             return;
         }
         const errors = validatePassword(password);
@@ -108,6 +113,13 @@ function Register() {
                         label="Wachtwoord"
                         text={password}
                         onTextChanged={setPassword}
+                        hidden={true}
+                        onSubmit={handleRegister}
+                    />
+                    <InputField
+                        label="Herhaal wachtwoord"
+                        text={repeatPassword}
+                        onTextChanged={setRepeatPassword}
                         hidden={true}
                         onSubmit={handleRegister}
                     />
