@@ -7,6 +7,7 @@ import com.itvitae.stackunderflow.exceptions.BadRequestException;
 import com.itvitae.stackunderflow.exceptions.ForbiddenException;
 import com.itvitae.stackunderflow.exceptions.NotFoundException;
 import com.itvitae.stackunderflow.user.User;
+import com.itvitae.stackunderflow.user.UserRepository;
 import com.itvitae.stackunderflow.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,7 @@ public class QuestionController {
 
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
 
     @GetMapping
@@ -48,12 +50,14 @@ public class QuestionController {
         return allQuestions.map(question -> QuestionMinimalDTO.from(question, user));
     }
 
-    @GetMapping("/own")
-    public Page<QuestionMinimalDTO> getAllQuestionsByUser(@RequestParam(required = false) String title,
+    @GetMapping("/user/{username}")
+    public Page<QuestionMinimalDTO> getAllQuestionsByUser(@PathVariable String username,
+                                                          @RequestParam(required = false) String title,
                                                           @RequestParam(name = "order-by", required = false) String orderBy,
-                                                          @RequestParam(required = false, name = "page") Integer pageParam,
-                                                          Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+                                                          @RequestParam(required = false, name = "page") Integer pageParam) {
+        Optional<User> possibleUser = userRepository.findByUsernameIgnoreCase(username);
+        User user = possibleUser.orElseThrow(NotFoundException::new);
+
         int page = pageParam == null ? 0 : pageParam - 1;
         Sort sort = switch (orderBy != null ? orderBy : "") {
             default -> Sort.by("date").descending();

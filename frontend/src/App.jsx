@@ -11,6 +11,7 @@ import Leaderboard from "./components/leaderboard/Leaderboard";
 import NotFoundPage from "./components/not-found-page/NotFoundPage";
 import { history } from "./services/History";
 import { useNavigate, useLocation } from "react-router-dom";
+import UserPage from "./components/user-page/UserPage";
 
 export default function App() {
     history.navigate = useNavigate();
@@ -24,11 +25,12 @@ export default function App() {
                 <Route path="" element={<Home />} />
                 <Route path="/vragen" element={<QuestionOverview />} />
                 <Route path="/vragen/:id" element={<Question />} />
+                <Route path="/vragen/aanmaken" element={<QuestionForm />} />
+                <Route path="/vragen/:id/bewerken" element={<QuestionForm />} />
                 <Route path="/leaderbord" element={<Leaderboard />} />
                 <Route path="/inloggen" element={<Login />} />
                 <Route path="/registreren" element={<Register />} />
-                <Route path="/vragen/aanmaken" element={<QuestionForm />} />
-                <Route path="/vragen/:id/bewerken" element={<QuestionForm />} />
+                <Route path="/gebruikers/:username" element={<UserPage />} />
 
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
