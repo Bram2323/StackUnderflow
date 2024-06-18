@@ -56,6 +56,7 @@ function validatePassword(password) {
 function Register() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [repeatPassword, setRepeatPassword] = useState("");
     const [errors, setErrors] = useState([]);
 
     const navigate = useNavigate();
@@ -74,6 +75,14 @@ function Register() {
         }
         if (password.length == 0) {
             setErrors(["Wachtwoord is verplicht!"]);
+            return;
+        }
+        if (repeatPassword.length == 0) {
+            setErrors(["Wachtwoord is verplicht!"]);
+            return;
+        }
+        if (password != repeatPassword) {
+            setErrors(["Wachtwoord komt nier overeen!"]);
             return;
         }
         const errors = validatePassword(password);
@@ -108,6 +117,13 @@ function Register() {
                         label="Wachtwoord"
                         text={password}
                         onTextChanged={setPassword}
+                        hidden={true}
+                        onSubmit={handleRegister}
+                    />
+                    <InputField
+                        label="Herhaal wachtwoord"
+                        text={repeatPassword}
+                        onTextChanged={setRepeatPassword}
                         hidden={true}
                         onSubmit={handleRegister}
                     />
