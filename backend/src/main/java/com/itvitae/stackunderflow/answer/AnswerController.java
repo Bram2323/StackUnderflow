@@ -108,12 +108,11 @@ public class AnswerController {
         Question question = possibleQuestion.get();
         if (text == null || text.isBlank())
             throw new BadRequestException("Text needs to be defined!");
-        String trimmedText = text.trim();
 
-        if (trimmedText.length() > MAX_TEXT_CHARACTERS)
+        if (text.length() > MAX_TEXT_CHARACTERS)
             throw new BadRequestException("Text can't be longer than " + MAX_TEXT_CHARACTERS + "characters");
 
-        Answer answer = new Answer(trimmedText, date, question, user);
+        Answer answer = new Answer(text, date, question, user);
         Answer savedAnswer = answerRepository.save(answer);
 
         URI path = ucb.path("/answers/{id}").buildAndExpand(savedAnswer.getId()).toUri();
