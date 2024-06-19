@@ -18,20 +18,34 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     Page<Question> findByTitleOrTextContainsIgnoreCaseAndEnabledTrue(@Param("search") String search, Pageable pageable);
 
     @Query("SELECT q FROM Questions q " +
-            "WHERE q.user.id = :userId " +
+            "WHERE q.category = :category " +
             "AND (lower(q.title) LIKE lower(concat('%', :search, '%')) " +
             "OR lower(q.text) LIKE lower(concat('%', :search, '%'))) " +
             "AND q.enabled = true")
-    Page<Question> findByUserIdAndTitleOrTextContainsIgnoreCaseAndEnabledTrue(
-            @Param("userId") UUID userId,
+    Page<Question> findByCategoryAndTitleOrTextContainsIgnoreCaseAndEnabledTrue(
+            @Param("category") Category category,
             @Param("search") String search,
             Pageable pageable);
 
-    Page<Question> findByCategoryAndTitleContainsIgnoreCaseAndEnabledTrue(Category category, String title,
+    @Query("SELECT q FROM Questions q " +
+            "WHERE q.user = :user " +
+            "AND (lower(q.title) LIKE lower(concat('%', :search, '%')) " +
+            "OR lower(q.text) LIKE lower(concat('%', :search, '%'))) " +
+            "AND q.enabled = true")
+    Page<Question> findByUserAndTitleOrTextContainsIgnoreCaseAndEnabledTrue(
+            @Param("user") User user,
+            @Param("search") String search,
             Pageable pageable);
 
-    Page<Question> findByUserAndTitleContainsIgnoreCaseAndEnabledTrue(User user, String title, Pageable pageable);
-
-    Page<Question> findByUserAndCategoryAndTitleContainsIgnoreCaseAndEnabledTrue(User user, Category category,
-            String title, Pageable pageable);
+    @Query("SELECT q FROM Questions q " +
+            "WHERE q.user = :user " +
+            "AND q.category = :category " +
+            "AND (lower(q.title) LIKE lower(concat('%', :search, '%')) " +
+            "OR lower(q.text) LIKE lower(concat('%', :search, '%'))) " +
+            "AND q.enabled = true")
+    Page<Question> findByUserAndCategoryAndTitleOrTextContainsIgnoreCaseAndEnabledTrue(
+            @Param("user") User user,
+            @Param("category") Category category,
+            @Param("search") String search,
+            Pageable pageable);
 }
