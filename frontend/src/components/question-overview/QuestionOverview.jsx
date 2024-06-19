@@ -11,7 +11,7 @@ function QuestionOverview() {
 
     useEffect(() => {
         const url =
-            queryParams.has("title") || queryParams.has("order-by")
+            queryParams.has("search") || queryParams.has("order-by")
                 ? "questions/search"
                 : "questions";
         ApiService.get(url, queryParams).then((response) => {

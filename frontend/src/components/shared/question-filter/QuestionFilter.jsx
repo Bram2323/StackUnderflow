@@ -9,17 +9,17 @@ import UserService from "../../../services/UserService";
 function QuestionFilter({ showAskQuestion = true }) {
     const navigate = useNavigate();
     const [queryParams, setQueryParams] = useSearchParams();
-    const [titleQuery, setTitleQuery] = useState(
-        queryParams.has("title") ? queryParams.get("title") : ""
+    const [searchQuery, setSearchQuery] = useState(
+        queryParams.has("search") ? queryParams.get("search") : ""
     );
     const [orderQuery, setOrderQuery] = useState(
         queryParams.has("order-by") ? queryParams.get("order-by") : ""
     );
 
     function handleSearch() {
-        if (queryParams.get("title") === titleQuery) return;
-        if (titleQuery == "") queryParams.delete("title");
-        else queryParams.set("title", titleQuery);
+        if (queryParams.get("search") === searchQuery) return;
+        if (searchQuery == "") queryParams.delete("search");
+        else queryParams.set("search", searchQuery);
         queryParams.delete("page");
         setQueryParams(queryParams);
     }
@@ -37,8 +37,8 @@ function QuestionFilter({ showAskQuestion = true }) {
             <div className="question-filter-container flex justify-between items-baseline gap-2">
                 <div className="flex gap-2 w-full h-fit items-baseline">
                     <InputField
-                        text={titleQuery}
-                        onTextChanged={setTitleQuery}
+                        text={searchQuery}
+                        onTextChanged={setSearchQuery}
                         placeHolder="Zoeken..."
                         onSubmit={handleSearch}
                         onBlur={handleSearch}

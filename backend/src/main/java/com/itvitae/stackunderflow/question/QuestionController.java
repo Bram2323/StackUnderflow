@@ -52,7 +52,7 @@ public class QuestionController {
 
     @GetMapping("/user/{username}")
     public Page<QuestionMinimalDTO> getAllQuestionsByUser(@PathVariable String username,
-                                                          @RequestParam(required = false) String title,
+                                                          @RequestParam(required = false) String search,
                                                           @RequestParam(name = "order-by", required = false) String orderBy,
                                                           @RequestParam(required = false, name = "page") Integer pageParam) {
         Optional<User> possibleUser = userRepository.findByUsernameIgnoreCase(username);
@@ -67,13 +67,13 @@ public class QuestionController {
         };
         Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
 
-        Page<Question> questions = questionRepository.findByUserIdAndTitleContainsIgnoreCaseAndEnabledTrue(user.getId(),
-                title != null ? title : "", pageable);
+        Page<Question> questions = questionRepository.findByUserIdAndTitleOrTextContainsIgnoreCaseAndEnabledTrue(user.getId(),
+                search != null ? search : "", pageable);
         return questions.map(question -> QuestionMinimalDTO.from(question, user));
     }
 
     @GetMapping("search")
-    public Page<QuestionMinimalDTO> search(@RequestParam(required = false) String title,
+    public Page<QuestionMinimalDTO> search(@RequestParam(required = false) String search,
                                            @RequestParam(name = "order-by", required = false) String orderBy,
                                            @RequestParam(required = false, name = "page") Integer pageParam,
                                            Authentication authentication) {
@@ -89,7 +89,7 @@ public class QuestionController {
         User user = authentication == null ? null : (User) authentication.getPrincipal();
 
         Page<Question> questions = questionRepository
-                .findByTitleContainsIgnoreCaseAndEnabledTrue(title != null ? title : "", pageable);
+                .findByTitleOrTextContainsIgnoreCaseAndEnabledTrue(search != null ? search : "", pageable);
         return questions.map(question -> QuestionMinimalDTO.from(question, user));
     }
 
