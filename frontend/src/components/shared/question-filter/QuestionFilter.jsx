@@ -15,6 +15,9 @@ function QuestionFilter({ showAskQuestion = true }) {
     const [orderQuery, setOrderQuery] = useState(
         queryParams.has("order-by") ? queryParams.get("order-by") : ""
     );
+    const [categoryQuery, setCategoryQuery] = useState(
+        queryParams.has("category") ? queryParams.get("category") : ""
+    );
 
     function handleSearch() {
         if (queryParams.get("search") === searchQuery) return;
@@ -28,6 +31,15 @@ function QuestionFilter({ showAskQuestion = true }) {
         if (newOrder === orderQuery) return;
         setOrderQuery(newOrder);
         queryParams.set("order-by", newOrder);
+        queryParams.delete("page");
+        setQueryParams(queryParams);
+    }
+
+    function handleCategoryChange(newCategory) {
+        if (newCategory === categoryQuery) return;
+        setCategoryQuery(newCategory);
+        if (newCategory == "") queryParams.delete("category");
+        else queryParams.set("category", newCategory);
         queryParams.delete("page");
         setQueryParams(queryParams);
     }
@@ -54,6 +66,20 @@ function QuestionFilter({ showAskQuestion = true }) {
                         <option value="date-asc">Oudste vragen</option>
                         <option value="most-answers">Meeste antwoorden</option>
                         <option value="least-answers">Minste antwoorden</option>
+                    </select>
+                    <select
+                        onChange={(e) => {
+                            handleCategoryChange(e.target.value);
+                        }}
+                        name="categories"
+                        value={categoryQuery}
+                    >
+                        <option value="">Alle categorieën</option>
+                        <option value="general">Algemeen</option>
+                        <option value="data">Data Engineering / Science</option>
+                        <option value="cloud">Cloud Engineering</option>
+                        <option value="cyber">Cyber Security</option>
+                        <option value="java">Java</option>
                     </select>
                 </div>
                 {showAskQuestion && UserService.isLoggedIn() && (
