@@ -15,7 +15,6 @@ function linkify(text) {
                     className="text-[#12A8C0] hover:text-[#207890] underline"
                     key={index}
                     href={part}
-                    target="_blank"
                     rel="noopener noreferrer"
                 >
                     {part}
