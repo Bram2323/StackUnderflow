@@ -52,14 +52,15 @@ public class QuestionController {
 
     @GetMapping("/user/{username}")
     public Page<QuestionMinimalDTO> getAllQuestionsByUser(@PathVariable String username,
-                                                          @RequestParam(required = false) String title,
+                                                          @RequestParam(required = false) String search,
                                                           @RequestParam(name = "order-by", required = false) String orderBy,
                                                           @RequestParam(name = "category", required = false) String categoryParam,
                                                           @RequestParam(required = false, name = "page") Integer pageParam) {
         Optional<User> possibleUser = userRepository.findByUsernameIgnoreCase(username);
         User user = possibleUser.orElseThrow(NotFoundException::new);
 
-        if (title == null) title = "";
+        if (search == null)
+            search = "";
 
         Category category;
         if (categoryParam != null) {
@@ -68,8 +69,8 @@ public class QuestionController {
             } catch (IllegalArgumentException e) {
                 category = null;
             }
-        } else category = null;
-
+        } else
+            category = null;
 
         int page = pageParam == null ? 0 : pageParam - 1;
         Sort sort = switch (orderBy != null ? orderBy : "") {
@@ -82,21 +83,23 @@ public class QuestionController {
 
         Page<Question> questions;
         if (category != null) {
-            questions = questionRepository.findByUserAndCategoryAndTitleContainsIgnoreCaseAndEnabledTrue(user, category, title, pageable);
+            questions = questionRepository.findByUserAndCategoryAndTitleOrTextContainsIgnoreCaseAndEnabledTrue(user, category,
+                    search, pageable);
         } else {
-            questions = questionRepository.findByUserAndTitleContainsIgnoreCaseAndEnabledTrue(user,
-                    title, pageable);
+            questions = questionRepository.findByUserAndTitleOrTextContainsIgnoreCaseAndEnabledTrue(user,
+                    search, pageable);
         }
         return questions.map(question -> QuestionMinimalDTO.from(question, user));
     }
 
     @GetMapping("search")
-    public Page<QuestionMinimalDTO> search(@RequestParam(required = false) String title,
+    public Page<QuestionMinimalDTO> search(@RequestParam(required = false) String search,
                                            @RequestParam(name = "order-by", required = false) String orderBy,
                                            @RequestParam(name = "category", required = false) String categoryParam,
                                            @RequestParam(required = false, name = "page") Integer pageParam,
                                            Authentication authentication) {
-        if (title == null) title = "";
+        if (search == null)
+            search = "";
 
         Category category;
         if (categoryParam != null) {
@@ -105,7 +108,8 @@ public class QuestionController {
             } catch (IllegalArgumentException e) {
                 category = null;
             }
-        } else category = null;
+        } else
+            category = null;
 
         int page = pageParam == null ? 0 : pageParam - 1;
         Sort sort = switch (orderBy != null ? orderBy : "") {
@@ -120,9 +124,10 @@ public class QuestionController {
 
         Page<Question> questions;
         if (category != null) {
-            questions = questionRepository.findByCategoryAndTitleContainsIgnoreCaseAndEnabledTrue(category, title, pageable);
+            questions = questionRepository.findByCategoryAndTitleOrTextContainsIgnoreCaseAndEnabledTrue(category, search,
+                    pageable);
         } else {
-            questions = questionRepository.findByTitleContainsIgnoreCaseAndEnabledTrue(title, pageable);
+            questions = questionRepository.findByTitleOrTextContainsIgnoreCaseAndEnabledTrue(search, pageable);
         }
         return questions.map(question -> QuestionMinimalDTO.from(question, user));
     }
