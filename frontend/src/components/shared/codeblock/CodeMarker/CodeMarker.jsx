@@ -45,7 +45,7 @@ function CodeMarker({ object, setObject, selectionRange, setSelectionRange }) {
         setSelectionRange({ start: null, end: null });
     }
     return (
-        <div className="w-full flex items-baseline mb-4">
+        <div className="w-full flex items-baseline mb-4 select-none">
             <p>Markeer als codeblock</p>
             <button
                 type="button"

@@ -70,7 +70,7 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
                 />
                 <button
                     onClick={() => setSolution(!answer.isSolution)}
-                    className={`checkmark-button transition-all duration-200 ${
+                    className={`checkmark-button select-none transition-all duration-200 ${
                         isQuestionOwner
                             ? answer.isSolution
                                 ? ""

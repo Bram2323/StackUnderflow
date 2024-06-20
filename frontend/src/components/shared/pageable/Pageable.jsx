@@ -28,7 +28,7 @@ function Pageable({ totalPages }) {
 
     return (
         <>
-            <div className="flex gap-1">
+            <div className="flex gap-1 select-none">
                 {pagesToDisplay.map((page, index) => {
                     const dots =
                         index != 0 && pagesToDisplay[index - 1] < page - 1;

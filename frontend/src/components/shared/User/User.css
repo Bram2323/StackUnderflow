@@ -11,6 +11,7 @@
     cursor: pointer;
     background: white;
     background: linear-gradient(180deg, white 70%, rgb(234, 234, 234) 100%);
+    user-select: none;
 }
 
 .admin {

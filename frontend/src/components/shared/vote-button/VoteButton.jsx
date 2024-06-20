@@ -2,7 +2,7 @@ import React from "react";
 
 function VoteButton({ onVote, votes, userHasUpVoted, userHasDownVoted }) {
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center select-none">
             <button
                 onClick={() => onVote(userHasUpVoted ? 0 : 1)}
                 className={`text-2xl ${
