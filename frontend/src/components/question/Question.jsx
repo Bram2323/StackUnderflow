@@ -12,15 +12,28 @@ import { formatDate } from "../shared/date-formatter/FormatDate";
 import AnswerList from "./answer-list/AnswerList";
 import { useSearchParams } from "react-router-dom";
 import ConfirmDialog from "../shared/confirm-dialog/ConfirmDialog";
+import { text } from "@fortawesome/fontawesome-svg-core";
+import Dropdown from "../shared/dropdown/Dropdown";
 
 function Question() {
-    const [queryParams] = useSearchParams();
+    const [queryParams, setQueryParams] = useSearchParams();
     const [question, setQuestion] = useState();
     const [answers, setAnswers] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
     const { id } = useParams();
     const navigate = useNavigate();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    const [orderQuery, setOrderQuery] = useState(
+        queryParams.has("order-by") ? queryParams.get("order-by") : ""
+    );
+
+    const orderOptions = [
+        { value: "votes-desc", text: "Meeste votes" },
+        { value: "votes-asc", text: "Minste votes" },
+        { value: "date-desc", text: "Nieuwste antwoorden" },
+        { value: "date-asc", text: "Oudste antwoorden" },
+    ];
 
     useEffect(() => {
         ApiService.get("questions/" + id).then((response) => {
@@ -104,6 +117,14 @@ function Question() {
         }
     }
 
+    function handleOrderChange(newOrder) {
+        if (newOrder === orderQuery) return;
+        setOrderQuery(newOrder);
+        queryParams.set("order-by", newOrder);
+        queryParams.delete("page");
+        setQueryParams(queryParams);
+    }
+
     return (
         <div className="question mb-12">
             <div className="question-container">
@@ -159,6 +180,12 @@ function Question() {
                     addAnswer={handleAddAnswer}
                 />
             </div>
+            <Dropdown
+                value={orderQuery}
+                setValue={handleOrderChange}
+                options={orderOptions}
+                name="orders"
+            />
             <AnswerList
                 answers={answers}
                 setAnswers={setAnswers}

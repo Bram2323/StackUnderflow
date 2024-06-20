@@ -6,6 +6,7 @@ import InputField from "../shared/input-field/InputField";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import CodeMarker from "../shared/formatter/CodeMarker/CodeMarker";
 import Button from "../shared/button/Button";
+import Dropdown from "../shared/dropdown/Dropdown";
 
 function QuestionForm() {
     const [question, setQuestion] = useState({
@@ -30,6 +31,15 @@ function QuestionForm() {
         questionId: null,
         isQuestionOwner: false,
     };
+
+    const categoryOptions = [
+        { value: "", text: "Selecteer een categorie", hidden: true },
+        { value: "GENERAL", text: "Algemeen" },
+        { value: "DATA", text: "Data Engineering / Science" },
+        { value: "CLOUD", text: "Cloud Engineering" },
+        { value: "CYBER", text: "Cyber Security" },
+        { value: "JAVA", text: "Java" },
+    ];
 
     useEffect(() => {
         if (editMode) {
@@ -167,28 +177,18 @@ function QuestionForm() {
                     </div>
                     <div className="flex flex-col items-start">
                         <p>Categorie</p>
-                        <select
-                            className="mb-6 select-none"
-                            name="categories"
+                        <Dropdown
                             value={question.category}
-                            onChange={(e) =>
+                            setValue={(value) =>
                                 setQuestion({
                                     ...question,
-                                    category: e.target.value,
+                                    category: value,
                                 })
                             }
-                        >
-                            <option value="" disabled hidden>
-                                Selecteer een categorie
-                            </option>
-                            <option value="GENERAL">Algemeen</option>
-                            <option value="DATA">
-                                Data Engineering / Science
-                            </option>
-                            <option value="CLOUD">Cloud Engineering</option>
-                            <option value="CYBER">Cyber Security</option>
-                            <option value="JAVA">Java</option>
-                        </select>
+                            options={categoryOptions}
+                            name={"categories"}
+                            className={"mb-6"}
+                        />
                         <Button
                             text={editMode ? "Opslaan" : "Plaats je vraag"}
                             onClick={handleSaveQuestion}
