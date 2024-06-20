@@ -61,6 +61,7 @@ function QuestionFilter({ showAskQuestion = true }) {
                         }}
                         name="orders"
                         value={orderQuery}
+                        className="select-none"
                     >
                         <option value="date-desc">Nieuwste vragen</option>
                         <option value="date-asc">Oudste vragen</option>
@@ -73,6 +74,7 @@ function QuestionFilter({ showAskQuestion = true }) {
                         }}
                         name="categories"
                         value={categoryQuery}
+                        className="select-none"
                     >
                         <option value="">Alle categorieën</option>
                         <option value="general">Algemeen</option>

@@ -168,7 +168,7 @@ function QuestionForm() {
                     <div className="flex flex-col items-start">
                         <p>Categorie</p>
                         <select
-                            className="mb-6"
+                            className="mb-6 select-none"
                             name="categories"
                             value={question.category}
                             onChange={(e) =>
