@@ -12,7 +12,6 @@ import { formatDate } from "../shared/date-formatter/FormatDate";
 import AnswerList from "./answer-list/AnswerList";
 import { useSearchParams } from "react-router-dom";
 import ConfirmDialog from "../shared/confirm-dialog/ConfirmDialog";
-import { text } from "@fortawesome/fontawesome-svg-core";
 import Dropdown from "../shared/dropdown/Dropdown";
 
 function Question() {
@@ -127,7 +126,7 @@ function Question() {
 
     return (
         <div className="question mb-12">
-            <div className="question-container">
+            <div className="question-container rounded-[10px] border border-neutral-400 shadow">
                 <h2 className="w-full font-bold whitespace-pre-wrap break-words">
                     {question.title}
                 </h2>
@@ -153,7 +152,7 @@ function Question() {
                         )}
                     </div>
                     <div className="flex items-center gap-3">
-                        <p className="text-xs bg-[#12A8C0] text-white rounded-xl text-center p-1 ">
+                        <p className="text-xs bg-[#12A8C0] text-white rounded-xl text-center py-1 px-2 ">
                             {getCategoryName(question.category)}
                         </p>
                         {isQuestionOwner && (
@@ -185,6 +184,7 @@ function Question() {
                 setValue={handleOrderChange}
                 options={orderOptions}
                 name="orders"
+                className="w-fit"
             />
             <AnswerList
                 answers={answers}

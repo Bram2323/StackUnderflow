@@ -40,7 +40,7 @@ export default function QuestionItem({ question }) {
                         {question.answers} Antwoord
                         {question.answers != 1 ? "en" : ""}
                     </p>
-                    <p className="text-sm bg-[#12A8C0] text-white rounded-xl text-center my-1">
+                    <p className="text-xs bg-[#12A8C0] text-white rounded-xl w-fit text-center my-1 py-1 px-2 ">
                         {getCategoryName(question.category)}
                     </p>
                 </div>
