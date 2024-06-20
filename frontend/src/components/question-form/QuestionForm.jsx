@@ -4,7 +4,7 @@ import UserService from "../../services/UserService";
 import "./QuestionForm.css";
 import InputField from "../shared/input-field/InputField";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
-import CodeMarker from "../shared/codeblock/CodeMarker/CodeMarker";
+import CodeMarker from "../shared/formatter/CodeMarker/CodeMarker";
 import Button from "../shared/button/Button";
 
 function QuestionForm() {
