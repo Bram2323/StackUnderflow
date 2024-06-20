@@ -87,11 +87,11 @@ function AnswerForm({
 
     return (
         <>
-            <div className="w-full flex flex-col  bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
+            <div className="w-full shadow flex flex-col  bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
                 {!UserService.isLoggedIn() ? (
                     <p>
                         <a
-                            className="font-bold text-[#2397F4]"
+                            className="font-bold text-[#12a8c0]"
                             href="./inloggen"
                             onClick={() => {
                                 const currentPath = location.pathname;

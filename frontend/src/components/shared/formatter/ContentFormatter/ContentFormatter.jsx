@@ -41,9 +41,9 @@ function ContentFormatter({ content }) {
                 block.startsWith("```") ? (
                     <pre
                         key={index}
-                        className="my-4 p-2 rounded-lg max-h-[600px] bg-[#f1f2f3] overflow-auto"
+                        className="my-4 p-2 rounded-lg max-h-[600px] bg-white overflow-hidden"
                     >
-                        <code className="hljs bg-[#f1f2f3]">
+                        <code className="hljs bg-white">
                             {block.replace(/^```|```$/g, "").trim()}
                         </code>
                     </pre>

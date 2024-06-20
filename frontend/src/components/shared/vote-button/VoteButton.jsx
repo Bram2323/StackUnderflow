@@ -15,7 +15,7 @@ function VoteButton({ onVote, votes, userHasUpVoted, userHasDownVoted }) {
             <button
                 onClick={() => onVote(userHasDownVoted ? 0 : -1)}
                 className={`text-2xl ${
-                    userHasDownVoted ? "text-[#2397F4]" : "text-gray-400"
+                    userHasDownVoted ? "text-[#12a8c0]" : "text-gray-400"
                 }`}
             >
                 ▼

@@ -28,8 +28,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("questions")
 public class QuestionController {
-    public static final int questionsPerPage = 15;
-    public static final int answersPerPage = 30;
+    public static final int QUESTIONS_PER_PAGE = 15;
+    public static final int ANSWERS_PER_PAGE = 30;
     public static final int MAX_TITLE_CHARACTERS = 150;
     public static final int MAX_TEXT_CHARACTERS = 30000;
 
@@ -42,7 +42,7 @@ public class QuestionController {
     public Page<QuestionMinimalDTO> getAllQuestions(@RequestParam(required = false, name = "page") Integer pageParam,
                                                     Authentication authentication) {
         int page = pageParam == null ? 0 : pageParam - 1;
-        Pageable pageable = PageRequest.of(page, questionsPerPage, Sort.by("date").descending());
+        Pageable pageable = PageRequest.of(page, QUESTIONS_PER_PAGE, Sort.by("date").descending());
 
         User user = authentication == null ? null : (User) authentication.getPrincipal();
 
@@ -79,7 +79,7 @@ public class QuestionController {
             case "most-answers" -> Sort.by("answerCount").descending().and(Sort.by("date").descending());
             case "least-answers" -> Sort.by("answerCount").ascending().and(Sort.by("date").descending());
         };
-        Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
+        Pageable pageable = PageRequest.of(page, QUESTIONS_PER_PAGE, sort);
 
         Page<Question> questions;
         if (category != null) {
@@ -118,7 +118,7 @@ public class QuestionController {
             case "most-answers" -> Sort.by("answerCount").descending().and(Sort.by("date").descending());
             case "least-answers" -> Sort.by("answerCount").ascending().and(Sort.by("date").descending());
         };
-        Pageable pageable = PageRequest.of(page, questionsPerPage, sort);
+        Pageable pageable = PageRequest.of(page, QUESTIONS_PER_PAGE, sort);
 
         User user = authentication == null ? null : (User) authentication.getPrincipal();
 
@@ -162,7 +162,7 @@ public class QuestionController {
             case "date-asc" -> Sort.by("date").ascending();
         };
 
-        Pageable pageable = PageRequest.of(page, answersPerPage,
+        Pageable pageable = PageRequest.of(page, ANSWERS_PER_PAGE,
                 Sort.by("isSolution").descending().and(sort));
 
         Page<Answer> answers = answerRepository.findByQuestionAndEnabledTrue(question, pageable);

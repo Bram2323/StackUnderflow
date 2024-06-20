@@ -64,7 +64,7 @@ function QuestionFilter({ showAskQuestion = true }) {
     return (
         <>
             <div className="question-filter-container flex justify-between items-baseline gap-2">
-                <div className="flex gap-2 w-full h-fit items-baseline">
+                <div className="flex gap-2 w-full h-fit items-stretch max-[850px]:flex-col">
                     <InputField
                         text={searchQuery}
                         onTextChanged={setSearchQuery}
@@ -72,18 +72,22 @@ function QuestionFilter({ showAskQuestion = true }) {
                         onSubmit={handleSearch}
                         onBlur={handleSearch}
                     />
-                    <Dropdown
-                        value={orderQuery}
-                        setValue={handleOrderChange}
-                        options={orderOptions}
-                        name={"orders"}
-                    />
-                    <Dropdown
-                        value={categoryQuery}
-                        setValue={handleCategoryChange}
-                        options={categoryOptions}
-                        name={"categories"}
-                    />
+                    <div className="flex gap-2 w-full items-stretch">
+                        <Dropdown
+                            value={orderQuery}
+                            setValue={handleOrderChange}
+                            options={orderOptions}
+                            name="orders"
+                            className=" max-[850px]:w-full"
+                        />
+                        <Dropdown
+                            value={categoryQuery}
+                            setValue={handleCategoryChange}
+                            options={categoryOptions}
+                            name="categories"
+                            className=" max-[850px]:w-full"
+                        />
+                    </div>
                 </div>
                 {showAskQuestion && UserService.isLoggedIn() && (
                     <Button

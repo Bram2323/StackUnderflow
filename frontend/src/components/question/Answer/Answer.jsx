@@ -60,7 +60,11 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
     const isAdmin = UserService.isLoggedIn() && UserService.getUser().isAdmin;
 
     return (
-        <div className={"answer-container flex items-start gap-2"}>
+        <div
+            className={
+                "answer-container flex-grow-0 box-border w-full max-w-full flex gap-2"
+            }
+        >
             <div className="flex flex-col items-center gap-[2px]">
                 <VoteButton
                     onVote={vote}
@@ -93,37 +97,39 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
                     updateAnswer={handleUpdateAnswer}
                 />
             ) : (
-                <div className="answer-container w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
+                <div className="box-border shadow min-w-0 w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
                     <ContentFormatter content={answer.text} />
 
                     <hr />
-                    <div className="flex items-center justify-between w-full">
-                        <div className="flex gap-4">
+                    <div className="flex items-center justify-between w-full gap-2 max-sm:flex-col">
+                        <div className="flex gap-4 max-sm:flex-col max-sm:items-center">
                             <User user={answer.user} />
-                            <div className="leading-tight text-[12px] flex flex-col justify-center">
-                                <p>Beantwoord op:</p>
-                                <p>{formatDate(answer.date)}</p>
-                            </div>
-                            {answer.lastEdited && (
+                            <div className="flex gap-4">
                                 <div className="leading-tight text-[12px] flex flex-col justify-center">
-                                    <p>Bewerkt op:</p>
-                                    <p>{formatDate(answer.lastEdited)}</p>
+                                    <p>Beantwoord op:</p>
+                                    <p>{formatDate(answer.date)}</p>
                                 </div>
-                            )}
+                                {answer.lastEdited && (
+                                    <div className="leading-tight text-[12px] flex flex-col justify-center">
+                                        <p>Bewerkt op:</p>
+                                        <p>{formatDate(answer.lastEdited)}</p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         <div className="flex gap-3">
                             {isAnswerOwner && !isEditing && (
                                 <FontAwesomeIcon
                                     icon={faPen}
-                                    className="cursor-pointer"
+                                    className="cursor-pointer text-neutral-500"
                                     onClick={() => setIsEditing(true)}
                                 />
                             )}
                             {(isAnswerOwner || isAdmin) && (
                                 <FontAwesomeIcon
                                     icon={faTrashCan}
-                                    className="cursor-pointer"
+                                    className="cursor-pointer text-neutral-500"
                                     onClick={handleDelete}
                                 />
                             )}

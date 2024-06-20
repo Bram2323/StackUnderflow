@@ -24,7 +24,7 @@ export default function QuestionItem({ question }) {
 
     return (
         <div
-            className=" cursor-pointer border-2 border-neutral-400 hover:border-neutral-500 transition-all duration-150 bg-gray-300 p-2 rounded-md flex flex-col gap-1"
+            className=" cursor-pointer border-2 border-neutral-300 hover:border-neutral-400 transition-all duration-150 bg-gray-200 p-2 rounded-md flex flex-col gap-1"
             onClick={() => navigate(`/vragen/${question.id}`)}
             key={question.id}
         >
@@ -36,15 +36,22 @@ export default function QuestionItem({ question }) {
             </p>
             <div className="flex h-full w-full items-end justify-between">
                 <div className="">
-                    <p className="font-bold">
+                    <p
+                        className={
+                            "font-bold " +
+                            (question.answers > 0
+                                ? "text-[#12a8c0]"
+                                : "text-[#ff6d00]")
+                        }
+                    >
                         {question.answers} Antwoord
                         {question.answers != 1 ? "en" : ""}
                     </p>
-                    <p className="text-sm">
+                    <p className="text-xs bg-[#12A8C0] text-white rounded-full w-fit text-center my-1 py-1 px-2 ">
                         {getCategoryName(question.category)}
                     </p>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-4">
                     <div className="leading-tight text-[12px] flex flex-col justify-center">
                         <p>Gevraagd op:</p>
                         <p>{formatDate(question.date)}</p>
@@ -55,9 +62,10 @@ export default function QuestionItem({ question }) {
                             <p>{formatDate(question.lastEdited)}</p>
                         </div>
                     )}
-                    <User user={question.user} />
+                    <User user={question.user} className="max-md:hidden" />
                 </div>
             </div>
+            <User user={question.user} className=" self-end md:hidden" />
         </div>
     );
 }

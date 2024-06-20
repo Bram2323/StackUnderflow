@@ -29,12 +29,14 @@ export default function Leaderboard() {
                 Leaderbord van de maand: {month} {date.getFullYear()}
             </p>
             {UserService.isLoggedIn() && (
-                <div className="pt-3 pb-3 w-3/5 flex flex-col gap-3 border-b-2 border-gray-400">
+                <div className="pt-5 pb-5 max-w-[600px] w-[90%] flex flex-col border-b-2 border-gray-400">
                     <p className=" font-bold text-center">Jouw rank:</p>
-                    <LeaderboardItem user={UserService.getUser()} />
+                    <div className="overflow-x-auto">
+                        <LeaderboardItem user={UserService.getUser()} />
+                    </div>
                 </div>
             )}
-            <div className="pt-3 w-3/5 flex flex-col gap-3">
+            <div className="pt-5 pb-5 max-w-[600px] w-[90%] flex flex-col">
                 <LeaderboardList users={users} totalPages={totalPages} />
             </div>
         </>

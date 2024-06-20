@@ -24,28 +24,36 @@ export default function NavBar() {
     }
 
     return (
-        <div className="sticky select-none top-0 h-14 w-full bg-white text-gray-900 border-gray-500 border-b z-[9999] ">
-            <button className="home-button" onClick={() => navigate("")}>
-                <img src={logo} className=" h-14 float-left "></img>{" "}
-                <div className=" float-left mt-4 mr-2 ">
-                    stack<b>underflow</b>
-                </div>
-            </button>
-            <div>
+        <div className="sticky select-none flex justify-between items-center top-0 w-full bg-white text-gray-900 border-gray-500 border-b z-[9999] max-sm:flex-col max-sm:pb-2">
+            <div className="flex">
+                <button className="home-button" onClick={() => navigate("")}>
+                    <img src={logo} className=" h-14 float-left "></img>{" "}
+                    <div className=" float-left mt-4 ">
+                        stack<b>underflow</b>
+                    </div>
+                </button>
                 <button
-                    className="nav-button"
+                    className={
+                        "nav-button " +
+                        (location.pathname == "/vragen" && " text-[#FF6D00]")
+                    }
                     onClick={() => navigate("/vragen")}
                 >
                     Vragen
                 </button>
                 <button
-                    className="nav-button"
+                    className={
+                        "nav-button " +
+                        (location.pathname == "/leaderbord" &&
+                            " text-[#FF6D00]")
+                    }
                     onClick={() => navigate("/leaderbord")}
                 >
                     Leaderbord
                 </button>
             </div>
-            <div className="float-right flex items-center gap-2 pr-1.5 h-full">
+
+            <div className="flex items-center gap-2 pr-1.5 h-full">
                 {UserService.isLoggedIn() ? (
                     <>
                         <Button
