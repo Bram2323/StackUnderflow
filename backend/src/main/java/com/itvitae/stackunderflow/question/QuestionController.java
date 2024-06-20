@@ -146,6 +146,7 @@ public class QuestionController {
 
     @GetMapping("{id}/answers")
     public Page<AnswerDTO> getAnswersFromQuestion(@PathVariable long id,
+                                                  @RequestParam(required = false, name = "order-by") String orderBy,
                                                   @RequestParam(required = false, name = "page") Integer pageParam, Authentication authentication) {
         Optional<Question> possibleQuestion = questionRepository.findById(id);
         Question question = possibleQuestion.orElseThrow(NotFoundException::new);
@@ -153,10 +154,16 @@ public class QuestionController {
         User user = authentication == null ? null : (User) authentication.getPrincipal();
 
         int page = pageParam == null ? 0 : pageParam - 1;
+
+        Sort sort = switch (orderBy != null ? orderBy : "") {
+            default -> Sort.by("voteCount").descending().and(Sort.by("date").ascending());
+            case "votes-asc" -> Sort.by("voteCount").ascending().and(Sort.by("date").ascending());
+            case "date-desc" -> Sort.by("date").descending();
+            case "date-asc" -> Sort.by("date").ascending();
+        };
+
         Pageable pageable = PageRequest.of(page, answersPerPage,
-                Sort.by("isSolution").descending().and(
-                        Sort.by("voteCount").descending().and(
-                                Sort.by("date").ascending())));
+                Sort.by("isSolution").descending().and(sort));
 
         Page<Answer> answers = answerRepository.findByQuestionAndEnabledTrue(question, pageable);
         return answers.map(answer -> AnswerDTO.from(answer, user));

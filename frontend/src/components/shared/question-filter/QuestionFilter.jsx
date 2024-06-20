@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../button/Button";
 import "./QuestionFilter.css";
 import UserService from "../../../services/UserService";
+import Dropdown from "../dropdown/Dropdown";
 
 function QuestionFilter({ showAskQuestion = true }) {
     const navigate = useNavigate();
@@ -18,6 +19,22 @@ function QuestionFilter({ showAskQuestion = true }) {
     const [categoryQuery, setCategoryQuery] = useState(
         queryParams.has("category") ? queryParams.get("category") : ""
     );
+
+    const orderOptions = [
+        { value: "date-desc", text: "Nieuwste vragen" },
+        { value: "date-asc", text: "Oudste vragen" },
+        { value: "most-answers", text: "Meeste antwoorden" },
+        { value: "least-answers", text: "Minste antwoorden" },
+    ];
+
+    const categoryOptions = [
+        { value: "", text: "Alle categorieën" },
+        { value: "general", text: "Algemeen" },
+        { value: "data", text: "Data Engineering / Science" },
+        { value: "cloud", text: "Cloud Engineering" },
+        { value: "cyber", text: "Cyber Security" },
+        { value: "java", text: "Java" },
+    ];
 
     function handleSearch() {
         if (queryParams.get("search") === searchQuery) return;
@@ -55,34 +72,18 @@ function QuestionFilter({ showAskQuestion = true }) {
                         onSubmit={handleSearch}
                         onBlur={handleSearch}
                     />
-                    <select
-                        onChange={(e) => {
-                            handleOrderChange(e.target.value);
-                        }}
-                        name="orders"
+                    <Dropdown
                         value={orderQuery}
-                        className="select-none"
-                    >
-                        <option value="date-desc">Nieuwste vragen</option>
-                        <option value="date-asc">Oudste vragen</option>
-                        <option value="most-answers">Meeste antwoorden</option>
-                        <option value="least-answers">Minste antwoorden</option>
-                    </select>
-                    <select
-                        onChange={(e) => {
-                            handleCategoryChange(e.target.value);
-                        }}
-                        name="categories"
+                        setValue={handleOrderChange}
+                        options={orderOptions}
+                        name={"orders"}
+                    />
+                    <Dropdown
                         value={categoryQuery}
-                        className="select-none"
-                    >
-                        <option value="">Alle categorieën</option>
-                        <option value="general">Algemeen</option>
-                        <option value="data">Data Engineering / Science</option>
-                        <option value="cloud">Cloud Engineering</option>
-                        <option value="cyber">Cyber Security</option>
-                        <option value="java">Java</option>
-                    </select>
+                        setValue={handleCategoryChange}
+                        options={categoryOptions}
+                        name={"categories"}
+                    />
                 </div>
                 {showAskQuestion && UserService.isLoggedIn() && (
                     <Button
