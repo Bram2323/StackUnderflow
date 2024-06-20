@@ -1,11 +1,9 @@
 .nav-button {
-    float: left;
-    padding-left: 20px;
-    padding-right: 20px;
-    line-height: 55px;
+    padding-left: 15px;
+    padding-right: 15px;
     cursor: pointer;
     height: 55px;
-    transition: 0.2s
+    transition: 0.2s;
 }
 
 .nav-button:hover {
@@ -13,10 +11,8 @@
 }
 
 .home-button {
-    float: left;
     height: 55px;
-    margin-left: 10px;
-    padding-right: 10px;
+    padding-right: 5px;
     cursor: pointer;
     transition: 0.2s;
 }
@@ -24,4 +20,3 @@
 .home-button:hover {
     background-color: lightgray;
 }
-

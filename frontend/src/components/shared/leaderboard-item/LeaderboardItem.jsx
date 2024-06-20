@@ -4,7 +4,7 @@ export default function LeaderboardItem({ user }) {
     return (
         <>
             {user.leaderboardRanking !== null && user.totalPoints > 0 ? (
-                <div className=" pl-5 grid grid-cols-[20%_60%_20%] items-center rounded-md border-2 border-neutral-300 bg-gray-200 p-2">
+                <div className=" min-w-[600px] grid grid-cols-[20%_60%_20%] items-center rounded-md border-2 border-neutral-300 bg-gray-200 p-2">
                     <div className=" col-start-1 col-end-1 font-bold text-2xl ">
                         #{user.leaderboardRanking}
                     </div>

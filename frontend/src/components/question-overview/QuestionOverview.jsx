@@ -23,7 +23,7 @@ function QuestionOverview() {
     }, [queryParams]);
 
     return (
-        <div className="pt-3 w-3/5 flex flex-col gap-3 mb-12 mt-4">
+        <div className="pt-3 w-[800px] max-w-[90%] flex flex-col gap-3 mb-12 mt-4">
             <QuestionFilter />
             <hr className="w-full border-none h-[2px] bg-[#e9e9e9]" />
             <QuestionList questions={questions} totalPages={totalPages} />

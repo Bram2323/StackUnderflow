@@ -25,8 +25,8 @@ function User({ user, className = "" }) {
         <>
             <div
                 className={
-                    " user-container " +
-                    (user.isAdmin ? "admin" : "") +
+                    " user-container whitespace-nowrap overflow-ellipsis min-w-fit " +
+                    (user.isAdmin ? " admin " : "") +
                     className
                 }
                 onClick={(e) => {
@@ -42,7 +42,7 @@ function User({ user, className = "" }) {
                 }}
             >
                 <img className=" w-[30px] h-[30px]" src={UserIcon}></img>
-                <p>{user.username}</p>
+                <p className=" min-w-0">{user.username}</p>
                 {getAward(user.award)}
             </div>
         </>

@@ -42,7 +42,9 @@ function UserInfo({ user, showAskQuestion = true }) {
                                 ? `Jouw rank van de maand: ${month} ${date.getFullYear()}`
                                 : `Rank van de maand: ${month} ${date.getFullYear()}`}
                         </p>
-                        <LeaderboardItem user={user} />
+                        <div className="overflow-x-auto">
+                            <LeaderboardItem user={user} />
+                        </div>
                     </>
                 )}
                 <div className="flex items-baseline justify-between gap-10 mt-3">

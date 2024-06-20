@@ -125,7 +125,7 @@ function Question() {
     }
 
     return (
-        <div className="question mb-12">
+        <div className="question mb-12 max-w-[800px] w-[90%]">
             <div className="question-container rounded-[10px] border border-neutral-400 shadow">
                 <h2 className="w-full font-bold whitespace-pre-wrap break-words">
                     {question.title}
@@ -136,22 +136,23 @@ function Question() {
 
                 <hr className="w-full border-none h-[2px] bg-[#C0C0C0]" />
 
-                <div className="flex justify-between w-full">
-                    <div className="flex gap-4 items-center">
+                <div className="flex justify-between w-full gap-2 max-sm:flex-col">
+                    <div className="flex gap-4 items-center max-sm:flex-col">
                         <User user={question.user} />
-
-                        <div className="leading-tight text-[12px] flex flex-col justify-center">
-                            <p>Gevraagd op:</p>
-                            <p>{formatDate(question.date)}</p>
-                        </div>
-                        {question.lastEdited && (
+                        <div className="flex gap-4 items-center">
                             <div className="leading-tight text-[12px] flex flex-col justify-center">
-                                <p>Bewerkt op:</p>
-                                <p>{formatDate(question.lastEdited)}</p>
+                                <p>Gevraagd op:</p>
+                                <p>{formatDate(question.date)}</p>
                             </div>
-                        )}
+                            {question.lastEdited && (
+                                <div className="leading-tight text-[12px] flex flex-col justify-center">
+                                    <p>Bewerkt op:</p>
+                                    <p>{formatDate(question.lastEdited)}</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-end gap-3">
                         <p className="text-xs bg-[#12A8C0] text-white rounded-full text-center py-1 px-2 ">
                             {getCategoryName(question.category)}
                         </p>

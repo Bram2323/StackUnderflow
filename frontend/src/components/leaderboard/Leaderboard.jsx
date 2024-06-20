@@ -31,7 +31,9 @@ export default function Leaderboard() {
             {UserService.isLoggedIn() && (
                 <div className="pt-5 pb-5 max-w-[600px] w-[90%] flex flex-col border-b-2 border-gray-400">
                     <p className=" font-bold text-center">Jouw rank:</p>
-                    <LeaderboardItem user={UserService.getUser()} />
+                    <div className="overflow-x-auto">
+                        <LeaderboardItem user={UserService.getUser()} />
+                    </div>
                 </div>
             )}
             <div className="pt-5 pb-5 max-w-[600px] w-[90%] flex flex-col">

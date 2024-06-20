@@ -101,19 +101,21 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
                     <ContentFormatter content={answer.text} />
 
                     <hr />
-                    <div className="flex items-center justify-between w-full">
-                        <div className="flex gap-4">
+                    <div className="flex items-center justify-between w-full gap-2 max-sm:flex-col">
+                        <div className="flex gap-4 max-sm:flex-col max-sm:items-center">
                             <User user={answer.user} />
-                            <div className="leading-tight text-[12px] flex flex-col justify-center">
-                                <p>Beantwoord op:</p>
-                                <p>{formatDate(answer.date)}</p>
-                            </div>
-                            {answer.lastEdited && (
+                            <div className="flex gap-4">
                                 <div className="leading-tight text-[12px] flex flex-col justify-center">
-                                    <p>Bewerkt op:</p>
-                                    <p>{formatDate(answer.lastEdited)}</p>
+                                    <p>Beantwoord op:</p>
+                                    <p>{formatDate(answer.date)}</p>
                                 </div>
-                            )}
+                                {answer.lastEdited && (
+                                    <div className="leading-tight text-[12px] flex flex-col justify-center">
+                                        <p>Bewerkt op:</p>
+                                        <p>{formatDate(answer.lastEdited)}</p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         <div className="flex gap-3">

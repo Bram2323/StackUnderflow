@@ -44,7 +44,7 @@ export default function QuestionItem({ question }) {
                         {getCategoryName(question.category)}
                     </p>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-4">
                     <div className="leading-tight text-[12px] flex flex-col justify-center">
                         <p>Gevraagd op:</p>
                         <p>{formatDate(question.date)}</p>
@@ -55,9 +55,10 @@ export default function QuestionItem({ question }) {
                             <p>{formatDate(question.lastEdited)}</p>
                         </div>
                     )}
-                    <User user={question.user} />
+                    <User user={question.user} className="max-md:hidden" />
                 </div>
             </div>
+            <User user={question.user} className=" self-end md:hidden" />
         </div>
     );
 }
