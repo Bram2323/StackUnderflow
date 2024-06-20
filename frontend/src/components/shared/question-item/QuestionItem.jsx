@@ -24,7 +24,7 @@ export default function QuestionItem({ question }) {
 
     return (
         <div
-            className=" cursor-pointer border-2 border-neutral-400 hover:border-neutral-500 transition-all duration-150 bg-gray-300 p-2 rounded-md flex flex-col gap-1"
+            className=" cursor-pointer border-2 border-neutral-300 hover:border-neutral-400 transition-all duration-150 bg-gray-200 p-2 rounded-md flex flex-col gap-1"
             onClick={() => navigate(`/vragen/${question.id}`)}
             key={question.id}
         >
@@ -40,7 +40,7 @@ export default function QuestionItem({ question }) {
                         {question.answers} Antwoord
                         {question.answers != 1 ? "en" : ""}
                     </p>
-                    <p className="text-xs bg-[#12A8C0] text-white rounded-xl w-fit text-center my-1 py-1 px-2 ">
+                    <p className="text-xs bg-[#12A8C0] text-white rounded-full w-fit text-center my-1 py-1 px-2 ">
                         {getCategoryName(question.category)}
                     </p>
                 </div>

@@ -136,7 +136,7 @@ function Question() {
 
                 <hr className="w-full border-none h-[2px] bg-[#C0C0C0]" />
 
-                <div className="flex  justify-between w-full">
+                <div className="flex justify-between w-full">
                     <div className="flex gap-4 items-center">
                         <User user={question.user} />
 
@@ -152,13 +152,13 @@ function Question() {
                         )}
                     </div>
                     <div className="flex items-center gap-3">
-                        <p className="text-xs bg-[#12A8C0] text-white rounded-xl text-center py-1 px-2 ">
+                        <p className="text-xs bg-[#12A8C0] text-white rounded-full text-center py-1 px-2 ">
                             {getCategoryName(question.category)}
                         </p>
                         {isQuestionOwner && (
                             <FontAwesomeIcon
                                 icon={faPen}
-                                className="cursor-pointer"
+                                className="cursor-pointer text-neutral-500"
                                 onClick={handleEdit}
                             />
                         )}
@@ -166,7 +166,7 @@ function Question() {
                         {(isQuestionOwner || isAdmin) && (
                             <FontAwesomeIcon
                                 icon={faTrashCan}
-                                className="cursor-pointer"
+                                className="cursor-pointer text-neutral-500"
                                 onClick={handleDelete}
                             />
                         )}

@@ -39,7 +39,7 @@ function Pageable({ totalPages }) {
                                 className={
                                     " px-[6px] border border-black border-solid rounded-[5px] " +
                                     (page === currentPage
-                                        ? " bg-orange-300"
+                                        ? " bg-[#FF6D00]"
                                         : "")
                                 }
                                 onClick={() => handleChangePage(page)}

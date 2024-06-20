@@ -33,13 +33,20 @@ export default function NavBar() {
             </button>
             <div>
                 <button
-                    className="nav-button"
+                    className={
+                        "nav-button " +
+                        (location.pathname == "/vragen" && " text-[#FF6D00]")
+                    }
                     onClick={() => navigate("/vragen")}
                 >
                     Vragen
                 </button>
                 <button
-                    className="nav-button"
+                    className={
+                        "nav-button " +
+                        (location.pathname == "/leaderbord" &&
+                            " text-[#FF6D00]")
+                    }
                     onClick={() => navigate("/leaderbord")}
                 >
                     Leaderbord

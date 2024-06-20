@@ -4,11 +4,14 @@
     align-items: stretch;
     width: 55%;
     gap: 20px;
+    flex-grow: 1;
+    flex-shrink: 2;
 }
 
 .question-container {
-    background-color: rgb(212, 212, 212);
+    background-color: rgb(229, 231, 235);
     padding: 20px;
+    padding-bottom: 10px;
     margin-top: 50px;
     display: flex;
     flex-direction: column;

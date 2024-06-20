@@ -37,7 +37,7 @@ function UserInfo({ user, showAskQuestion = true }) {
                 </div>
                 {user.leaderboardRanking && (
                     <>
-                        <p className=" font-bold text-center pt-5 ">
+                        <p className=" font-bold text-center pt-5 text-2xl">
                             {isCurrentUser
                                 ? `Jouw rank van de maand: ${month} ${date.getFullYear()}`
                                 : `Rank van de maand: ${month} ${date.getFullYear()}`}
@@ -45,12 +45,13 @@ function UserInfo({ user, showAskQuestion = true }) {
                         <LeaderboardItem user={user} />
                     </>
                 )}
-                <div className="flex items-baseline justify-between gap-10 mt-12">
+                <div className="flex items-baseline justify-between gap-10 mt-3">
                     <h1 className="font-bold text-center text-2xl">
                         {isCurrentUser ? "Mijn vragen" : "Vragen"}
                     </h1>
                 </div>
                 <QuestionFilter showAskQuestion={showAskQuestion} />
+                <hr className="w-full border-none h-[2px] bg-[#e9e9e9]" />
                 <QuestionList questions={questions} totalPages={totalPages} />
             </div>
         </>

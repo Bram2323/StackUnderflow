@@ -64,7 +64,7 @@ function QuestionFilter({ showAskQuestion = true }) {
     return (
         <>
             <div className="question-filter-container flex justify-between items-baseline gap-2">
-                <div className="flex gap-2 w-full h-fit items-baseline">
+                <div className="flex gap-2 w-full h-fit items-stretch">
                     <InputField
                         text={searchQuery}
                         onTextChanged={setSearchQuery}
@@ -76,13 +76,14 @@ function QuestionFilter({ showAskQuestion = true }) {
                         value={orderQuery}
                         setValue={handleOrderChange}
                         options={orderOptions}
-                        name={"orders"}
+                        name="orders"
+                        className=" "
                     />
                     <Dropdown
                         value={categoryQuery}
                         setValue={handleCategoryChange}
                         options={categoryOptions}
-                        name={"categories"}
+                        name="categories"
                     />
                 </div>
                 {showAskQuestion && UserService.isLoggedIn() && (
