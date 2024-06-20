@@ -24,7 +24,7 @@ export default function NavBar() {
     }
 
     return (
-        <div className="sticky select-none top-0 h-14 w-full bg-white text-gray-900 border-gray-500 border-b z-[9999] ">
+        <div className="sticky select-none top-0 h-14 w-full bg-white text-gray-900 border-gray-500 border-b z-[9999]">
             <button className="home-button" onClick={() => navigate("")}>
                 <img src={logo} className=" h-14 float-left "></img>{" "}
                 <div className=" float-left mt-4 mr-2 ">

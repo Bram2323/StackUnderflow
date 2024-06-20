@@ -132,7 +132,7 @@ function Question() {
                         )}
                     </div>
                     <div className="flex items-center gap-3">
-                        <p className="text-xs">
+                        <p className="text-xs bg-[#12A8C0] text-white rounded-xl text-center p-1 ">
                             {getCategoryName(question.category)}
                         </p>
                         {isQuestionOwner && (

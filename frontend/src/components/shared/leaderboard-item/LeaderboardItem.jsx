@@ -3,15 +3,20 @@ import User from "../User/User";
 export default function LeaderboardItem({ user }) {
     return (
         <>
-            {user.leaderboardRanking !== null ? (
-                <div className=" bg-gray-300 p-2 my-2">
-                    <div className="question-title">
-                        rank: {user.leaderboardRanking}
+            {user.leaderboardRanking !== null && user.totalPoints > 0 ? (
+                <div className=" pl-5 grid grid-cols-[20%_60%_20%] items-center rounded-md border-2 border-neutral-400 bg-gray-300 p-2">
+                    <div className=" col-start-1 col-end-1 font-bold text-2xl ">
+                        #{user.leaderboardRanking}
                     </div>
-                    <div className=" flex items-center gap-1">
-                        <p>naam:</p> <User user={user} />
+                    <div className="col-start-2 col-end-2">
+                        <div className=" w-fit ">
+                            <User user={user} />
+                        </div>
                     </div>
-                    <div>punten: {user.totalPoints}</div>
+                    <div className="col-start-3 col-end-3">
+                        {user.totalPoints}{" "}
+                        {user.totalPoints === 1 ? "punt" : "punten"}
+                    </div>
                 </div>
             ) : (
                 <p>

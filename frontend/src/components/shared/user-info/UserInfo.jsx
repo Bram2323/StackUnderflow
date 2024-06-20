@@ -40,14 +40,14 @@ function UserInfo({ user, showAskQuestion = true }) {
                         <p className=" font-bold text-center pt-5 ">
                             {isCurrentUser
                                 ? `Jouw rank van de maand: ${month} ${date.getFullYear()}`
-                                : `rank van de maand: ${month} ${date.getFullYear()}`}
+                                : `Rank van de maand: ${month} ${date.getFullYear()}`}
                         </p>
                         <LeaderboardItem user={user} />
                     </>
                 )}
                 <div className="flex items-baseline justify-between gap-10 mt-12">
                     <h1 className="font-bold text-center text-2xl">
-                        {isCurrentUser ? "Mijn vragen" : "vragen"}
+                        {isCurrentUser ? "Mijn vragen" : "Vragen"}
                     </h1>
                 </div>
                 <QuestionFilter showAskQuestion={showAskQuestion} />

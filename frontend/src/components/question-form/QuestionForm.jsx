@@ -3,6 +3,7 @@ import ApiService from "../../services/ApiService";
 import UserService from "../../services/UserService";
 import "./QuestionForm.css";
 import InputField from "../shared/input-field/InputField";
+import TextareaAutosize from "react-textarea-autosize";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import CodeMarker from "../shared/formatter/CodeMarker/CodeMarker";
 import Button from "../shared/button/Button";
@@ -130,8 +131,8 @@ function QuestionForm() {
 
                     <label>Beschrijf je probleem</label>
                     <div className="flex flex-col items-end">
-                        <textarea
-                            className="border-2 border-[#5c5c5c] rounded-lg bg-[#f3f3f3] text-base w-full h-72 mb-2 p-2"
+                        <TextareaAutosize
+                            className=" min-h-[150px] max-h-[300px] border-2 border-[#5c5c5c] rounded-lg bg-[#f3f3f3] text-base w-full h-72 mb-2 p-2"
                             value={question.text}
                             onMouseUp={handleSelect}
                             onSelect={handleSelect}
@@ -147,7 +148,7 @@ function QuestionForm() {
                                 }
                             }}
                             maxLength={MAX_TEXT_CHARACTERS}
-                        ></textarea>
+                        ></TextareaAutosize>
                     </div>
 
                     <div className="flex justify-between">
@@ -189,13 +190,14 @@ function QuestionForm() {
                             <option value="CYBER">Cyber Security</option>
                             <option value="JAVA">Java</option>
                         </select>
+                        {error && (
+                            <p className="question-form-error">{error}</p>
+                        )}
                         <Button
                             text={editMode ? "Opslaan" : "Plaats je vraag"}
                             onClick={handleSaveQuestion}
                         />
                     </div>
-
-                    {error && <p className="question-form-error">{error}</p>}
                 </form>
             </div>
         </div>

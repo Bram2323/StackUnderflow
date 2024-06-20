@@ -20,6 +20,7 @@ export default function App() {
     return (
         <>
             <NavBar />
+            <div className=" h-3 "></div>
 
             <Routes>
                 <Route path="" element={<Home />} />

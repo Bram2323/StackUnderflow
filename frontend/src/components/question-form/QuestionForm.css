@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 20px;
     margin-bottom: 20px;
     width: 100%;
 }
@@ -10,7 +10,8 @@
 .question-form label {
     display: block;
 }
-.question-form p, .question-form label {
+.question-form p,
+.question-form label {
     margin-bottom: 5px;
 }
 
@@ -40,5 +41,3 @@
     color: red;
     margin-top: 10px;
 }
-
-
