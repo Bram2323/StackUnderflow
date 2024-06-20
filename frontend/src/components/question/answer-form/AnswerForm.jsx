@@ -91,7 +91,7 @@ function AnswerForm({
                 {!UserService.isLoggedIn() ? (
                     <p>
                         <a
-                            className="font-bold text-[#2397F4]"
+                            className="font-bold text-[#12a8c0]"
                             href="./inloggen"
                             onClick={() => {
                                 const currentPath = location.pathname;

@@ -36,7 +36,14 @@ export default function QuestionItem({ question }) {
             </p>
             <div className="flex h-full w-full items-end justify-between">
                 <div className="">
-                    <p className="font-bold">
+                    <p
+                        className={
+                            "font-bold " +
+                            (question.answers > 0
+                                ? "text-[#12a8c0]"
+                                : "text-[#ff6d00]")
+                        }
+                    >
                         {question.answers} Antwoord
                         {question.answers != 1 ? "en" : ""}
                     </p>
