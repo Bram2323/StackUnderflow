@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import UserService from "../../../services/UserService";
 import TextareaAutosize from "react-textarea-autosize";
-import CodeMarker from "../../shared/codeblock/CodeMarker/CodeMarker";
+import CodeMarker from "../../shared/formatter/CodeMarker/CodeMarker";
 import ApiService from "../../../services/ApiService";
 import Button from "../../shared/button/Button";
 import { useNavigate, useLocation } from "react-router-dom";

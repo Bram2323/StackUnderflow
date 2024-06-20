@@ -3,7 +3,7 @@ import User from "../../shared/User/User";
 import VoteButton from "../../shared/vote-button/VoteButton";
 import ApiService from "../../../services/ApiService";
 import UserService from "../../../services/UserService";
-import CodeHighlighter from "../../shared/codeblock/CodeHighlighter/CodeHighlighter";
+import ContentFormatter from "../../shared/formatter/ContentFormatter/ContentFormatter";
 import CheckMark from "../../../assets/images/checkmark.svg";
 import "./Answer.css";
 import { formatDate } from "../../shared/date-formatter/FormatDate";
@@ -94,7 +94,7 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
                 />
             ) : (
                 <div className="answer-container w-full flex flex-col gap-[10px] bg-gray-100 p-[15px] rounded-[10px] border border-solid border-gray-400">
-                    <CodeHighlighter markdown={answer.text} />
+                    <ContentFormatter content={answer.text} />
 
                     <hr />
                     <div className="flex items-center justify-between w-full">

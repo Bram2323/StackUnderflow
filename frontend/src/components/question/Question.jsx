@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ApiService from "../../services/ApiService";
 import "./Question.css";
 import User from "../shared/User/User";
-import CodeHighlighter from "../shared/codeblock/CodeHighlighter/CodeHighlighter";
+import ContentFormatter from "../shared/formatter/ContentFormatter/ContentFormatter";
 import AnswerForm from "./answer-form/AnswerForm";
 import UserService from "../../services/UserService";
 import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -112,7 +112,7 @@ function Question() {
                 </h2>
                 <hr className="w-full border-none h-[2px] bg-[#C0C0C0]" />
 
-                <CodeHighlighter markdown={question.text} />
+                <ContentFormatter content={question.text} />
 
                 <hr className="w-full border-none h-[2px] bg-[#C0C0C0]" />
 
