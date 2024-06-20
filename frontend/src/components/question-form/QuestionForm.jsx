@@ -188,7 +188,7 @@ function QuestionForm() {
                             }
                             options={categoryOptions}
                             name={"categories"}
-                            className={"mb-6"}
+                            className={"mb-3"}
                         />
                         {error && (
                             <p className="question-form-error">{error}</p>
