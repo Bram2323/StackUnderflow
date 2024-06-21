@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import UserInfo from "../shared/user-info/UserInfo";
 import { useParams } from "react-router-dom";
 import ApiService from "../../services/ApiService";
-import User from "../shared/user/User";
+import User from "../shared/User/User";
 
 function UserPage() {
     const { username } = useParams();

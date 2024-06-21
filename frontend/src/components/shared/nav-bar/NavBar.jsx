@@ -2,7 +2,7 @@ import "./NavBar.css";
 import logo from "../../../assets/images/stack_underflow_logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import UserService from "../../../services/UserService";
-import User from "../user/User";
+import User from "../User/User";
 import Button from "../button/Button";
 
 export default function NavBar() {
@@ -24,8 +24,8 @@ export default function NavBar() {
     }
 
     return (
-        <div className="sticky select-none flex justify-between items-center top-0 w-full bg-white text-gray-900 border-gray-500 border-b z-[9999] max-sm:flex-col max-sm:pb-2">
-            <div className="flex">
+        <div className="sticky select-none flex flex-wrap justify-between items-center top-0 w-full bg-white text-gray-900 border-gray-500 border-b z-[9999] max-sm:flex-col max-sm:pb-2">
+            <div className="flex flex-nowrap">
                 <button className="home-button" onClick={() => navigate("")}>
                     <img src={logo} className=" h-14 float-left "></img>{" "}
                     <div className=" float-left mt-4 ">
@@ -53,7 +53,7 @@ export default function NavBar() {
                 </button>
             </div>
 
-            <div className="flex items-center gap-2 pr-1.5 h-full">
+            <div className="flex flex-nowrap items-center gap-2 pr-1.5 h-full">
                 {UserService.isLoggedIn() ? (
                     <>
                         <Button
