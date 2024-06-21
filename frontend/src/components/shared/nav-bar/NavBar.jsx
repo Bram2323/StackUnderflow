@@ -44,12 +44,12 @@ export default function NavBar() {
                 <button
                     className={
                         "nav-button " +
-                        (location.pathname == "/leaderbord" &&
+                        (location.pathname == "/leaderboard" &&
                             " text-[#FF6D00]")
                     }
-                    onClick={() => navigate("/leaderbord")}
+                    onClick={() => navigate("/leaderboard")}
                 >
-                    Leaderbord
+                    Leaderboard
                 </button>
             </div>
 
