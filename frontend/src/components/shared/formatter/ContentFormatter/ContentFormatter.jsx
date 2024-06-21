@@ -33,7 +33,7 @@ function ContentFormatter({ content }) {
     }, [content]);
 
     // Split markdown into code blocks and text
-    const blocks = content.split(/(```[^`]*```)/gs);
+    const blocks = content.split(/(```.*?```)/gs);
 
     return (
         <div className="w-full">
@@ -41,7 +41,7 @@ function ContentFormatter({ content }) {
                 block.startsWith("```") ? (
                     <pre
                         key={index}
-                        className="my-4 p-2 rounded-lg max-h-[600px] bg-white overflow-hidden"
+                        className="my-4 p-2 rounded-lg max-h-[600px] bg-white overflow-auto"
                     >
                         <code className="hljs bg-white">
                             {block.replace(/^```|```$/g, "").trim()}
