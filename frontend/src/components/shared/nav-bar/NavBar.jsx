@@ -2,7 +2,7 @@ import "./NavBar.css";
 import logo from "../../../assets/images/stack_underflow_logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import UserService from "../../../services/UserService";
-import User from "../User/User";
+import User from "../user/User";
 import Button from "../button/Button";
 
 export default function NavBar() {

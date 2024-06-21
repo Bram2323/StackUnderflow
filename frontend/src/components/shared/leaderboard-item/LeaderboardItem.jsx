@@ -1,4 +1,4 @@
-import User from "../User/User";
+import User from "../user/User";
 
 export default function LeaderboardItem({ user }) {
     return (

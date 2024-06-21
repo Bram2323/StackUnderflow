@@ -5,7 +5,7 @@ import QuestionList from "../question-list/QuestionList";
 import ApiService from "../../../services/ApiService";
 import LeaderboardItem from "../leaderboard-item/LeaderboardItem";
 import UserService from "../../../services/UserService";
-import User from "../User/User";
+import User from "../user/User";
 
 function UserInfo({ user, showAskQuestion = true }) {
     const [questions, setQuestions] = useState([]);

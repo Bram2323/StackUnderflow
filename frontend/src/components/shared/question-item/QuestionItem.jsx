@@ -1,4 +1,4 @@
-import User from "../User/User.jsx";
+import User from "../user/User.jsx";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../date-formatter/FormatDate.js";
 

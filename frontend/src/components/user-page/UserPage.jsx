@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import UserInfo from "../shared/user-info/UserInfo";
 import { useParams } from "react-router-dom";
 import ApiService from "../../services/ApiService";
-import User from "../shared/User/User";
+import User from "../shared/user/User";
 
 function UserPage() {
     const { username } = useParams();
@@ -18,7 +18,7 @@ function UserPage() {
 
     return (
         <>
-            <div className="flex flex-col w-3/5 gap-3 mb-12">
+            <div className="flex flex-col max-w-[800px] w-[90%] gap-3 mb-12">
                 <UserInfo user={user} showAskQuestion={false} />
             </div>
         </>
