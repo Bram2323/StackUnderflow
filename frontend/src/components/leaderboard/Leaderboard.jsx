@@ -26,7 +26,7 @@ export default function Leaderboard() {
     return (
         <>
             <p className=" font-bold text-center pt-5 text-3xl ">
-                Leaderbord van de maand: {month} {date.getFullYear()}
+                Leaderboard van de maand: {month} {date.getFullYear()}
             </p>
             {UserService.isLoggedIn() && (
                 <div className="pt-5 pb-5 max-w-[600px] w-[90%] flex flex-col border-b-2 border-gray-400">

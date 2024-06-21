@@ -28,7 +28,7 @@ export default function App() {
                 <Route path="/vragen/:id" element={<Question />} />
                 <Route path="/vragen/aanmaken" element={<QuestionForm />} />
                 <Route path="/vragen/:id/bewerken" element={<QuestionForm />} />
-                <Route path="/leaderbord" element={<Leaderboard />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/inloggen" element={<Login />} />
                 <Route path="/registreren" element={<Register />} />
                 <Route path="/gebruikers/:username" element={<UserPage />} />

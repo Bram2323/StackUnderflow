@@ -12,7 +12,7 @@
 
 .home-button {
     height: 55px;
-    padding-right: 5px;
+    padding-right: 15px;
     cursor: pointer;
     transition: 0.2s;
 }

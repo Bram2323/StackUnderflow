@@ -18,7 +18,7 @@ function UserPage() {
 
     return (
         <>
-            <div className="flex flex-col w-3/5 gap-3 mb-12">
+            <div className="flex flex-col max-w-[800px] w-[90%] gap-3 mb-12">
                 <UserInfo user={user} showAskQuestion={false} />
             </div>
         </>
