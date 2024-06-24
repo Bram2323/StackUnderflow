@@ -45,6 +45,7 @@ function Answer({ answer, setAnswer, answers, setAnswers, isQuestionOwner }) {
             const updatedAnswers = answers.filter((a) => a.id !== answer.id);
             setAnswers(updatedAnswers);
         });
+        setIsDialogOpen(false);
     }
 
     function cancelDelete() {
